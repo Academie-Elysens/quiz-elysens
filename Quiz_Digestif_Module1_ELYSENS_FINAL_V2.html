@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Système Digestif M1 | Académie ÉLYSENS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --vert:    #0C2613;
+    --sauge:   #9EC8B0;
+    --beige:   #F2EDE4;
+    --or:      #FFBD46;
+    --noir:    #1E1E1E;
+    --orange:  #E0732E;
+    --rouge:   #8C0009;
+    --blanc:   #FFFFFF;
+    --sauge-l: #E8F4EE;
+    --border:  #D4C9B8;
+    --muted:   #6B6B5A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Outfit',sans-serif;background:var(--beige);
+    color:var(--noir);font-size:15px;min-height:100vh}
+
+  /* ── HEADER ── */
+  .hdr{background:var(--vert);padding:16px 28px;display:flex;
+    align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .hdr-brand{display:flex;align-items:center;gap:12px}
+  .hdr-logo{width:36px;height:36px;border-radius:50%;
+    background:var(--or);display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:var(--vert)}
+  .hdr-text h1{font-family:'Cormorant Garamond',serif;font-size:17px;
+    font-weight:600;color:var(--blanc);letter-spacing:.3px}
+  .hdr-text p{font-size:11px;color:var(--sauge);margin-top:1px}
+  .score-badge{background:var(--or);color:var(--vert);padding:6px 16px;
+    border-radius:20px;font-weight:700;font-size:13px;
+    font-family:'Outfit',sans-serif;min-width:85px;text-align:center;
+    white-space:nowrap}
+
+  /* ── PROGRESS ── */
+  .prog-wrap{background:var(--blanc);padding:8px 28px;
+    border-bottom:1px solid var(--border);display:none}
+  .prog-bar-bg{background:var(--border);border-radius:10px;height:6px;overflow:hidden}
+  .prog-bar{background:linear-gradient(90deg,var(--vert),var(--sauge));
+    height:100%;border-radius:10px;transition:width .4s}
+  .prog-info{display:flex;justify-content:space-between;
+    font-size:11px;color:var(--muted);margin-top:3px}
+
+  main{max-width:760px;margin:0 auto;padding:28px 16px 80px}
+
+  /* ── SCREENS ── */
+  .screen{display:none}.screen.active{display:block}
+
+  /* ── CARDS ── */
+  .card{background:var(--blanc);border-radius:14px;padding:32px;
+    box-shadow:0 2px 16px rgba(12,38,19,.09)}
+
+  /* ── WELCOME ── */
+  .welcome-wrap{max-width:540px;margin:24px auto}
+  .brand-pill{display:inline-flex;align-items:center;gap:7px;
+    background:var(--vert);color:var(--blanc);padding:4px 14px;
+    border-radius:20px;font-size:11px;font-weight:600;
+    letter-spacing:.6px;margin-bottom:16px}
+  .brand-pill span{background:var(--or);color:var(--vert);
+    padding:1px 7px;border-radius:10px;font-size:10px}
+  .welcome-wrap h2{font-family:'Cormorant Garamond',serif;
+    font-size:28px;font-weight:700;color:var(--vert);margin-bottom:4px}
+  .welcome-wrap .sub{font-size:13.5px;color:var(--muted);margin-bottom:22px}
+
+  .instr{background:var(--sauge-l);border-left:4px solid var(--sauge);
+    border-radius:0 10px 10px 0;padding:14px 16px;
+    margin-bottom:18px;font-size:13.5px;line-height:1.8}
+  .instr strong{color:var(--vert)}
+  .instr ul{margin-left:18px;margin-top:4px}
+  .instr li{margin-bottom:2px}
+
+  .alert{border-left:4px solid var(--orange);background:#FEF6EC;
+    border-radius:0 10px 10px 0;padding:12px 16px;
+    font-size:13px;color:#5A2E00;margin-bottom:22px;line-height:1.6}
+
+  .field{margin-bottom:14px}
+  .field label{display:block;font-weight:600;font-size:13px;
+    color:var(--vert);margin-bottom:5px}
+  .field input{width:100%;padding:10px 13px;
+    border:1.5px solid var(--border);border-radius:9px;
+    font-family:'Outfit',sans-serif;font-size:14px;transition:border .2s;
+    background:var(--beige)}
+  .field input:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
+  .err{color:var(--rouge);font-size:13px;margin-bottom:10px;display:none}
+
+  /* ── QUESTION ── */
+  .q-card{background:var(--blanc);border-radius:14px;padding:0;
+    box-shadow:0 2px 14px rgba(12,38,19,.08);margin-bottom:20px;overflow:hidden}
+  .q-num{display:inline-block;background:var(--vert);color:var(--blanc);
+    font-size:11px;font-weight:700;padding:3px 12px;
+    border-radius:10px;margin-bottom:12px;letter-spacing:.5px}
+  .q-text{font-family:'Cormorant Garamond',serif;font-size:18px;
+    font-weight:600;color:var(--vert);line-height:1.45;margin-bottom:22px}
+  .part-label{font-size:11px;font-weight:700;letter-spacing:.7px;
+    color:var(--muted);text-transform:uppercase;margin-bottom:5px}
+  .part-hint{font-size:14.5px;color:var(--noir);
+    margin-bottom:9px;font-style:italic}
+  textarea{width:100%;min-height:105px;padding:11px 13px;
+    border:1.5px solid var(--border);border-radius:9px;
+    font-family:'Outfit',sans-serif;font-size:15px;
+    resize:vertical;transition:border .2s;
+    background:var(--beige);line-height:1.65}
+  textarea:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
+  .autosave{font-size:11px;color:var(--muted);margin-top:3px}
+
+  /* ── SEPARATOR ── */
+  .sep{border:none;border-top:1.5px solid var(--border);margin:22px 0}
+
+  /* ── CHOICES ── */
+  .choice{display:flex;align-items:flex-start;gap:11px;
+    padding:11px 14px;border:1.5px solid var(--border);
+    border-radius:10px;margin-bottom:8px;cursor:pointer;
+    transition:all .15s;background:var(--blanc);user-select:none}
+  .choice:hover:not(.locked){border-color:var(--sauge);background:var(--sauge-l)}
+  .choice.locked{cursor:default}
+
+  /* Après réponse */
+  .choice.is-correct{border-color:#2E7D32!important;background:#E8F5E9!important}
+  .choice.is-wrong{border-color:var(--rouge)!important;background:#FDECEA!important}
+  .choice.reveal{border-color:#2E7D32!important;background:#F1F8F1!important}
+
+  .letter{flex-shrink:0;width:28px;height:28px;border-radius:50%;
+    background:var(--beige);border:1.5px solid var(--border);
+    font-weight:700;font-size:12px;display:flex;
+    align-items:center;justify-content:center;
+    color:var(--noir);transition:all .15s}
+  .choice.is-correct .letter{background:#2E7D32;border-color:#2E7D32;color:#fff}
+  .choice.is-wrong .letter{background:var(--rouge);border-color:var(--rouge);color:#fff}
+  .choice.reveal .letter{background:#2E7D32;border-color:#2E7D32;color:#fff}
+  .choice-text{font-size:15px;line-height:1.5;padding-top:4px;color:var(--noir)}
+
+  /* ── FEEDBACK ── */
+  .fb{padding:11px 14px;border-radius:9px;margin-top:10px;
+    font-size:13.5px;font-weight:600;display:none;line-height:1.5}
+  .fb.show{display:block}
+  .fb.ok{background:#E8F5E9;color:#1B5E20;border-left:4px solid #2E7D32}
+  .fb.ko{background:#FDECEA;color:#7F1D1D;border-left:4px solid var(--rouge)}
+
+  /* ── BUTTONS ── */
+  .btn{display:inline-flex;align-items:center;justify-content:center;
+    gap:7px;padding:11px 24px;border:none;border-radius:9px;
+    font-family:'Outfit',sans-serif;font-weight:600;font-size:14px;
+    cursor:pointer;transition:all .18s;letter-spacing:.2px}
+  .btn-vert{background:var(--vert);color:var(--blanc)}
+  .btn-vert:hover{background:#0A1E0F}
+  .btn-or{background:var(--or);color:var(--vert)}
+  .btn-or:hover{background:#E0A030}
+  .btn-outline{background:var(--blanc);color:var(--vert);
+    border:1.5px solid var(--vert)}
+  .btn-outline:hover{background:var(--sauge-l)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .nav-row{display:flex;gap:10px;justify-content:space-between;
+    align-items:center;flex-wrap:wrap;margin-top:20px}
+
+  /* ── RESULTS ── */
+  .res-wrap{max-width:580px;margin:28px auto}
+  .score-ring{width:148px;height:148px;border-radius:50%;
+    border:8px solid var(--vert);margin:20px auto;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    background:var(--sauge-l)}
+  .score-pct{font-family:'Cormorant Garamond',serif;
+    font-size:42px;font-weight:700;color:var(--vert)}
+  .score-lbl{font-size:11px;color:var(--muted);margin-top:1px}
+  .mention{font-family:'Cormorant Garamond',serif;
+    font-size:22px;font-weight:600;color:var(--vert);
+    margin:14px 0;text-align:center}
+  .breakdown{background:var(--beige);border-radius:10px;padding:16px;
+    margin:16px 0;font-size:13.5px;line-height:2.1}
+  .send-st{font-size:13px;margin-top:12px;text-align:center}
+  .s-wait{color:var(--muted)}.s-ok{color:#2E7D32;font-weight:600}
+  .s-err{color:var(--rouge)}
+
+
+  /* ── CORRIGÉ COMPLET ── */
+  .corrige-item{background:var(--blanc);border-radius:12px;padding:22px;
+    margin-bottom:16px;box-shadow:0 1px 8px rgba(12,38,19,.07)}
+  .corrige-qnum{display:inline-block;font-size:11px;font-weight:700;
+    letter-spacing:.5px;padding:2px 10px;border-radius:10px;
+    margin-bottom:10px}
+  .corrige-qnum.ok{background:#E8F5E9;color:#1B5E20}
+  .corrige-qnum.ko{background:#FDECEA;color:#7F1D1D}
+  .corrige-qnum.skip{background:#F5F5F5;color:#666}
+  .corrige-qtxt{font-family:'Cormorant Garamond',serif;font-size:16px;
+    font-weight:600;color:var(--vert);margin-bottom:14px;line-height:1.4}
+  .corrige-block{margin-bottom:12px}
+  .corrige-label{font-size:11px;font-weight:700;letter-spacing:.5px;
+    color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+  .corrige-answer{background:var(--beige);border-radius:7px;padding:10px 12px;
+    font-size:13.5px;line-height:1.6;color:var(--noir)}
+  .corrige-mcq-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .mcq-chip{padding:5px 12px;border-radius:20px;font-size:12.5px;font-weight:600}
+  .mcq-correct{background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7}
+  .mcq-wrong{background:#FDECEA;color:#7F1D1D;border:1px solid #FFCDD2}
+  .mcq-good{background:#E8F5E9;color:#1B5E20;border:1.5px solid #2E7D32}
+
+  /* ── IMPRESSION ── */
+  @media print{
+    .hdr,.prog-wrap,.nav-row,#btn-start,.btn{display:none!important}
+    .screen{display:none!important}
+    #screen-corrige{display:block!important}
+    body{background:#fff;font-size:12px}
+    .corrige-item{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+    main{padding:10px}
+  }
+
+
+  /* ── VISUEL THÉMATIQUE ── */
+  .q-visual{width:100%;height:110px;overflow:hidden;border-radius:10px 10px 0 0;
+    margin:-26px -26px 20px -26px;width:calc(100% + 52px)}
+  .q-visual svg{width:100%;height:110px;display:block}
+  .q-theme-label{display:flex;align-items:center;gap:8px;
+    margin-bottom:16px;padding:6px 12px;
+    background:var(--vert);border-radius:6px;
+    font-size:11px;font-weight:700;letter-spacing:.6px;
+    color:var(--or);text-transform:uppercase;
+    width:fit-content}
+  .q-card{overflow:hidden;padding-top:0}
+  .q-card-inner{padding:20px 26px 26px}
+
+  @media(max-width:600px){
+    main{padding:12px 8px 70px}
+    .q-card{padding:0}
+    .q-card-inner{padding:14px 14px 18px}
+    .card{padding:18px}
+    .hdr{padding:12px 14px}
+    .hdr-text h1{font-size:14px}
+    .hdr-text p{font-size:10px}
+    .q-text{font-size:16px}
+    .choice{padding:10px 12px}
+    .choice-text{font-size:14px}
+    .btn{padding:12px 16px;font-size:13px}
+    .nav-row{gap:8px}
+    .q-visual{height:80px;margin:-0 -0 16px -0;width:100%;border-radius:10px 10px 0 0}
+    .q-visual svg{height:80px}
+    .welcome-wrap{margin:12px auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-logo">
+    <svg width="42" height="42" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="21,2 40,21 21,40 2,21" fill="#FFBD46"/>
+      <polygon points="21,4 38,21 21,38 4,21" fill="none" stroke="#0C2613" stroke-width="1" opacity=".3"/>
+      <text x="13" y="24" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,13,24)">A</text>
+      <text x="22" y="28" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,22,28)">É</text>
+    </svg>
+  </div>
+    <div class="hdr-text">
+      <h1>Académie ÉLYSENS</h1>
+      <p>Système Digestif — Module 1 · 30 questions</p>
+    </div>
+  </div>
+  <div class="score-badge" id="live-score">— / 100</div>
+</header>
+
+<div class="prog-wrap" id="prog-wrap">
+  <div class="prog-bar-bg"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+  <div class="prog-info">
+    <span id="prog-text">Question 1 / 30</span>
+    <span id="prog-pct">0 %</span>
+  </div>
+</div>
+
+<main>
+
+<!-- ─── WELCOME ─────────────────────────────────────────── -->
+<div class="screen active" id="screen-welcome">
+  <div class="welcome-wrap">
+    <div class="card">
+      <div class="brand-pill">ACADÉMIE <span>ÉLYSENS</span></div>
+      <h2>Quiz de fin de module</h2>
+      <p class="sub">Système Digestif · Module 1 · 30 questions</p>
+
+      <div class="instr">
+        <strong>Consignes :</strong>
+        <ul>
+          <li>Relisez la section correspondante dans votre cahier avant de répondre.</li>
+          <li><strong>1‑A</strong> — Répondez avec vos propres mots.</li>
+          <li><strong>1‑B</strong> — Sélectionnez la section où vous avez trouvé l'information.</li>
+          <li>Vous pouvez quitter et reprendre à tout moment — votre progression est sauvegardée.</li>
+        </ul>
+      </div>
+
+      <div class="alert">
+        ⚠️ <strong>Note importante :</strong> La note est calculée à partir des questions 1‑B.
+        Les réponses 1‑A sont vérifiées par l'enseignant. Une réponse absente ou
+        insuffisante entraîne une pénalité pouvant aller jusqu'à <strong>50 % de la note finale</strong>.
+        Ces questionnaires constituent votre meilleure préparation à l'examen de fin de système.
+      </div>
+
+      <div class="field">
+        <label for="inp-name">Nom complet *</label>
+        <input type="text" id="inp-name" placeholder="Prénom Nom">
+      </div>
+      <div class="field">
+        <label for="inp-email">Adresse courriel *</label>
+        <input type="email" id="inp-email" placeholder="votre@courriel.com">
+      </div>
+      <div class="err" id="err-msg">Veuillez entrer votre nom et une adresse courriel valide.</div>
+      <button class="btn btn-vert" id="btn-start" style="width:100%;padding:13px;font-size:15px">
+        ▶&nbsp;&nbsp;Commencer le quiz
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── QUIZ ─────────────────────────────────────────────── -->
+<div class="screen" id="screen-quiz">
+  <div id="q-container"></div>
+</div>
+
+<!-- ─── RESULTS ──────────────────────────────────────────── -->
+<div class="screen" id="screen-results">
+  <div class="res-wrap">
+    <div class="card" style="text-align:center">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--vert)">
+        Quiz terminé !
+      </div>
+      <div class="score-ring">
+        <div class="score-pct" id="res-pct">—</div>
+        <div class="score-lbl">sur 100</div>
+      </div>
+      <div class="mention" id="res-mention"></div>
+      <div class="breakdown" id="res-breakdown" style="text-align:left"></div>
+      <div class="alert" style="text-align:left">
+        ⚠️ Cette note sera ajustée par l'enseignant après révision des réponses écrites (1‑A).
+        Une réponse insuffisante peut entraîner une pénalité jusqu'à 50 %.
+      </div>
+      <div id="send-status" class="send-st s-wait">⏳ Envoi des résultats en cours…</div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+        <button class="btn btn-vert" style="flex:1;min-width:180px" onclick="showCorrige()">
+          📋&nbsp; Voir le corrigé complet
+        </button>
+        <button class="btn btn-outline" style="flex:1;min-width:180px" onclick="window.print()">
+          🖨&nbsp; Imprimer / PDF
+        </button>
+      </div>
+      <button class="btn" onclick="restartQuiz()" style="width:100%;margin-top:10px;background:#fff;color:#8C0009;border:1.5px solid #8C0009;font-family:Outfit,sans-serif;font-weight:600;font-size:14px;padding:11px;border-radius:9px;cursor:pointer">
+        🔄&nbsp; Recommencer le quiz à zéro
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── CORRIGÉ COMPLET ──────────────────────────────────── -->
+<div class="screen" id="screen-corrige">
+  <div style="max-width:760px;margin:0 auto">
+    <div class="card" style="margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--vert)">
+            Corrigé complet — Système Digestif M1
+          </div>
+          <div style="font-size:13px;color:var(--muted);margin-top:3px" id="corrige-info"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline" style="font-size:13px;padding:8px 16px" onclick="show('screen-results')">
+            ← Retour aux résultats
+          </button>
+          <button class="btn btn-vert" style="font-size:13px;padding:8px 16px" onclick="window.print()">
+            🖨 Imprimer
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="corrige-list"></div>
+  </div>
+</div>
+
+<!-- ─── BOUTON FLOTTANT SOUMETTRE ─── -->
+<div id="float-submit" style="display:none;position:fixed;bottom:20px;right:20px;z-index:999">
+  <button onclick="soumettreMaintenant()" style="
+    background:var(--orange);color:#fff;
+    border:none;border-radius:30px;
+    padding:13px 22px;
+    font-family:Outfit,sans-serif;font-weight:700;font-size:14px;
+    cursor:pointer;
+    box-shadow:0 4px 16px rgba(224,115,46,.45);
+    transition:all .2s">
+    ✔ Soumettre maintenant
+  </button>
+</div>
+
+</main>
+
+<script>
+const SVGS = {
+  1: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <path d="M0,55 C95,15 190,95 285,55 S475,15 570,55 S665,95 760,55 L760,110 L0,110 Z" fill="#9EC8B0" opacity=".35"/>
+  <path d="M0,70 C95,30 190,110 285,70 S475,30 570,70 S665,110 760,70 L760,110 L0,110 Z" fill="#9EC8B0" opacity=".2"/>
+  <path d="M0,55 C95,95 190,15 285,55 S475,95 570,55 S665,15 760,55 L760,0 L0,0 Z" fill="#FFBD46" opacity=".3"/>
+  <path d="M0,40 C95,80 190,0 285,40 S475,80 570,40 S665,0 760,40 L760,0 L0,0 Z" fill="#FFBD46" opacity=".18"/>
+  <circle cx="380" cy="55" r="18" fill="none" stroke="#F2EDE4" stroke-width="1.5" opacity=".4"/>
+  <circle cx="380" cy="55" r="6" fill="#F2EDE4" opacity=".5"/>
+  <text x="380" y="20" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#9EC8B0" opacity=".7" letter-spacing="2">EAU &#8651; FEU</text>
+  <text x="380" y="100" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".6" letter-spacing="2">CYCLE DE CONTRÔLE (KE)</text>
+</svg>`,
+  2: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <ellipse cx="380" cy="55" rx="340" ry="48" fill="none" stroke="#9EC8B0" stroke-width=".8" opacity=".3"/>
+  <ellipse cx="380" cy="55" rx="270" ry="38" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".35"/>
+  <ellipse cx="380" cy="55" rx="200" ry="28" fill="none" stroke="#FFBD46" stroke-width="1.2" opacity=".45"/>
+  <ellipse cx="380" cy="55" rx="130" ry="18" fill="none" stroke="#E0732E" stroke-width="1.5" opacity=".55"/>
+  <ellipse cx="380" cy="55" rx="65" ry="10" fill="none" stroke="#E0732E" stroke-width="2" opacity=".7"/>
+  <circle cx="380" cy="55" r="9" fill="#E0732E" opacity=".85"/>
+  <line x1="0" y1="55" x2="100" y2="55" stroke="#9EC8B0" stroke-width=".8" opacity=".25"/>
+  <line x1="660" y1="55" x2="760" y2="55" stroke="#9EC8B0" stroke-width=".8" opacity=".25"/>
+  <text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#FFBD46" opacity=".7" letter-spacing="2">ÉMOTIONS &amp; ÉNERGIE</text>
+</svg>`,
+  3: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <circle cx="100" cy="40" r="7" fill="#FFBD46" opacity=".85"/>
+  <circle cx="145" cy="22" r="5" fill="#FFBD46" opacity=".65"/>
+  <circle cx="155" cy="62" r="4" fill="#FFBD46" opacity=".6"/>
+  <circle cx="200" cy="42" r="8" fill="#FFBD46" opacity=".8"/>
+  <line x1="100" y1="40" x2="145" y2="22" stroke="#FFBD46" stroke-width="1" opacity=".35"/>
+  <line x1="100" y1="40" x2="155" y2="62" stroke="#FFBD46" stroke-width="1" opacity=".35"/>
+  <line x1="145" y1="22" x2="200" y2="42" stroke="#FFBD46" stroke-width="1" opacity=".35"/>
+  <line x1="155" y1="62" x2="200" y2="42" stroke="#FFBD46" stroke-width="1" opacity=".35"/>
+  <path d="M200,42 C300,42 460,68 560,68" stroke="#F2EDE4" stroke-width="2" fill="none" opacity=".45" stroke-dasharray="10,5"/>
+  <circle cx="560" cy="68" r="8" fill="#9EC8B0" opacity=".9"/>
+  <circle cx="608" cy="50" r="5" fill="#9EC8B0" opacity=".65"/>
+  <circle cx="618" cy="88" r="4" fill="#9EC8B0" opacity=".6"/>
+  <circle cx="660" cy="68" r="7" fill="#9EC8B0" opacity=".8"/>
+  <circle cx="700" cy="45" r="5" fill="#9EC8B0" opacity=".65"/>
+  <line x1="560" y1="68" x2="608" y2="50" stroke="#9EC8B0" stroke-width="1" opacity=".35"/>
+  <line x1="560" y1="68" x2="618" y2="88" stroke="#9EC8B0" stroke-width="1" opacity=".35"/>
+  <line x1="608" y1="50" x2="660" y2="68" stroke="#9EC8B0" stroke-width="1" opacity=".35"/>
+  <line x1="618" y1="88" x2="660" y2="68" stroke="#9EC8B0" stroke-width="1" opacity=".35"/>
+  <line x1="660" y1="68" x2="700" y2="45" stroke="#9EC8B0" stroke-width="1" opacity=".35"/>
+  <text x="380" y="18" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#F2EDE4" opacity=".6" letter-spacing="2">PHASE CÉPHALIQUE · PAVLOV</text>
+</svg>`,
+  4: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <g opacity=".55">
+  <polygon points="80,14 92,21 92,35 80,42 68,35 68,21" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="80,42 92,49 92,63 80,70 68,63 68,49" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="80,70 92,77 92,91 80,98 68,91 68,77" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="160,14 172,21 172,35 160,42 148,35 148,21" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="160,42 172,49 172,63 160,70 148,63 148,49" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="160,70 172,77 172,91 160,98 148,91 148,77" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="240,14 252,21 252,35 240,42 228,35 228,21" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="240,42 252,49 252,63 240,70 228,63 228,49" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="240,70 252,77 252,91 240,98 228,91 228,77" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="320,14 332,21 332,35 320,42 308,35 308,21" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="320,42 332,49 332,63 320,70 308,63 308,49" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="320,70 332,77 332,91 320,98 308,91 308,77" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="400,14 412,21 412,35 400,42 388,35 388,21" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="400,42 412,49 412,63 400,70 388,63 388,49" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="400,70 412,77 412,91 400,98 388,91 388,77" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="480,14 492,21 492,35 480,42 468,35 468,21" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="480,42 492,49 492,63 480,70 468,63 468,49" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="480,70 492,77 492,91 480,98 468,91 468,77" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="560,14 572,21 572,35 560,42 548,35 548,21" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="560,42 572,49 572,63 560,70 548,63 548,49" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="560,70 572,77 572,91 560,98 548,91 548,77" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="640,14 652,21 652,35 640,42 628,35 628,21" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="640,42 652,49 652,63 640,70 628,63 628,49" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="640,70 652,77 652,91 640,98 628,91 628,77" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="720,14 732,21 732,35 720,42 708,35 708,21" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="720,42 732,49 732,63 720,70 708,63 708,49" fill="none" stroke="#9EC8B0" stroke-width="1"/><polygon points="720,70 732,77 732,91 720,98 708,91 708,77" fill="none" stroke="#9EC8B0" stroke-width="1"/>
+  </g>
+  <circle cx="200" cy="55" r="14" fill="#9EC8B0" opacity=".5"/>
+  <circle cx="380" cy="30" r="10" fill="#FFBD46" opacity=".6"/>
+  <circle cx="480" cy="70" r="10" fill="#E0732E" opacity=".5"/>
+  <circle cx="560" cy="40" r="8" fill="#9EC8B0" opacity=".4"/>
+  <line x1="200" y1="55" x2="380" y2="30" stroke="#F2EDE4" stroke-width="1" opacity=".3"/>
+  <line x1="380" y1="30" x2="480" y2="70" stroke="#F2EDE4" stroke-width="1" opacity=".3"/>
+  <line x1="480" y1="70" x2="560" y2="40" stroke="#F2EDE4" stroke-width="1" opacity=".3"/>
+  <text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#FFBD46" opacity=".7" letter-spacing="2">TISSUS EMBRYONNAIRES</text>
+</svg>`,
+  5: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <circle cx="380" cy="55" r="42" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".5"/>
+  <circle cx="380" cy="55" r="28" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".4"/>
+  <circle cx="340" cy="38" r="4" fill="#9EC8B0" opacity="0.7"/><circle cx="420" cy="35" r="3" fill="#FFBD46" opacity="0.6"/><circle cx="350" cy="72" r="5" fill="#9EC8B0" opacity="0.65"/><circle cx="415" cy="68" r="3" fill="#9EC8B0" opacity="0.5"/><circle cx="360" cy="55" r="3" fill="#FFBD46" opacity="0.7"/><circle cx="400" cy="50" r="4" fill="#9EC8B0" opacity="0.6"/><circle cx="390" cy="78" r="3" fill="#E0732E" opacity="0.5"/><circle cx="370" cy="30" r="4" fill="#9EC8B0" opacity="0.55"/><circle cx="130" cy="30" r="5" fill="#9EC8B0" opacity="0.5"/><circle cx="190" cy="55" r="4" fill="#FFBD46" opacity="0.45"/><circle cx="80" cy="60" r="3" fill="#9EC8B0" opacity="0.4"/><circle cx="220" cy="35" r="3" fill="#9EC8B0" opacity="0.4"/><circle cx="580" cy="40" r="5" fill="#9EC8B0" opacity="0.5"/><circle cx="630" cy="70" r="4" fill="#FFBD46" opacity="0.45"/><circle cx="680" cy="45" r="3" fill="#9EC8B0" opacity="0.4"/><circle cx="550" cy="75" r="3" fill="#9EC8B0" opacity="0.4"/><circle cx="700" cy="80" r="4" fill="#E0732E" opacity="0.35"/><circle cx="70" cy="85" r="3" fill="#FFBD46" opacity="0.35"/>
+  <text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#9EC8B0" opacity=".7" letter-spacing="2">MICROBIOME BUCCAL</text>
+</svg>`,
+  6: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <g transform="translate(380,55)">
+    <path d="M0,-50 C-40,-50 -55,-20 -55,10 C-55,45 -25,58 0,58 C25,58 55,45 55,10 C55,-20 40,-50 0,-50 Z" fill="none" stroke="#F2EDE4" stroke-width="1.5" opacity=".35"/>
+    <path d="M0,-50 C-30,-50 -42,-20 -42,10 C-42,38 -18,50 0,50 C18,50 42,38 42,10 C42,-20 30,-50 0,-50 Z" fill="#FFBD46" opacity=".2"/>
+    <path d="M0,-38 C-22,-38 -32,-15 -32,10 C-32,30 -13,40 0,40 C13,40 32,30 32,10 C32,-15 22,-38 0,-38 Z" fill="#9EC8B0" opacity=".25"/>
+    <path d="M0,-20 C-12,-20 -18,-8 -18,8 C-18,20 -8,25 0,25 C8,25 18,20 18,8 C18,-8 12,-20 0,-20 Z" fill="#E0732E" opacity=".3"/>
+    <circle cx="0" cy="8" r="6" fill="#E0732E" opacity=".5"/>
+  </g>
+  <text x="200" y="30" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".55" letter-spacing="1">Émail</text>
+  <text x="200" y="55" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#9EC8B0" opacity=".55" letter-spacing="1">Dentine</text>
+  <text x="200" y="78" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#E0732E" opacity=".55" letter-spacing="1">Pulpe</text>
+  <line x1="218" y1="30" x2="338" y2="15" stroke="#FFBD46" stroke-width=".8" opacity=".25"/>
+  <line x1="218" y1="55" x2="348" y2="55" stroke="#9EC8B0" stroke-width=".8" opacity=".25"/>
+  <line x1="218" y1="78" x2="338" y2="68" stroke="#E0732E" stroke-width=".8" opacity=".25"/>
+  <text x="580" y="20" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#F2EDE4" opacity=".6" letter-spacing="2">ANATOMIE DENTAIRE</text>
+</svg>`,
+  7: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  
+  <g transform="translate(100,35)" opacity="0.8">
+    <polygon points="0,-18 9.0,-15.66 9.0,15.66 0,18 -9.0,15.66 -9.0,-15.66" fill="#FFBD46" opacity=".35"/>
+    <circle cx="0" cy="0" r="7" fill="#FFBD46" opacity=".7"/>
+  </g>
+  <g transform="translate(200,72)" opacity="0.7">
+    <polygon points="0,-14 7.0,-12.18 7.0,12.18 0,14 -7.0,12.18 -7.0,-12.18" fill="#9EC8B0" opacity=".35"/>
+    <circle cx="0" cy="0" r="5" fill="#9EC8B0" opacity=".7"/>
+  </g>
+  <g transform="translate(310,28)" opacity="0.7">
+    <polygon points="0,-16 8.0,-13.92 8.0,13.92 0,16 -8.0,13.92 -8.0,-13.92" fill="#E0732E" opacity=".35"/>
+    <circle cx="0" cy="0" r="6" fill="#E0732E" opacity=".7"/>
+  </g>
+  <g transform="translate(420,75)" opacity="0.75">
+    <polygon points="0,-20 10.0,-17.4 10.0,17.4 0,20 -10.0,17.4 -10.0,-17.4" fill="#FFBD46" opacity=".35"/>
+    <circle cx="0" cy="0" r="8" fill="#FFBD46" opacity=".7"/>
+  </g>
+  <g transform="translate(520,32)" opacity="0.7">
+    <polygon points="0,-15 7.5,-13.05 7.5,13.05 0,15 -7.5,13.05 -7.5,-13.05" fill="#9EC8B0" opacity=".35"/>
+    <circle cx="0" cy="0" r="6" fill="#9EC8B0" opacity=".7"/>
+  </g>
+  <g transform="translate(630,68)" opacity="0.65">
+    <polygon points="0,-17 8.5,-14.79 8.5,14.79 0,17 -8.5,14.79 -8.5,-14.79" fill="#E0732E" opacity=".35"/>
+    <circle cx="0" cy="0" r="6" fill="#E0732E" opacity=".7"/>
+  </g>
+  <g transform="translate(700,30)" opacity="0.6">
+    <polygon points="0,-12 6.0,-10.44 6.0,10.44 0,12 -6.0,10.44 -6.0,-10.44" fill="#FFBD46" opacity=".35"/>
+    <circle cx="0" cy="0" r="4" fill="#FFBD46" opacity=".7"/>
+  </g>
+  <g transform="translate(680,88)" opacity="0.55">
+    <polygon points="0,-10 5.0,-8.7 5.0,8.7 0,10 -5.0,8.7 -5.0,-8.7" fill="#9EC8B0" opacity=".35"/>
+    <circle cx="0" cy="0" r="4" fill="#9EC8B0" opacity=".7"/>
+  </g>
+  <g transform="translate(50,80)" opacity="0.5">
+    <polygon points="0,-10 5.0,-8.7 5.0,8.7 0,10 -5.0,8.7 -5.0,-8.7" fill="#E0732E" opacity=".35"/>
+    <circle cx="0" cy="0" r="4" fill="#E0732E" opacity=".7"/>
+  </g>
+  <g transform="translate(760,60)" opacity="0.5">
+    <polygon points="0,-13 6.5,-11.31 6.5,11.31 0,13 -6.5,11.31 -6.5,-11.31" fill="#9EC8B0" opacity=".35"/>
+    <circle cx="0" cy="0" r="5" fill="#9EC8B0" opacity=".7"/>
+  </g>
+  <text x="380" y="14" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#F2EDE4" opacity=".6" letter-spacing="2">PAPILLES GUSTATIVES · 5 SAVEURS</text>
+</svg>`,
+  8: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <ellipse cx="380" cy="60" rx="200" ry="40" fill="#9EC8B0" opacity=".12"/>
+  <ellipse cx="380" cy="60" rx="165" ry="34" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".4"/>
+  <line x1="180" y1="60" x2="580" y2="60" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/>
+  <line x1="230" y1="28" x2="530" y2="28" stroke="#F2EDE4" stroke-width=".8" opacity=".15"/>
+  <line x1="230" y1="92" x2="530" y2="92" stroke="#F2EDE4" stroke-width=".8" opacity=".15"/>
+  <line x1="280" y1="20" x2="280" y2="100" stroke="#F2EDE4" stroke-width=".8" opacity=".15"/>
+  <line x1="380" y1="20" x2="380" y2="100" stroke="#F2EDE4" stroke-width=".8" opacity=".15"/>
+  <line x1="480" y1="20" x2="480" y2="100" stroke="#F2EDE4" stroke-width=".8" opacity=".15"/>
+  <text x="280" y="45" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#9EC8B0" opacity=".6">Rate</text>
+  <text x="380" y="45" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#FFBD46" opacity=".6">Cœur/Feu</text>
+  <text x="480" y="45" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#9EC8B0" opacity=".6">Reins</text>
+  <circle cx="280" cy="60" r="8" fill="#9EC8B0" opacity=".4"/>
+  <circle cx="380" cy="60" r="10" fill="#FFBD46" opacity=".4"/>
+  <circle cx="480" cy="60" r="8" fill="#9EC8B0" opacity=".35"/>
+  <text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#F2EDE4" opacity=".6" letter-spacing="2">LANGUE · CARTE MTC</text>
+</svg>`,
+  9: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <ellipse cx="380" cy="62" rx="18" ry="25" fill="#9EC8B0" opacity="0.3"/><ellipse cx="380" cy="50" rx="14" ry="20" fill="#9EC8B0" opacity="0.25"/><ellipse cx="380" cy="42" rx="8" ry="13" fill="#9EC8B0" opacity="0.35"/><ellipse cx="380" cy="60" rx="6" ry="10" fill="#9EC8B0" opacity="0.5"/><ellipse cx="150" cy="70" rx="8" ry="11" fill="#9EC8B0" opacity="0.2"/><ellipse cx="230" cy="45" rx="6" ry="9" fill="#9EC8B0" opacity="0.18"/><ellipse cx="560" cy="65" rx="9" ry="13" fill="#9EC8B0" opacity="0.2"/><ellipse cx="630" cy="40" rx="6" ry="9" fill="#9EC8B0" opacity="0.18"/><ellipse cx="700" cy="75" rx="5" ry="8" fill="#9EC8B0" opacity="0.15"/><ellipse cx="80" cy="55" rx="5" ry="7" fill="#9EC8B0" opacity="0.15"/><ellipse cx="460" cy="80" rx="7" ry="10" fill="#9EC8B0" opacity="0.18"/>
+  <path d="M0,80 Q190,60 380,80 Q570,100 760,80" stroke="#9EC8B0" stroke-width="1.5" fill="none" opacity=".3"/>
+  <path d="M0,70 Q190,50 380,70 Q570,90 760,70" stroke="#9EC8B0" stroke-width="1" fill="none" opacity=".2"/>
+  <text x="380" y="18" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#9EC8B0" opacity=".7" letter-spacing="2">SALIVE · COMPOSITION · pH</text>
+</svg>`,
+  10: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <rect x="0" y="0" width="380" height="110" fill="#9EC8B0" opacity=".08"/>
+  <rect x="380" y="0" width="380" height="110" fill="#E0732E" opacity=".07"/>
+  <line x1="380" y1="0" x2="380" y2="110" stroke="#F2EDE4" stroke-width="1.5" opacity=".35"/>
+  <path d="M20,55 Q60,55 100,55 Q140,55 180,55 Q220,55 260,55 Q300,55 340,55 Q360,55 380,55" stroke="#9EC8B0" stroke-width="2" fill="none" opacity=".5"/>
+  <path d="M380,55 Q400,30 420,75 Q440,20 460,85 Q480,15 500,90 Q520,20 540,80 Q560,30 580,65 Q620,45 660,70 Q700,40 740,60" stroke="#E0732E" stroke-width="2" fill="none" opacity=".5"/>
+  <text x="190" y="30" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="12" fill="#9EC8B0" opacity=".6">CALME</text>
+  <text x="570" y="30" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="12" fill="#E0732E" opacity=".6">STRESS</text>
+  <text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#F2EDE4" opacity=".5" letter-spacing="2">STRESS &amp; DIGESTION</text>
+</svg>`,
+  11: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  
+  <g opacity=".75">
+    <path d="M80,15 C200,5 280,40 300,55" stroke="#FFBD46" stroke-width="2.5" fill="none" opacity=".6"/>
+    <polygon points="294,50 306,50 300,63" fill="#FFBD46" opacity=".7"/>
+    <text x="50" y="18" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="14" fill="#FFBD46" font-weight="700" opacity=".75">1</text>
+  </g>
+  <g opacity=".75">
+    <path d="M300,55 C380,65 440,65 460,55" stroke="#9EC8B0" stroke-width="2.5" fill="none" opacity=".6"/>
+    <polygon points="454,50 466,50 460,63" fill="#9EC8B0" opacity=".7"/>
+    <text x="270" y="72" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="14" fill="#9EC8B0" font-weight="700" opacity=".75">2</text>
+  </g>
+  <g opacity=".75">
+    <path d="M460,55 C500,45 560,75 580,75" stroke="#E0732E" stroke-width="2.5" fill="none" opacity=".6"/>
+    <polygon points="574,70 586,70 580,83" fill="#E0732E" opacity=".7"/>
+    <text x="440" y="50" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="14" fill="#E0732E" font-weight="700" opacity=".75">3</text>
+  </g>
+  <g opacity=".75">
+    <path d="M580,75 C620,80 680,90 700,100" stroke="#9EC8B0" stroke-width="2.5" fill="none" opacity=".6"/>
+    <polygon points="694,95 706,95 700,108" fill="#9EC8B0" opacity=".7"/>
+    <text x="555" y="85" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="14" fill="#9EC8B0" font-weight="700" opacity=".75">4</text>
+  </g>
+  <text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#F2EDE4" opacity=".55" letter-spacing="2">DÉGLUTITION EN 4 TEMPS</text>
+</svg>`,
+  12: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <path d="M360,5 C340,5 320,20 320,55 C320,90 340,105 360,105 L400,105 C420,105 440,90 440,55 C440,20 420,5 400,5 Z" fill="none" stroke="#9EC8B0" stroke-width="2" opacity=".45"/>
+  <path d="M365,5 C348,5 330,20 330,55 C330,90 348,105 365,105 L395,105 C412,105 430,90 430,55 C430,20 412,5 395,5 Z" fill="#9EC8B0" opacity=".12"/>
+  <ellipse cx="380" cy="20" rx="22" ry="5" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".3"/><ellipse cx="380" cy="35" rx="22" ry="5" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".3"/><ellipse cx="380" cy="50" rx="22" ry="5" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".3"/><ellipse cx="380" cy="65" rx="22" ry="5" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".3"/><ellipse cx="380" cy="80" rx="22" ry="5" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".3"/><ellipse cx="380" cy="95" rx="22" ry="5" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".3"/>
+  <ellipse cx="380" cy="95" rx="32" ry="8" fill="none" stroke="#FFBD46" stroke-width="2.5" opacity=".55"/>
+  <text x="380" y="55" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="#9EC8B0" opacity=".5" letter-spacing="1">ŒSOPHAGE</text>
+  <text x="380" y="98" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="8" fill="#FFBD46" opacity=".65">CARDIA</text>
+  <path d="M50,40 C150,30 220,55 240,55" stroke="#F2EDE4" stroke-width="1" fill="none" opacity=".2" stroke-dasharray="6,4"/>
+  <path d="M520,55 C540,55 610,30 710,40" stroke="#F2EDE4" stroke-width="1" fill="none" opacity=".2" stroke-dasharray="6,4"/>
+  <text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#F2EDE4" opacity=".55" letter-spacing="2">ŒSOPHAGE &amp; CARDIA</text>
+</svg>`,
+  13: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+  <rect width="760" height="110" fill="#0C2613"/>
+  <circle cx="380" cy="55" r="10" fill="#FFBD46" opacity="0.7"/><circle cx="200" cy="30" r="7" fill="#9EC8B0" opacity="0.6"/><circle cx="560" cy="30" r="7" fill="#9EC8B0" opacity="0.6"/><circle cx="150" cy="80" r="6" fill="#E0732E" opacity="0.5"/><circle cx="610" cy="80" r="6" fill="#E0732E" opacity="0.5"/><circle cx="80" cy="45" r="5" fill="#9EC8B0" opacity="0.45"/><circle cx="680" cy="45" r="5" fill="#9EC8B0" opacity="0.45"/><circle cx="300" cy="90" r="6" fill="#FFBD46" opacity="0.45"/><circle cx="460" cy="90" r="6" fill="#FFBD46" opacity="0.45"/><circle cx="700" cy="90" r="4" fill="#9EC8B0" opacity="0.35"/><circle cx="60" cy="90" r="4" fill="#9EC8B0" opacity="0.35"/>
+  <line x1="380" y1="55" x2="200" y2="30" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="380" y1="55" x2="560" y2="30" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="380" y1="55" x2="150" y2="80" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="380" y1="55" x2="610" y2="80" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="200" y1="30" x2="80" y2="45" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="200" y1="30" x2="150" y2="80" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="560" y1="30" x2="680" y2="45" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="560" y1="30" x2="610" y2="80" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="150" y1="80" x2="80" y2="45" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="150" y1="80" x2="300" y2="90" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="610" y1="80" x2="680" y2="45" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="610" y1="80" x2="460" y2="90" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="300" y1="90" x2="60" y2="90" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/><line x1="460" y1="90" x2="700" y2="90" stroke="#F2EDE4" stroke-width=".8" opacity=".2"/>
+  <text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#FFBD46" opacity=".7" letter-spacing="2">LIENS INTER-SYSTÈMES</text>
+</svg>`,
+};
+const QTHEM = [1, 1, 1, 2, 3, 3, 3, 4, 5, 5, 6, 6, 6, 7, 7, 8, 9, 9, 9, 10, 11, 11, 11, 11, 12, 12, 12, 13, 9, 13];
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRBLCAE0REhsengeNdrXbz0MouKzr1sPA-FfKHJIq08EEINIrcfKOuTbXlNvBXivUVNg/exec";
+const PTS = 100/30;
+
+const CORRECT_ANS=[
+  "La relation entre ces deux structures suit le cycle de contrôle (Ke) : l'Eau contrôle le Feu. En d'autres mots, la colonne vertébrale (Eau, structure protectrice) encadre et régule physiquement le SNC (Feu, fonction) — Les surrénales permettent l'adaptabilité et lors de stress chronique une perte d'équilibre de l'Eau réduit la capacité à contrôler le Feu, une image cohérente avec le rôle stabilisateur que la MTC attribue aux Reins/Eau envers l'activité du cerveau.",
+  "En MTC, le SNC relève de l'élément Feu : c'est le Cœur qui abrite le Shen, c'est-à-dire la conscience, la pensée claire, la capacité de réfléchir.",
+  "La colonne vertébrale — les os qui entourent et protègent la moelle épinière — relève quant à elle de l'élément Eau, puisque les os sont gouvernés par les Reins (l'organe associé à l'élément Eau) ainsi que les surrénales qui sont en constante adaptation pour le SNC.",
+  "Les Reins sont liés aux glandes surrénales — un stress prolongé produit le même épuisement énergétique que la peur chronique.",
+  "Ce mécanisme a été démontré pour la première fois au début du XXe siècle par Ivan Pavlov, dont les travaux sur les sécrétions digestives lui ont valu le prix Nobel de physiologie/médecine en 1904.",
+  "La simple anticipation d'un repas peut représenter plus de 50 % de la réponse digestive totale (Pavlov, 1910 ; Power & Schulkin, 2008).",
+  "L'équilibrer nourrit le Feu (réglant la cause émotionnelle initiale, cycle nourricier Bois→Feu) et contrôle la Terre (réglant le symptôme digestif, cycle de contrôle Bois→Terre) — les deux cycles retrouvent simultanément leur équilibre.",
+  "Identifier d'abord le tissu embryonnaire concerné oriente à la fois la recherche scientifique et la lecture énergétique (l'élément correspondant).",
+  "La bouche abrite plus de 700 espèces de micro-organismes différentes, formant le microbiome oral — l'un des microbiomes les plus diversifiés du corps humain après celui de l'intestin. La recherche s'oriente vers la modulation du microbiome buccal pour prévenir des maladies qui touchent tout le corps.",
+  "Des études récentes établissent des liens entre la parodontite (l'inflammation des tissus de soutien de la dent) et le risque de maladie d'Alzheimer, de diabète de type 2 et de maladies cardiovasculaires (Hajishengallis, 2015).",
+  "L'émail : la couche externe, composée à 96 % d'hydroxyapatite (un minéral très dur fait de calcium et de phosphate). C'est le tissu le plus dur du corps humain, sans cellules vivantes ni nerfs.",
+  "Lorsqu'il est enflammé de façon prolongée (une parodontite non traitée), il libère dans le sang des cytokines pro-inflammatoires — des molécules messagères qui amplifient l'inflammation partout où elles circulent (notamment l'IL-1β et le TNF-α).",
+  "Les Reins gouvernent les dents, les os, la moelle osseuse.",
+  "Les molécules responsables du goût doivent être dissoutes dans la salive pour atteindre les récepteurs. C'est pourquoi une bouche sèche ne goûte pratiquement rien.",
+  "Cette idée a été invalidée par la recherche (Collings, 1974) : les 5 saveurs de base peuvent être détectées par les bourgeons présents dans la plupart des papilles — il n'existe pas de zone exclusive réservée à une seule saveur.",
+  "Pour le système digestif, la zone la plus pertinente est le centre de la langue (Rate-Estomac) : un enduit épais ou des fissures à cet endroit orientent vers un déséquilibre digestif.",
+  "La salive a un pH presque neutre (entre 6,5 et 7,0 — rappel : le pH mesure l'acidité d'une substance ; 7 est neutre, moins de 7 est acide).",
+  "Elle transforme — on dit qu'elle « hydrolyse » — l'amidon (le sucre complexe présent dans le pain, les pâtes, les pommes de terre) en maltose, un sucre simple.",
+  "Une bouche sèche (xérostomie) n'est donc jamais un simple inconfort : elle signale un déséquilibre plus profond, et augmente le risque de caries, d'infections et de troubles digestifs.",
+  "Un repas pris dans le stress (qui active le système « sympathique », celui qui accélère et alerte) inhibe cette phase et détériore la qualité de la digestion dès la bouche.",
+  "C'est le point où les voies respiratoires (l'air) et digestives (les aliments) se croisent. Le moindre défaut de coordination peut entraîner une « fausse route ».",
+  "On y trouve les amygdales palatines (un tissu immunitaire de chaque côté de la gorge) et la zone du réflexe de nausée — un mécanisme de défense qui empêche d'avaler des substances potentiellement toxiques.",
+  "Le voile du palais (la partie molle à l'arrière du palais) se soulève pour fermer l'accès au nez, l'épiglotte (un petit clapet de cartilage) bascule vers l'arrière pour fermer l'accès au larynx, les cordes vocales se ferment, et les muscles du pharynx se contractent pour pousser le bol vers le bas.",
+  "Une fois cette étape déclenchée, le reste du processus devient automatique — on ne peut plus l'arrêter.",
+  "L'œsophage traverse le diaphragme (le grand muscle qui sépare le thorax de l'abdomen) par une ouverture appelée l'hiatus œsophagien, et rejoint l'estomac au niveau du cardia.",
+  "La force de fermeture de ce sphincter est maintenue par le diaphragme et par le tonus (la tension) propre de son propre muscle.",
+  "Un RGO chronique non pris en charge peut entraîner une œsophagite (une inflammation de l'œsophage) puis, dans certains cas, une métaplasie appelée œsophage de Barrett (ou endobrachyœsophage) — qui est le seul précurseur connu de l'adénocarcinome œsophagien (un cancer de l'œsophage).",
+  "L'œsophage relève de l'élément Terre, dont l'émotion associée en déséquilibre est la rumination et l'inquiétude — Clouse et Lustman offrent ainsi une validation scientifique moderne d'un lien observé en MTC depuis des siècles.",
+  "Celles de la salive forment une première barrière de protection dans la bouche.",
+  "Un stress intense peut provoquer des spasmes œsophagiens (des contractions douloureuses et anormales) suffisamment forts pour imiter un infarctus (une crise cardiaque)."
+];
+
+const QS=[
+  {id:1,q:"Selon le cycle de contrôle (Ke), quelle relation existe entre l'Eau et le Feu, et comment cela se traduit-il pour le SNC et la colonne vertébrale ?",ok:"C",ch:[{l:"A",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"},{l:"B",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"C",t:"1.2.1. Eau ~ Feu"},{l:"D",t:"4.6. Lecture MTC et naturopathique"},{l:"E",t:"7.5. Lien inter-systèmes"}]},
+  {id:2,q:"Pourquoi le SNC relève-t-il de l'élément Feu en MTC ?",ok:"D",ch:[{l:"A",t:"5.2. La langue comme outil d'observation en MTC"},{l:"B",t:"4.6. Lecture MTC et naturopathique"},{l:"C",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"D",t:"1.2.1. Eau ~ Feu"},{l:"E",t:"3. Les Tissus Embryonnaires — Repère pour la recherche"}]},
+  {id:3,q:"Pourquoi la colonne vertébrale relève-t-elle de l'élément Eau en MTC ?",ok:"B",ch:[{l:"A",t:"4.6. Lecture MTC et naturopathique"},{l:"B",t:"1.2.1. Eau ~ Feu"},{l:"C",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"},{l:"D",t:"7.5. Lien inter-systèmes"},{l:"E",t:"3. Les Tissus Embryonnaires — Repère pour la recherche"}]},
+  {id:4,q:"Quel est le lien entre la peur chronique et le stress chronique selon le cahier ?",ok:"E",ch:[{l:"A",t:"1.2.1. Eau ~ Feu"},{l:"B",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"C",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"D",t:"4.6. Lecture MTC et naturopathique"},{l:"E",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"}]},
+  {id:5,q:"Quelle découverte d'Ivan Pavlov est citée pour appuyer le mécanisme de la phase céphalique ?",ok:"A",ch:[{l:"A",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"B",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"C",t:"1.2.1. Eau ~ Feu"},{l:"D",t:"2. Perspective évolutive et vision d'ensemble"},{l:"E",t:"6.2. Composition et rôles multiples"}]},
+  {id:6,q:"Quelle proportion de la réponse digestive totale peut représenter la simple anticipation d'un repas ?",ok:"D",ch:[{l:"A",t:"6.2. Composition et rôles multiples"},{l:"B",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"C",t:"2. Perspective évolutive et vision d'ensemble"},{l:"D",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"E",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"}]},
+  {id:7,q:"Comment le Bois permet-il de rétablir l'équilibre, qu'il s'agisse d'une situation aiguë (Feu→Terre) ou chronique (Terre→Métal) ?",ok:"C",ch:[{l:"A",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"},{l:"B",t:"5.2. La langue comme outil d'observation en MTC"},{l:"C",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"D",t:"4.6. Lecture MTC et naturopathique"},{l:"E",t:"7.5. Lien inter-systèmes"}]},
+  {id:8,q:"Pourquoi est-il utile d'identifier le tissu embryonnaire concerné lors d'une recherche sur une pathologie digestive ?",ok:"E",ch:[{l:"A",t:"2. Perspective évolutive et vision d'ensemble"},{l:"B",t:"4.4. Anatomie et composition"},{l:"C",t:"4.6. Lecture MTC et naturopathique"},{l:"D",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"E",t:"3. Les Tissus Embryonnaires — Repère pour la recherche"}]},
+  {id:9,q:"Comment le cahier décrit-il le microbiome buccal dans la perspective « Aujourd'hui » ?",ok:"B",oks:["A","B"],ch:[{l:"A",t:"2. Perspective évolutive et vision d'ensemble"},{l:"B",t:"2.1. Le microbiome buccal — un écosystème à ne pas négliger"},{l:"C",t:"6.2. Composition et rôles multiples"},{l:"D",t:"4.5. Le parodonte — le système de soutien de la dent"},{l:"E",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"}]},
+  {id:10,q:"À quels risques de santé la parodontite a-t-elle été reliée selon Hajishengallis (2015) ?",ok:"D",ch:[{l:"A",t:"4.5. Le parodonte — le système de soutien de la dent"},{l:"B",t:"2.1. Le microbiome buccal — un écosystème à ne pas négliger"},{l:"C",t:"4.6. Lecture MTC et naturopathique"},{l:"D",t:"2. Perspective évolutive et vision d'ensemble"},{l:"E",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"}]},
+  {id:11,q:"De quoi est composé l'émail dentaire à 96 %, et quelles sont ses propriétés ?",ok:"A",ch:[{l:"A",t:"4.4. Anatomie et composition"},{l:"B",t:"4.5. Le parodonte — le système de soutien de la dent"},{l:"C",t:"4.6. Lecture MTC et naturopathique"},{l:"D",t:"3. Les Tissus Embryonnaires — Repère pour la recherche"},{l:"E",t:"5.1. Les papilles gustatives — les capteurs du goût"}]},
+  {id:12,q:"Que libère dans le sang un parodonte enflammé de façon prolongée, et quel est l'effet de ces substances ?",ok:"C",ch:[{l:"A",t:"4.4. Anatomie et composition"},{l:"B",t:"4.6. Lecture MTC et naturopathique"},{l:"C",t:"4.5. Le parodonte — le système de soutien de la dent"},{l:"D",t:"2. Perspective évolutive et vision d'ensemble"},{l:"E",t:"7.5. Lien inter-systèmes"}]},
+  {id:13,q:"En MTC, quelles structures du corps les Reins gouvernent-ils, en lien avec les dents ?",ok:"E",ch:[{l:"A",t:"1.2.1. Eau ~ Feu"},{l:"B",t:"4.4. Anatomie et composition"},{l:"C",t:"4.5. Le parodonte — le système de soutien de la dent"},{l:"D",t:"3. Les Tissus Embryonnaires — Repère pour la recherche"},{l:"E",t:"4.6. Lecture MTC et naturopathique"}]},
+  {id:14,q:"Pourquoi une bouche sèche ne goûte-t-elle presque rien ?",ok:"B",ch:[{l:"A",t:"6.2. Composition et rôles multiples"},{l:"B",t:"5.1. Les papilles gustatives — les capteurs du goût"},{l:"C",t:"5.2. La langue comme outil d'observation en MTC"},{l:"D",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"E",t:"4.4. Anatomie et composition"}]},
+  {id:15,q:"Qu'a invalidé la recherche (Collings, 1974) concernant la « carte des saveurs » de la langue ?",ok:"D",ch:[{l:"A",t:"5.2. La langue comme outil d'observation en MTC"},{l:"B",t:"6.2. Composition et rôles multiples"},{l:"C",t:"4.4. Anatomie et composition"},{l:"D",t:"5.1. Les papilles gustatives — les capteurs du goût"},{l:"E",t:"2.1. Le microbiome buccal — un écosystème à ne pas négliger"}]},
+  {id:16,q:"Quelle zone de la langue est la plus pertinente pour évaluer le système digestif en MTC ?",ok:"C",ch:[{l:"A",t:"5.1. Les papilles gustatives — les capteurs du goût"},{l:"B",t:"4.6. Lecture MTC et naturopathique"},{l:"C",t:"5.2. La langue comme outil d'observation en MTC"},{l:"D",t:"6.2. Composition et rôles multiples"},{l:"E",t:"1.2.1. Eau ~ Feu"}]},
+  {id:17,q:"Quel est le pH de la salive et que signifie cette valeur ?",ok:"E",ch:[{l:"A",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"B",t:"5.1. Les papilles gustatives — les capteurs du goût"},{l:"C",t:"4.4. Anatomie et composition"},{l:"D",t:"7.3. L'Œsophage — Bien plus qu'un simple tuyau"},{l:"E",t:"6.2. Composition et rôles multiples"}]},
+  {id:18,q:"Quelle est l'action de l'amylase salivaire sur l'amidon ?",ok:"A",ch:[{l:"A",t:"6.2. Composition et rôles multiples"},{l:"B",t:"5.1. Les papilles gustatives — les capteurs du goût"},{l:"C",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"D",t:"4.4. Anatomie et composition"},{l:"E",t:"3. Les Tissus Embryonnaires — Repère pour la recherche"}]},
+  {id:19,q:"Que signale une bouche sèche (xérostomie) persistante, selon le cahier ?",ok:"C",ch:[{l:"A",t:"5.2. La langue comme outil d'observation en MTC"},{l:"B",t:"7.4. Le cardia — gardien de l'œsophage"},{l:"C",t:"6.2. Composition et rôles multiples"},{l:"D",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"E",t:"2.1. Le microbiome buccal — un écosystème à ne pas négliger"}]},
+  {id:20,q:"Quel effet a un repas pris sous stress sur la phase céphalique de la digestion ?",ok:"D",ch:[{l:"A",t:"6.2. Composition et rôles multiples"},{l:"B",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"C",t:"7.4. Le cardia — gardien de l'œsophage"},{l:"D",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"E",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"}]},
+  {id:21,q:"Pourquoi le pharynx est-il l'un des endroits les plus à risque de notre anatomie ?",ok:"B",ch:[{l:"A",t:"7.1. Les 3 parties du pharynx"},{l:"B",t:"7. Le Pharynx et la Déglutition — Le carrefour vital"},{l:"C",t:"7.2. La déglutition en 4 temps — une chorégraphie remarquablement précise"},{l:"D",t:"7.3. L'Œsophage — Bien plus qu'un simple tuyau"},{l:"E",t:"6.3. Lien inter-systèmes — la phase céphalique"}]},
+  {id:22,q:"Quelles structures immunitaires et quel réflexe de protection se trouvent dans l'oropharynx ?",ok:"E",ch:[{l:"A",t:"7. Le Pharynx et la Déglutition — Le carrefour vital"},{l:"B",t:"7.2. La déglutition en 4 temps — une chorégraphie remarquablement précise"},{l:"C",t:"6.2. Composition et rôles multiples"},{l:"D",t:"4.5. Le parodonte — le système de soutien de la dent"},{l:"E",t:"7.1. Les 3 parties du pharynx"}]},
+  {id:23,q:"Que se passe-t-il pendant le Temps 2 (pharyngien) de la déglutition ?",ok:"C",ch:[{l:"A",t:"7. Le Pharynx et la Déglutition — Le carrefour vital"},{l:"B",t:"7.1. Les 3 parties du pharynx"},{l:"C",t:"7.2. La déglutition en 4 temps — une chorégraphie remarquablement précise"},{l:"D",t:"7.3. L'Œsophage — Bien plus qu'un simple tuyau"},{l:"E",t:"7.4. Le cardia — gardien de l'œsophage"}]},
+  {id:24,q:"Que se passe-t-il une fois que le Temps 1 (buccal) de la déglutition est déclenché ?",ok:"A",ch:[{l:"A",t:"7.2. La déglutition en 4 temps — une chorégraphie remarquablement précise"},{l:"B",t:"7.1. Les 3 parties du pharynx"},{l:"C",t:"7. Le Pharynx et la Déglutition — Le carrefour vital"},{l:"D",t:"7.3. L'Œsophage — Bien plus qu'un simple tuyau"},{l:"E",t:"6.3. Lien inter-systèmes — la phase céphalique"}]},
+  {id:25,q:"Quelles structures l'œsophage traverse-t-il avant de rejoindre l'estomac ?",ok:"D",ch:[{l:"A",t:"7.2. La déglutition en 4 temps — une chorégraphie remarquablement précise"},{l:"B",t:"7. Le Pharynx et la Déglutition — Le carrefour vital"},{l:"C",t:"7.4. Le cardia — gardien de l'œsophage"},{l:"D",t:"7.3. L'Œsophage — Bien plus qu'un simple tuyau"},{l:"E",t:"7.5. Lien inter-systèmes"}]},
+  {id:26,q:"Qu'est-ce qui maintient la force de fermeture du cardia ?",ok:"B",ch:[{l:"A",t:"7.3. L'Œsophage — Bien plus qu'un simple tuyau"},{l:"B",t:"7.4. Le cardia — gardien de l'œsophage"},{l:"C",t:"7.5. Lien inter-systèmes"},{l:"D",t:"7.2. La déglutition en 4 temps — une chorégraphie remarquablement précise"},{l:"E",t:"6.3. Lien inter-systèmes — la phase céphalique"}]},
+  {id:27,q:"Selon Shaheen et al. (2016), quelle est l'évolution possible d'un RGO chronique non pris en charge ?",ok:"E",ch:[{l:"A",t:"7.3. L'Œsophage — Bien plus qu'un simple tuyau"},{l:"B",t:"7.5. Lien inter-systèmes"},{l:"C",t:"2. Perspective évolutive et vision d'ensemble"},{l:"D",t:"7.2. La déglutition en 4 temps — une chorégraphie remarquablement précise"},{l:"E",t:"7.4. Le cardia — gardien de l'œsophage"}]},
+  {id:28,q:"Quelle correspondance énergétique l'étude de Clouse et Lustman (1983) vient-elle valider scientifiquement ?",ok:"C",ch:[{l:"A",t:"7.4. Le cardia — gardien de l'œsophage"},{l:"B",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"C",t:"7.5. Lien inter-systèmes"},{l:"D",t:"7.3. L'Œsophage — Bien plus qu'un simple tuyau"},{l:"E",t:"4.6. Lecture MTC et naturopathique"}]},
+  {id:29,q:"Quel rôle jouent les IgA sécrétoires présents dans la salive ?",ok:"D",ch:[{l:"A",t:"2.1. Le microbiome buccal — un écosystème à ne pas négliger"},{l:"B",t:"4.5. Le parodonte — le système de soutien de la dent"},{l:"C",t:"5.1. Les papilles gustatives — les capteurs du goût"},{l:"D",t:"6.2. Composition et rôles multiples"},{l:"E",t:"6.3. Lien inter-systèmes — la phase céphalique"}]},
+  {id:30,q:"Quel type de situation peut imiter une crise cardiaque à travers l'œsophage ?",ok:"B",ch:[{l:"A",t:"7.4. Le cardia — gardien de l'œsophage"},{l:"B",t:"7.5. Lien inter-systèmes"},{l:"C",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"D",t:"7.2. La déglutition en 4 temps — une chorégraphie remarquablement précise"},{l:"E",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"}]}
+];
+
+const LS="elysens_quiz_m1_v3";
+let S={name:"",email:"",cur:0,done:false,score:0,
+  ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))};
+
+function save(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function load(){try{const d=localStorage.getItem(LS);if(d){S=JSON.parse(d);return true}}catch(e){}return false}
+function reset(){localStorage.removeItem(LS);S={name:"",email:"",cur:0,done:false,score:0,ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))}}
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.getElementById("prog-wrap").style.display=id==="screen-quiz"?"block":"none";
+  document.getElementById("float-submit").style.display=id==="screen-quiz"?"block":"none";
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("btn-start").addEventListener("click",startQuiz);
+  if(load()&&S.name&&!S.done){
+    if(confirm("Quiz en cours trouvé pour "+S.name+".\n\nReprendre à la question "+(S.cur+1)+" ?\n\n(Annuler = recommencer à zéro)")){
+      show("screen-quiz");liveScore();render();
+    }else{reset();}
+  }
+  if(S.done){showResults();}
+});
+
+function startQuiz(){
+  const n=document.getElementById("inp-name").value.trim();
+  const e=document.getElementById("inp-email").value.trim();
+  const err=document.getElementById("err-msg");
+  if(!n||!e||!e.includes("@")){err.style.display="block";return;}
+  err.style.display="none";
+  S.name=n;S.email=e;save();
+  show("screen-quiz");liveScore();render();
+}
+
+function render(){
+  const i=S.cur,q=QS[i],ans=S.ans[i],locked=ans.mcq!==null;
+  const pct=Math.round(i/30*100);
+  document.getElementById("prog-bar").style.width=pct+"%";
+  document.getElementById("prog-text").textContent="Question "+(i+1)+" / 30";
+  document.getElementById("prog-pct").textContent=pct+" %";
+
+  let ch="";
+  const validAnswers = q.oks || [q.ok];
+  q.ch.forEach(c=>{
+    let cls="choice";
+    if(locked){
+      cls+=" locked";
+      if(validAnswers.includes(c.l))cls+=" is-correct";
+      else if(c.l===ans.mcq && !ans.ok)cls+=" is-wrong";
+    }
+    ch+=`<div class="${cls}" data-letter="${c.l}"><div class="letter">${c.l}</div><div class="choice-text">${c.t}</div></div>`;
+  });
+
+  let fb="";
+  if(locked){
+    const validAnsList = q.oks || [q.ok];
+    const sectList = validAnsList.map(l=>q.ch.find(c=>c.l===l).t).join(" — ou — ");
+    const cAns=CORRECT_ANS[i];
+    fb=ans.ok
+      ?`<div class="fb ok show">✅ Bonne réponse ! Section : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`
+      :`<div class="fb ko show">❌ La bonne réponse est : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`;
+  }
+
+  const isLast=i===29;
+  const nxt=isLast
+    ?`<button class="btn btn-or" id="btn-next" ${!locked?"disabled":""} onclick="finish()">Terminer le quiz ✓</button>`
+    :`<button class="btn btn-vert" id="btn-next" ${!locked?"disabled":""} onclick="goTo(${i+1})">Suivant →</button>`;
+
+  const themeNum = QTHEM[i];
+  const themeSvg = SVGS[themeNum] || "";
+  document.getElementById("q-container").innerHTML=`
+    <div class="q-card">
+      <div class="q-visual">${themeSvg}</div>
+      <div class="q-card-inner">
+      <div class="q-num">QUESTION ${i+1} / 30</div>
+      <div class="q-text">${q.q}</div>
+      <div class="part-label">1 — A &nbsp;·&nbsp; Réponse à développement</div>
+      <div class="part-hint">Consultez votre cahier et répondez avec vos propres mots :</div>
+      <textarea id="ta" placeholder="Écrivez votre réponse ici…">${ans.txt}</textarea>
+      <div class="autosave">💾 Sauvegarde automatique à chaque frappe</div>
+      <hr class="sep">
+      <div class="part-label">1 — B &nbsp;·&nbsp; Section du cahier</div>
+      <div class="part-hint">Dans quelle section avez-vous trouvé cette information ?</div>
+      <div id="cw">${ch}</div>
+      ${fb}
+      <div class="nav-row">
+        <button class="btn btn-outline" onclick="goTo(${i-1})" ${i===0?"disabled":""}>← Précédent</button>
+<span style="font-size:13px;color:var(--muted)">Score : <strong>${Math.round(S.score)}</strong> / 100</span>
+        ${nxt}
+      </div>
+      </div>
+    </div>`;
+
+  document.getElementById("ta").addEventListener("input",e=>{S.ans[S.cur].txt=e.target.value;save();});
+  if(!locked){
+    document.getElementById("cw").addEventListener("click",e=>{
+      const el=e.target.closest(".choice");
+      if(!el)return;
+      pick(el.dataset.letter);
+    });
+  }
+  window.scrollTo(0,0);
+}
+
+function pick(letter){
+  const i=S.cur,q=QS[i],ans=S.ans[i];
+  if(ans.mcq!==null)return;
+  const ta=document.getElementById("ta");
+  if(ta)ans.txt=ta.value;
+  ans.mcq=letter;
+  // Supporte plusieurs bonnes réponses via q.oks[]
+  const validAnswers = q.oks || [q.ok];
+  ans.ok = validAnswers.includes(letter);
+  if(ans.ok)S.score=Math.min(100,S.score+PTS);
+  save();liveScore();render();
+}
+
+function goTo(idx){
+  const ta=document.getElementById("ta");
+  if(ta)S.ans[S.cur].txt=ta.value;
+  save();
+  if(idx<0||idx>=30)return;
+  S.cur=idx;save();render();
+}
+
+function liveScore(){
+  document.getElementById("live-score").textContent=Math.round(S.score)+" / 100";
+}
+
+function soumettreMaintenant(){
+  if(confirm("Soumettre le quiz maintenant ? Les questions non répondues compteront comme incorrectes.")){
+    const ta=document.getElementById("ta");
+    if(ta)S.ans[S.cur].txt=ta.value;
+    S.done=true;save();showResults();send();
+  }
+}
+
+function finish(){
+  const ta=document.getElementById("ta");
+  if(ta)S.ans[S.cur].txt=ta.value;
+  S.done=true;save();showResults();send();
+}
+
+function showResults(){
+  show("screen-results");
+  const pct=Math.round(S.score);
+  const correct=S.ans.filter(a=>a.ok).length;
+  const withTxt=S.ans.filter(a=>a.txt.trim().length>15).length;
+  document.getElementById("res-pct").textContent=pct+" %";
+  document.getElementById("live-score").textContent=pct+" / 100";
+  const ms=[[90,"🏆 Excellent !"],[80,"🌟 Très bien"],[70,"👍 Bien"],[60,"📖 Passable"],[0,"⚠️ À revoir"]];
+  document.getElementById("res-mention").textContent=ms.find(m=>pct>=m[0])[1];
+  document.getElementById("res-breakdown").innerHTML=`
+    <strong>Résumé</strong><br>
+    📊 Score QCM (1‑B) : <strong>${pct} / 100</strong><br>
+    ✅ Bonnes réponses : <strong>${correct} / 30</strong><br>
+    ✍️ Réponses écrites (1‑A) : <strong>${withTxt} / 30</strong> complétées<br>
+    👤 ${S.name}<br>📧 ${S.email}<br>
+    📅 ${new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"})}`;
+}
+
+function restartQuiz(){
+  if(confirm("Recommencer le quiz ? Toute votre progression sera effacée.")){
+    reset();
+    document.getElementById("inp-name").value="";
+    document.getElementById("inp-email").value="";
+    document.getElementById("live-score").textContent="— / 100";
+    show("screen-welcome");
+  }
+}
+
+function send(){
+  const el=document.getElementById("send-status");
+  if(SCRIPT_URL==="REPLACE_WITH_GOOGLE_SCRIPT_URL"){
+    el.className="send-st s-err";
+    el.textContent="⚙️ URL Google Apps Script non configurée.";
+    return;
+  }
+
+  // Timeout de sécurité : si pas de réponse en 12s, on considère envoyé
+  const timeout = setTimeout(()=>{
+    el.className="send-st s-ok";
+    el.textContent="✅ Résultats transmis. Vérifiez votre Google Sheet.";
+  }, 12000);
+
+  const payload = JSON.stringify({
+    nom:S.name, courriel:S.email,
+    date:new Date().toISOString(),
+    score:Math.round(S.score),
+    reponses:S.ans.map((a,i)=>({q:i+1,texte:a.txt,choix:a.mcq,correct:a.ok}))
+  });
+
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{"Content-Type":"text/plain"},
+    body:payload
+  })
+  .then(()=>{
+    clearTimeout(timeout);
+    el.className="send-st s-ok";
+    el.textContent="✅ Résultats transmis à l'enseignant.";
+  })
+  .catch(()=>{
+    clearTimeout(timeout);
+    el.className="send-st s-err";
+    el.textContent="❌ Erreur d'envoi — contactez votre enseignant.";
+  });
+}
+
+function showCorrige(){
+  show("screen-corrige");
+  const info=document.getElementById("corrige-info");
+  info.textContent=S.name+" · "+S.email+" · Score : "+Math.round(S.score)+" / 100 · "+
+    new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"});
+
+  const list=document.getElementById("corrige-list");
+  let html="";
+  QS.forEach((q,i)=>{
+    const ans=S.ans[i];
+    const locked=ans.mcq!==null;
+    const correct=q.ch.find(c=>c.l===q.ok);
+    const chosen=ans.mcq?q.ch.find(c=>c.l===ans.mcq):null;
+
+    let status="skip",statusTxt="Non répondue";
+    if(locked){status=ans.ok?"ok":"ko";statusTxt=ans.ok?"✅ Correcte":"❌ Incorrecte";}
+
+    html+=`
+      <div class="corrige-item">
+        <div class="corrige-qnum ${status}">${statusTxt} — Question ${i+1}/30</div>
+        <div class="corrige-qtxt">${q.q}</div>
+
+        <div class="corrige-block">
+          <div class="corrige-label">1 — A · Réponse développement</div>
+          <div class="corrige-answer">${ans.txt.trim()||'<em style="color:var(--muted)">Aucune réponse écrite</em>'}</div>
+        </div>
+
+        <div class="corrige-block">
+          <div class="corrige-label">✅ Bonne réponse — Corrigé</div>
+          <div class="corrige-answer" style="border-left:3px solid #2E7D32;background:#E8F5E9;color:#1B5E20">${CORRECT_ANS[i]}</div>
+        </div>
+
+        <div class="corrige-block">
+          <div class="corrige-label">1 — B · Section du cahier</div>
+          <div class="corrige-mcq-row">
+            ${chosen && !ans.ok?`<div class="mcq-chip mcq-wrong">❌ Votre choix : ${chosen.t}</div>`:''}
+            ${(q.oks||[q.ok]).map(l=>`<div class="mcq-chip mcq-good">✅ ${q.ch.find(c=>c.l===l).t}</div>`).join('')}
+          </div>
+        </div>
+      </div>`;
+  });
+  list.innerHTML=html;
+  window.scrollTo(0,0);
+}
+
+</script>
+</body>
+</html>
