@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Système Digestif M2 | Académie ÉLYSENS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--vert: #0C2613;
+--sauge: #9EC8B0;
+--beige: #F2EDE4;
+--or: #FFBD46;
+--noir: #1E1E1E;
+--orange: #E0732E;
+--rouge: #8C0009;
+--blanc: #FFFFFF;
+--sauge-l: #E8F4EE;
+--border: #D4C9B8;
+--muted: #6B6B5A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--beige);
+color:var(--noir);font-size:15px;min-height:100vh}
+.hdr{background:var(--vert);padding:16px 28px;display:flex;
+align-items:center;justify-content:space-between;
+position:sticky;top:0;z-index:100;
+box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.hdr-brand{display:flex;align-items:center;gap:12px}
+.hdr-logo{width:36px;height:36px;border-radius:50%;
+background:var(--or);display:flex;align-items:center;justify-content:center;
+font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:var(--vert)}
+.hdr-text h1{font-family:'Cormorant Garamond',serif;font-size:17px;
+font-weight:600;color:var(--blanc);letter-spacing:.3px}
+.hdr-text p{font-size:11px;color:var(--sauge);margin-top:1px}
+.score-badge{background:var(--or);color:var(--vert);padding:6px 16px;
+border-radius:20px;font-weight:700;font-size:13px;
+font-family:'Outfit',sans-serif;min-width:85px;text-align:center;
+white-space:nowrap}
+.prog-wrap{background:var(--blanc);padding:8px 28px;
+border-bottom:1px solid var(--border);display:none}
+.prog-bar-bg{background:var(--border);border-radius:10px;height:6px;overflow:hidden}
+.prog-bar{background:linear-gradient(90deg,var(--vert),var(--sauge));
+height:100%;border-radius:10px;transition:width .4s}
+.prog-info{display:flex;justify-content:space-between;
+font-size:11px;color:var(--muted);margin-top:3px}
+main{max-width:760px;margin:0 auto;padding:28px 16px 80px}
+.screen{display:none}.screen.active{display:block}
+.card{background:var(--blanc);border-radius:14px;padding:32px;
+box-shadow:0 2px 16px rgba(12,38,19,.09)}
+.welcome-wrap{max-width:540px;margin:24px auto}
+.brand-pill{display:inline-flex;align-items:center;gap:7px;
+background:var(--vert);color:var(--blanc);padding:4px 14px;
+border-radius:20px;font-size:11px;font-weight:600;
+letter-spacing:.6px;margin-bottom:16px}
+.brand-pill span{background:var(--or);color:var(--vert);
+padding:1px 7px;border-radius:10px;font-size:10px}
+.welcome-wrap h2{font-family:'Cormorant Garamond',serif;
+font-size:28px;font-weight:700;color:var(--vert);margin-bottom:4px}
+.welcome-wrap .sub{font-size:13.5px;color:var(--muted);margin-bottom:22px}
+.instr{background:var(--sauge-l);border-left:4px solid var(--sauge);
+border-radius:0 10px 10px 0;padding:14px 16px;
+margin-bottom:18px;font-size:13.5px;line-height:1.8}
+.instr strong{color:var(--vert)}
+.instr ul{margin-left:18px;margin-top:4px}
+.instr li{margin-bottom:2px}
+.alert{border-left:4px solid var(--orange);background:#FEF6EC;
+border-radius:0 10px 10px 0;padding:12px 16px;
+font-size:13px;color:#5A2E00;margin-bottom:22px;line-height:1.6}
+.field{margin-bottom:14px}
+.field label{display:block;font-weight:600;font-size:13px;
+color:var(--vert);margin-bottom:5px}
+.field input{width:100%;padding:10px 13px;
+border:1.5px solid var(--border);border-radius:9px;
+font-family:'Outfit',sans-serif;font-size:14px;transition:border .2s;
+background:var(--beige)}
+.field input:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
+.err{color:var(--rouge);font-size:13px;margin-bottom:10px;display:none}
+.q-card{background:var(--blanc);border-radius:14px;padding:0;
+box-shadow:0 2px 14px rgba(12,38,19,.08);margin-bottom:20px;overflow:hidden}
+.q-num{display:inline-block;background:var(--vert);color:var(--blanc);
+font-size:11px;font-weight:700;padding:3px 12px;
+border-radius:10px;margin-bottom:12px;letter-spacing:.5px}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:18px;
+font-weight:600;color:var(--vert);line-height:1.45;margin-bottom:22px}
+.part-label{font-size:11px;font-weight:700;letter-spacing:.7px;
+color:var(--muted);text-transform:uppercase;margin-bottom:5px}
+.part-hint{font-size:14.5px;color:var(--noir);
+margin-bottom:9px;font-style:italic}
+textarea{width:100%;min-height:105px;padding:11px 13px;
+border:1.5px solid var(--border);border-radius:9px;
+font-family:'Outfit',sans-serif;font-size:15px;
+resize:vertical;transition:border .2s;
+background:var(--beige);line-height:1.65}
+textarea:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
+.autosave{font-size:11px;color:var(--muted);margin-top:3px}
+.sep{border:none;border-top:1.5px solid var(--border);margin:22px 0}
+.choice{display:flex;align-items:flex-start;gap:11px;
+padding:11px 14px;border:1.5px solid var(--border);
+border-radius:10px;margin-bottom:8px;cursor:pointer;
+transition:all .15s;background:var(--blanc);user-select:none}
+.choice:hover:not(.locked){border-color:var(--sauge);background:var(--sauge-l)}
+.choice.locked{cursor:default}
+.choice.is-correct{border-color:#2E7D32!important;background:#E8F5E9!important}
+.choice.is-wrong{border-color:var(--rouge)!important;background:#FDECEA!important}
+.choice.reveal{border-color:#2E7D32!important;background:#F1F8F1!important}
+.letter{flex-shrink:0;width:28px;height:28px;border-radius:50%;
+background:var(--beige);border:1.5px solid var(--border);
+font-weight:700;font-size:12px;display:flex;
+align-items:center;justify-content:center;
+color:var(--noir);transition:all .15s}
+.choice.is-correct .letter{background:#2E7D32;border-color:#2E7D32;color:#fff}
+.choice.is-wrong .letter{background:var(--rouge);border-color:var(--rouge);color:#fff}
+.choice.reveal .letter{background:#2E7D32;border-color:#2E7D32;color:#fff}
+.choice-text{font-size:15px;line-height:1.5;padding-top:4px;color:var(--noir)}
+.fb{padding:11px 14px;border-radius:9px;margin-top:10px;
+font-size:13.5px;font-weight:600;display:none;line-height:1.5}
+.fb.show{display:block}
+.fb.ok{background:#E8F5E9;color:#1B5E20;border-left:4px solid #2E7D32}
+.fb.ko{background:#FDECEA;color:#7F1D1D;border-left:4px solid var(--rouge)}
+.btn{display:inline-flex;align-items:center;justify-content:center;
+gap:7px;padding:11px 24px;border:none;border-radius:9px;
+font-family:'Outfit',sans-serif;font-weight:600;font-size:14px;
+cursor:pointer;transition:all .18s;letter-spacing:.2px}
+.btn-vert{background:var(--vert);color:var(--blanc)}
+.btn-vert:hover{background:#0A1E0F}
+.btn-or{background:var(--or);color:var(--vert)}
+.btn-or:hover{background:#E0A030}
+.btn-outline{background:var(--blanc);color:var(--vert);
+border:1.5px solid var(--vert)}
+.btn-outline:hover{background:var(--sauge-l)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.nav-row{display:flex;gap:10px;justify-content:space-between;
+align-items:center;flex-wrap:wrap;margin-top:20px}
+.res-wrap{max-width:580px;margin:28px auto}
+.score-ring{width:148px;height:148px;border-radius:50%;
+border:8px solid var(--vert);margin:20px auto;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+background:var(--sauge-l)}
+.score-pct{font-family:'Cormorant Garamond',serif;
+font-size:42px;font-weight:700;color:var(--vert)}
+.score-lbl{font-size:11px;color:var(--muted);margin-top:1px}
+.mention{font-family:'Cormorant Garamond',serif;
+font-size:22px;font-weight:600;color:var(--vert);
+margin:14px 0;text-align:center}
+.breakdown{background:var(--beige);border-radius:10px;padding:16px;
+margin:16px 0;font-size:13.5px;line-height:2.1}
+.send-st{font-size:13px;margin-top:12px;text-align:center}
+.s-wait{color:var(--muted)}.s-ok{color:#2E7D32;font-weight:600}
+.s-err{color:var(--rouge)}
+.corrige-item{background:var(--blanc);border-radius:12px;padding:22px;
+margin-bottom:16px;box-shadow:0 1px 8px rgba(12,38,19,.07)}
+.corrige-qnum{display:inline-block;font-size:11px;font-weight:700;
+letter-spacing:.5px;padding:2px 10px;border-radius:10px;
+margin-bottom:10px}
+.corrige-qnum.ok{background:#E8F5E9;color:#1B5E20}
+.corrige-qnum.ko{background:#FDECEA;color:#7F1D1D}
+.corrige-qnum.skip{background:#F5F5F5;color:#666}
+.corrige-qtxt{font-family:'Cormorant Garamond',serif;font-size:16px;
+font-weight:600;color:var(--vert);margin-bottom:14px;line-height:1.4}
+.corrige-block{margin-bottom:12px}
+.corrige-label{font-size:11px;font-weight:700;letter-spacing:.5px;
+color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.corrige-answer{background:var(--beige);border-radius:7px;padding:10px 12px;
+font-size:13.5px;line-height:1.6;color:var(--noir)}
+.corrige-mcq-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.mcq-chip{padding:5px 12px;border-radius:20px;font-size:12.5px;font-weight:600}
+.mcq-correct{background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7}
+.mcq-wrong{background:#FDECEA;color:#7F1D1D;border:1px solid #FFCDD2}
+.mcq-good{background:#E8F5E9;color:#1B5E20;border:1.5px solid #2E7D32}
+@media print{
+.hdr,.prog-wrap,.nav-row,#btn-start,.btn{display:none!important}
+.screen{display:none!important}
+#screen-corrige{display:block!important}
+body{background:#fff;font-size:12px}
+.corrige-item{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+main{padding:10px}
+}
+.q-visual{width:100%;height:110px;overflow:hidden;border-radius:10px 10px 0 0;
+margin:-26px -26px 20px -26px;width:calc(100% + 52px)}
+.q-visual svg{width:100%;height:110px;display:block}
+.q-theme-label{display:flex;align-items:center;gap:8px;
+margin-bottom:16px;padding:6px 12px;
+background:var(--vert);border-radius:6px;
+font-size:11px;font-weight:700;letter-spacing:.6px;
+color:var(--or);text-transform:uppercase;
+width:fit-content}
+.q-card{overflow:hidden;padding-top:0}
+.q-card-inner{padding:20px 26px 26px}
+@media(max-width:600px){
+main{padding:12px 8px 70px}
+.q-card{padding:0}
+.q-card-inner{padding:14px 14px 18px}
+.card{padding:18px}
+.hdr{padding:12px 14px}
+.hdr-text h1{font-size:14px}
+.hdr-text p{font-size:10px}
+.q-text{font-size:16px}
+.choice{padding:10px 12px}
+.choice-text{font-size:14px}
+.btn{padding:12px 16px;font-size:13px}
+.nav-row{gap:8px}
+.q-visual{height:80px;margin:-0 -0 16px -0;width:100%;border-radius:10px 10px 0 0}
+.q-visual svg{height:80px}
+.welcome-wrap{margin:12px auto}
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-brand">
+<div class="hdr-logo">
+<svg width="42" height="42" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+<polygon points="21,2 40,21 21,40 2,21" fill="#FFBD46"/>
+<polygon points="21,4 38,21 21,38 4,21" fill="none" stroke="#0C2613" stroke-width="1" opacity=".3"/>
+<text x="13" y="24" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,13,24)">A</text>
+<text x="22" y="28" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,22,28)">É</text>
+</svg>
+</div>
+<div class="hdr-text">
+<h1>Académie ÉLYSENS</h1>
+<p>Système Digestif — Module 2 · 30 questions</p>
+</div>
+</div>
+<div class="score-badge" id="live-score">— / 100</div>
+</header>
+<div class="prog-wrap" id="prog-wrap">
+<div class="prog-bar-bg"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+<div class="prog-info">
+<span id="prog-text">Question 1 / 30</span>
+<span id="prog-pct">0 %</span>
+</div>
+</div>
+<main>
+<div class="screen active" id="screen-welcome">
+<div class="welcome-wrap">
+<div class="card">
+<div class="brand-pill">ACADÉMIE <span>ÉLYSENS</span></div>
+<h2>Quiz de fin de module</h2>
+<p class="sub">Système Digestif · Module 2 · Digestion et Organes Centraux · 30 questions</p>
+<div class="instr">
+<strong>Consignes :</strong>
+<ul>
+<li>Relisez la section correspondante dans votre cahier avant de répondre.</li>
+<li><strong>1‑A</strong> — Répondez avec vos propres mots.</li>
+<li><strong>1‑B</strong> — Sélectionnez la section où vous avez trouvé l'information.</li>
+<li>Vous pouvez quitter et reprendre à tout moment — votre progression est sauvegardée.</li>
+</ul>
+</div>
+<div class="alert">
+⚠️ <strong>Note importante :</strong> La note est calculée à partir des questions 1‑B.
+Les réponses 1‑A sont vérifiées par l'enseignant. Une réponse absente ou
+insuffisante entraîne une pénalité pouvant aller jusqu'à <strong>50 % de la note finale</strong>.
+Ces questionnaires constituent votre meilleure préparation à l'examen de fin de système.
+</div>
+<div class="field">
+<label for="inp-name">Nom complet *</label>
+<input type="text" id="inp-name" placeholder="Prénom Nom">
+</div>
+<div class="field">
+<label for="inp-email">Adresse courriel *</label>
+<input type="email" id="inp-email" placeholder="votre@courriel.com">
+</div>
+<div class="err" id="err-msg">Veuillez entrer votre nom et une adresse courriel valide.</div>
+<button class="btn btn-vert" id="btn-start" style="width:100%;padding:13px;font-size:15px">
+▶&nbsp;&nbsp;Commencer le quiz
+</button>
+</div>
+</div>
+</div>
+<div class="screen" id="screen-quiz">
+<div id="q-container"></div>
+</div>
+<div class="screen" id="screen-results">
+<div class="res-wrap">
+<div class="card" style="text-align:center">
+<div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--vert)">
+Quiz terminé !
+</div>
+<div class="score-ring">
+<div class="score-pct" id="res-pct">—</div>
+<div class="score-lbl">sur 100</div>
+</div>
+<div class="mention" id="res-mention"></div>
+<div class="breakdown" id="res-breakdown" style="text-align:left"></div>
+<div class="alert" style="text-align:left">
+⚠️ Cette note sera ajustée par l'enseignant après révision des réponses écrites (1‑A).
+Une réponse insuffisante peut entraîner une pénalité jusqu'à 50 %.
+</div>
+<div id="send-status" class="send-st s-wait">⏳ Envoi des résultats en cours…</div>
+<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+<button class="btn btn-vert" style="flex:1;min-width:180px" onclick="showCorrige()">
+📋&nbsp; Voir le corrigé complet
+</button>
+<button class="btn btn-outline" style="flex:1;min-width:180px" onclick="window.print()">
+🖨&nbsp; Imprimer / PDF
+</button>
+</div>
+<button class="btn" onclick="restartQuiz()" style="width:100%;margin-top:10px;background:#fff;color:#8C0009;border:1.5px solid #8C0009;font-family:Outfit,sans-serif;font-weight:600;font-size:14px;padding:11px;border-radius:9px;cursor:pointer">
+🔄&nbsp; Recommencer le quiz à zéro
+</button>
+</div>
+</div>
+</div>
+<div class="screen" id="screen-corrige">
+<div style="max-width:760px;margin:0 auto">
+<div class="card" style="margin-bottom:20px">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+<div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--vert)">
+Corrigé complet — Système Digestif M2
+</div>
+<div style="font-size:13px;color:var(--muted);margin-top:3px" id="corrige-info"></div>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-outline" style="font-size:13px;padding:8px 16px" onclick="show('screen-results')">
+← Retour aux résultats
+</button>
+<button class="btn btn-vert" style="font-size:13px;padding:8px 16px" onclick="window.print()">
+🖨 Imprimer
+</button>
+</div>
+</div>
+</div>
+<div id="corrige-list"></div>
+</div>
+</div>
+<div id="float-submit" style="display:none;position:fixed;bottom:20px;right:20px;z-index:999">
+<button onclick="soumettreMaintenant()" style="
+background:var(--orange);color:#fff;
+border:none;border-radius:30px;
+padding:13px 22px;
+font-family:Outfit,sans-serif;font-weight:700;font-size:14px;
+cursor:pointer;
+box-shadow:0 4px 16px rgba(224,115,46,.45);
+transition:all .2s">
+✔ Soumettre maintenant
+</button>
+</div>
+</main>
+<script>
+const SVGS = {
+1: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M280,10 C240,10 220,35 220,60 C220,90 250,100 300,100 L480,100 C540,100 570,80 570,55 C570,25 540,15 500,15" fill="none" stroke="#9EC8B0" stroke-width="2" opacity=".45"/>
+<path d="M280,20 C250,20 236,38 236,60 C236,82 258,90 300,90 L480,90 C530,90 558,75 558,55 C558,35 535,25 500,25" fill="#FFBD46" opacity=".12"/>
+<circle cx="330" cy="65" r="4" fill="#FFBD46" opacity=".6"/><circle cx="360" cy="72" r="3" fill="#FFBD46" opacity=".5"/><circle cx="395" cy="66" r="4" fill="#FFBD46" opacity=".6"/><circle cx="430" cy="74" r="3" fill="#FFBD46" opacity=".5"/><circle cx="465" cy="65" r="4" fill="#FFBD46" opacity=".55"/>
+<text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#9EC8B0" opacity=".7" letter-spacing="2">ESTOMAC · SÉCRÉTION ACIDE</text>
+</svg>`,
+2: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M330,15 C270,15 240,40 240,60 C240,85 275,98 330,98 L370,98" fill="none" stroke="#9EC8B0" stroke-width="2.5" opacity=".5"/>
+<ellipse cx="470" cy="58" rx="110" ry="30" fill="#FFBD46" opacity=".1"/>
+<ellipse cx="470" cy="58" rx="110" ry="30" fill="none" stroke="#FFBD46" stroke-width="1.5" opacity=".4"/>
+<circle cx="300" cy="30" r="4" fill="#E0732E" opacity=".55"/><circle cx="290" cy="80" r="4" fill="#E0732E" opacity=".5"/>
+<path d="M330,15 L330,-5" stroke="#9EC8B0" stroke-width="2" opacity=".4"/>
+<text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#9EC8B0" opacity=".7" letter-spacing="2">DUODÉNUM · CARREFOUR HORMONAL</text>
+</svg>`,
+3: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<polygon points="380,15 440,35 440,75 380,95 320,75 320,35" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".4"/>
+<circle cx="380" cy="55" r="10" fill="#E0732E" opacity=".5"/>
+<line x1="380" y1="55" x2="380" y2="15" stroke="#FFBD46" stroke-width="1" opacity=".3"/>
+<line x1="380" y1="55" x2="440" y2="35" stroke="#FFBD46" stroke-width="1" opacity=".3"/>
+<line x1="380" y1="55" x2="440" y2="75" stroke="#FFBD46" stroke-width="1" opacity=".3"/>
+<line x1="380" y1="55" x2="380" y2="95" stroke="#FFBD46" stroke-width="1" opacity=".3"/>
+<line x1="380" y1="55" x2="320" y2="75" stroke="#FFBD46" stroke-width="1" opacity=".3"/>
+<line x1="380" y1="55" x2="320" y2="35" stroke="#FFBD46" stroke-width="1" opacity=".3"/>
+<polygon points="180,15 240,35 240,75 180,95 120,75 120,35" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".22"/>
+<polygon points="580,15 640,35 640,75 580,95 520,75 520,35" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".22"/>
+<text x="380" y="108" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".6" letter-spacing="2">FOIE · LOBULE HÉPATIQUE</text>
+</svg>`,
+4: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M380,15 C360,15 350,30 350,50 C350,75 362,95 380,95 C398,95 410,75 410,50 C410,30 400,15 380,15 Z" fill="#9EC8B0" opacity=".18"/>
+<path d="M380,15 C360,15 350,30 350,50 C350,75 362,95 380,95 C398,95 410,75 410,50 C410,30 400,15 380,15 Z" fill="none" stroke="#9EC8B0" stroke-width="2" opacity=".5"/>
+<path d="M380,15 C380,5 400,0 430,10 C460,20 500,20 540,15" stroke="#FFBD46" stroke-width="1.5" fill="none" opacity=".4"/>
+<circle cx="330" cy="30" r="4" fill="#E0732E" opacity=".5"/><circle cx="440" cy="55" r="3" fill="#E0732E" opacity=".4"/><circle cx="480" cy="30" r="3" fill="#E0732E" opacity=".4"/>
+<text x="380" y="108" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".6" letter-spacing="2">VÉSICULE BILIAIRE · CONCENTRATION</text>
+</svg>`,
+5: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M180,55 C180,35 210,25 260,28 C340,32 460,45 560,42 C600,41 620,48 620,58 C620,70 595,78 550,76 C450,72 340,62 260,68 C215,71 180,72 180,55 Z" fill="#FFBD46" opacity=".1"/>
+<path d="M180,55 C180,35 210,25 260,28 C340,32 460,45 560,42 C600,41 620,48 620,58 C620,70 595,78 550,76 C450,72 340,62 260,68 C215,71 180,72 180,55 Z" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".45"/>
+<circle cx="260" cy="48" r="5" fill="#E0732E" opacity=".55"/><circle cx="340" cy="52" r="4" fill="#E0732E" opacity=".5"/><circle cx="420" cy="55" r="5" fill="#E0732E" opacity=".55"/><circle cx="500" cy="58" r="4" fill="#E0732E" opacity=".5"/>
+<text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#9EC8B0" opacity=".7" letter-spacing="2">PANCRÉAS · ÎLOTS DE LANGERHANS</text>
+</svg>`,
+};
+
+const QTHEM = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 3, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5];
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzpGI6VYxakRpoRyTA1swKb04rsOGaUcISRGZjVIXPtmChmbBQQ8TG3cK54N1BZ6pJ5sg/exec";
+const PTS = 100/30;
+const CORRECT_ANS=[
+"C'est William Beaumont qui, entre 1822 et 1833, a observé pour la première fois la digestion en train de se produire, en temps réel. Son patient Alexis St. Martin avait été blessé par balle, et la plaie ne s'était jamais complètement refermée : elle avait laissé une fistule gastrique, une ouverture anormale et permanente reliant l'intérieur de l'estomac à l'extérieur du corps.",
+"Six autres types de cellules spécialisées se trouvent ensuite dans les glandes elles-mêmes, chacune avec un rôle précis et unique, pour un total de sept types répartis dans l'ensemble de la muqueuse gastrique :",
+"La gastrine, sécrétée par les cellules G en réponse à trois signaux : la distension de l'estomac, le fait qu'il s'étire physiquement en se remplissant, la présence de protéines partiellement digérées, et la stimulation venant du nerf vague.",
+"Ces médicaments bloquent directement cette pompe, ce qui empêche la cellule pariétale de fabriquer de l'acide. Plutôt que de neutraliser l'acide déjà présent, ils coupent sa production à la source, comme fermer un robinet plutôt que d'éponger l'eau qui coule déjà.",
+"C'est justement pour cette raison que les anti-inflammatoires courants comme l'ibuprofène, qui bloquent la fabrication des prostaglandines dans tout le corps pour réduire la douleur et l'inflammation, ont comme effet secondaire d'augmenter à la fois l'acidité de l'estomac et de fragiliser sa couche protectrice, une double perte de protection qui explique pourquoi ces médicaments peuvent causer des ulcères à long terme.",
+"Le facteur intrinsèque, fabriqué par les cellules pariétales, est indispensable à l'absorption de la vitamine B12 contenue dans les aliments, une absorption qui se produit non pas dans l'estomac lui-même, mais beaucoup plus loin, dans la dernière portion de l'intestin grêle.",
+"Un débordement du Feu de l'Estomac se traduit par une faim excessive, des brûlures et une haleine forte ; un Vide de Qi de l'Estomac se manifeste par une digestion lente et un manque d'appétit ; une Stagnation alimentaire produit une sensation de plénitude douloureuse après les repas.",
+"C'est le médecin grec Hérophile d'Alexandrie, au IIIe siècle avant notre ère, qui donne son nom au duodénum, littéralement « douze doigts », en référence à sa longueur, mesurée à l'époque en largeurs de doigt placés côte à côte.",
+"Les glandes de Brunner, situées un peu plus profondément dans la paroi, dans la sous-muqueuse, qui fabriquent un mucus alcalin riche en bicarbonate, capable de le neutraliser.",
+"Elle déclenche trois effets en même temps : la contraction de la vésicule biliaire (Section 6), la sécrétion des enzymes du pancréas (Section 7.4.1), et un ralentissement de la vidange de l'estomac (Section 3.4.4).",
+"La motiline, contrairement aux trois autres hormones, n'est pas déclenchée par la présence de nourriture, mais par son absence. Pendant les périodes de jeûne entre les repas, elle est libérée par intermittence et déclenche le complexe moteur migrant, une vague de contractions qui balaie l'estomac et l'intestin grêle pour évacuer les résidus non digérés.",
+"Sa fonction est décrite comme « séparer le pur de l'impur », une image remarquablement juste de son rôle réel décrit plus haut, qui consiste précisément à trier ce qui sera absorbé de ce qui poursuivra sa route vers l'élimination.",
+"Les hépatocytes situés près de l'espace porte, dits de « zone 1 », reçoivent le sang le plus riche en oxygène et se spécialisent davantage dans les réactions qui ont besoin de beaucoup d'oxygène, comme la combustion des graisses. Les hépatocytes situés près de la veine centrale, dits de « zone 3 », reçoivent moins d'oxygène et se spécialisent plutôt dans la neutralisation des toxines et la fabrication de graisses.",
+"C'est pourquoi le moment de l'intervention change tout. Une amélioration des habitudes de vie, comme l'arrêt de l'alcool, permet une récupération significative lorsqu'elle survient avant que la fibrose ne soit extensive, puisque l'architecture du foie est encore largement préservée. Une fois la cirrhose bien installée, le processus devient largement irréversible. Le problème n'est alors plus le nombre de cellules disponibles pour se régénérer, mais la structure sur laquelle elles pourraient se reconstruire.",
+"Quand les réserves de fer du corps sont suffisantes, mesurées en partie par le niveau de ferritine, l'hepcidine bloque la ferroportine, ce qui empêche le fer absorbé de rejoindre le sang. Quand les réserves sont basses, la production d'hepcidine diminue, et l'absorption du fer augmente en conséquence.",
+"En contexte d'infection ou d'inflammation prolongée, cette hausse d'hepcidine bloque la ferroportine, ce qui retient le fer à l'intérieur des cellules plutôt que de le rendre disponible dans le sang. Ce mécanisme, qui prive les bactéries d'une ressource dont elles ont besoin pour se multiplier, peut cependant causer une anémie même lorsque les réserves de fer du corps sont normales, un phénomène clinique appelé anémie de l'inflammation, à distinguer d'une carence en fer véritable.",
+"Une accumulation excessive de fer, appelée surcharge en fer ou hémochromatose, peut aussi endommager progressivement le tissu hépatique. Le cuivre suit le même principe : son accumulation excessive, une condition appelée maladie de Wilson, est toxique pour le foie et peut aussi affecter le système nerveux.",
+"Une stagnation du Qi du Foie se traduit par de la frustration, une tension dans les côtes et un cycle menstruel irrégulier ; un Feu du Foie montant produit colère, maux de tête et rougeur du visage ; un Vide de Sang du Foie se manifeste par des yeux secs, des crampes musculaires et des troubles du sommeil.",
+"En 1985, le chirurgien allemand Erich Mühe réalise la première cholécystectomie par laparoscopie, une technique qui ne nécessite que de petites incisions plutôt qu'une ouverture complète de l'abdomen, une avancée qui transforme la récupération des patients.",
+"environ 95 % d'entre eux sont activement réabsorbés dans l'iléon, la dernière portion de l'intestin grêle, par un transporteur spécifique, puis retournent au foie par la veine porte pour être réutilisés. Avant cette réabsorption, certaines bactéries de la flore intestinale transforment une partie des sels biliaires primaires en sels biliaires secondaires, ce qui influence leur activité biologique et illustre concrètement l'axe intestin-foie. Ce cycle complet, appelé circulation entérohépatique, se répète généralement de six à dix fois par jour,",
+"La paroi de la vésicule absorbe une grande quantité de sodium, à l'aide d'un transporteur appelé l'échangeur sodium-hydrogène 3 (NHE3), qui fait entrer le sodium dans les cellules épithéliales en échange d'un ion hydrogène. Un deuxième transporteur, l'échangeur AE2, agit en parallèle et fait entrer le chlore en échange d'un ion bicarbonate. Une fois à l'intérieur des cellules, le sodium est ensuite expulsé vers le sang par une pompe, la Na+/K+-ATPase, tandis que le chlore sort de son côté par des canaux distincts.",
+"Si la bile contient trop de cholestérol par rapport aux sels biliaires et aux phospholipides disponibles pour former des micelles stables, ce cholestérol peut précipiter et former des cristaux, qui grossissent ensuite en calculs biliaires, un phénomène appelé lithiase biliaire.",
+"Un texte fondateur de la médecine chinoise, le Huangdi Neijing, attribue à la Vésicule biliaire une importance qui dépasse largement sa petite taille physique, allant jusqu'à affirmer que les onze autres organes principaux dépendent d'elle pour leurs propres décisions.",
+"Le pancréas doit son nom à Galien, du grec pan, tout, et kreas, chair, littéralement « tout en chair », en référence à son apparence uniforme, sans os ni cartilage visible.",
+"À l'Université de Toronto, l'équipe formée de Frederick Banting, Charles Best, James Collip et John Macleod isole l'insuline. Le prix Nobel de 1923 fut attribué officiellement à Banting et à Macleod ; jugeant que Best avait joué un rôle tout aussi essentiel, Banting partagea aussitôt la moitié de sa récompense avec lui.",
+"Une fois le trypsinogène arrivé dans le duodénum, il est activé et transformé en trypsine par une enzyme spécifique présente à la surface de la paroi duodénale, appelée entéropeptidase, longtemps connue sous le nom d'entérokinase. Cette activation ne peut donc avoir lieu qu'une fois le duodénum atteint, jamais à l'intérieur du pancréas.",
+"Les manuels classiques nomment souvent le GLUT2 comme responsable de cette entrée, mais cette information provient surtout d'études sur des cellules bêta de rongeurs. Chez l'humain, ce sont plutôt les transporteurs GLUT1 et GLUT3 qui dominent, le GLUT2 n'y jouant qu'un rôle mineur.",
+"La cause la plus fréquente est un calcul biliaire qui migre et vient obstruer l'ampoule de Vater, le point de sortie commun de la bile et du suc pancréatique. Cette obstruction fait refluer les sécrétions pancréatiques à l'intérieur même du pancréas, où le trypsinogène commence à s'activer prématurément, avant même d'atteindre le duodénum.",
+"Chez l'humain, les cellules de l'îlot sont plutôt dispersées les unes parmi les autres, sans division anatomique aussi nette, ce qui favorise des contacts directs et fréquents entre les différents types de cellules (Cabrera et al., 2006).",
+"Un Vide de Qi de la Rate se traduit par une fatigue après les repas, des selles molles et une digestion faible."
+];
+const QS=[
+{id:1,q:"Comment William Beaumont a-t-il pu observer la digestion gastrique en temps réel pour la première fois ?",ok:"C",ch:[{l:"A",t:"3.3 Microstructure et histologie"},{l:"B",t:"7.1 Perspective évolutive"},{l:"C",t:"3.1 Perspective évolutive"},{l:"D",t:"6.4.5 Un mot sur la lithiase biliaire"},{l:"E",t:"3.4.1 La sécrétion acide"}]},
+{id:2,q:"Comment le total de sept types de cellules de la muqueuse gastrique se répartit-il entre la surface et les glandes ?",ok:"D",ch:[{l:"A",t:"6.5 Rappel MTC"},{l:"B",t:"7.1 Perspective évolutive"},{l:"C",t:"3.4.1 La sécrétion acide"},{l:"D",t:"3.3 Microstructure et histologie"},{l:"E",t:"7.5 Rappel MTC"}]},
+{id:3,q:"Quels sont les trois signaux qui déclenchent la sécrétion de gastrine par les cellules G ?",ok:"D",ch:[{l:"A",t:"4.1 Perspective évolutive"},{l:"B",t:"3.4.1 La sécrétion acide"},{l:"C",t:"3.1 Perspective évolutive"},{l:"D",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"E",t:"3.3 Microstructure et histologie"}]},
+{id:4,q:"Comment agissent les inhibiteurs de la pompe à protons, une classe de médicaments très utilisée en médecine ?",ok:"A",ch:[{l:"A",t:"3.4.1 La sécrétion acide"},{l:"B",t:"5.4.9.5 La régulation du fer par l'hepcidine"},{l:"C",t:"6.5 Rappel MTC"},{l:"D",t:"5.4.5 Production et sécrétion de la bile"},{l:"E",t:"7.1 Perspective évolutive"}]},
+{id:5,q:"Pourquoi les anti-inflammatoires comme l'ibuprofène augmentent-ils le risque d'ulcère à long terme ?",ok:"A",ch:[{l:"A",t:"3.4.1 La sécrétion acide"},{l:"B",t:"7.5 Rappel MTC"},{l:"C",t:"7.4.3 La régulation glycémique, insuline et glucagon"},{l:"D",t:"3.1 Perspective évolutive"},{l:"E",t:"7.4.5 Un mot sur la pancréatite"}]},
+{id:6,q:"Pourquoi la destruction des cellules pariétales par le système immunitaire mène-t-elle à une carence en vitamine B12 ?",ok:"E",ch:[{l:"A",t:"4.1 Perspective évolutive"},{l:"B",t:"7.4.1 La sécrétion enzymatique, un mécanisme de sécurité en"},{l:"C",t:"3.4.1 La sécrétion acide"},{l:"D",t:"4.5 Rappel MTC"},{l:"E",t:"3.4.3 Le facteur intrinsèque, le maillon caché de la vitamine"}]},
+{id:7,q:"Selon la MTC, quelles conséquences produit un débordement du Feu de l'Estomac ?",ok:"E",ch:[{l:"A",t:"5.3 Microstructure et histologie"},{l:"B",t:"4.4.3 Régulation hormonale du reste du système digestif"},{l:"C",t:"7.3 Microstructure et histologie"},{l:"D",t:"6.4.2 Concentration de la bile"},{l:"E",t:"3.5 Rappel MTC"}]},
+{id:8,q:"D'où vient le nom « duodénum » ?",ok:"B",ch:[{l:"A",t:"5.4.8 Régénération"},{l:"B",t:"4.1 Perspective évolutive"},{l:"C",t:"6.1 Perspective évolutive"},{l:"D",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"E",t:"4.4.3 Régulation hormonale du reste du système digestif"}]},
+{id:9,q:"Quelle structure unique du duodénum neutralise l'acidité gastrique en premier ?",ok:"C",ch:[{l:"A",t:"6.5 Rappel MTC"},{l:"B",t:"3.3 Microstructure et histologie"},{l:"C",t:"4.3 Microstructure et histologie"},{l:"D",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"E",t:"7.1 Perspective évolutive"}]},
+{id:10,q:"Quels sont les trois effets déclenchés en même temps par la cholécystokinine, CCK ?",ok:"C",ch:[{l:"A",t:"4.3 Microstructure et histologie"},{l:"B",t:"7.5 Rappel MTC"},{l:"C",t:"4.4.3 Régulation hormonale du reste du système digestif"},{l:"D",t:"3.4.1 La sécrétion acide"},{l:"E",t:"5.4.9.5 La régulation du fer par l'hepcidine"}]},
+{id:11,q:"Qu'est-ce que la motiline, et en quoi son déclencheur est-il différent des trois autres hormones duodénales ?",ok:"E",ch:[{l:"A",t:"7.1 Perspective évolutive"},{l:"B",t:"4.3 Microstructure et histologie"},{l:"C",t:"3.5 Rappel MTC"},{l:"D",t:"5.4.8 Régénération"},{l:"E",t:"4.4.3 Régulation hormonale du reste du système digestif"}]},
+{id:12,q:"En MTC, comment la fonction du duodénum au sein de l'Intestin grêle est-elle décrite ?",ok:"A",ch:[{l:"A",t:"4.5 Rappel MTC"},{l:"B",t:"5.4.8 Régénération"},{l:"C",t:"5.4.9.5 La régulation du fer par l'hepcidine"},{l:"D",t:"3.4.3 Le facteur intrinsèque, le maillon caché de la vitamine"},{l:"E",t:"4.3 Microstructure et histologie"}]},
+{id:13,q:"Qu'est-ce que la zonation métabolique du lobule hépatique ?",ok:"E",ch:[{l:"A",t:"4.1 Perspective évolutive"},{l:"B",t:"3.3 Microstructure et histologie"},{l:"C",t:"7.4.5 Un mot sur la pancréatite"},{l:"D",t:"7.4.1 La sécrétion enzymatique, un mécanisme de sécurité en"},{l:"E",t:"5.3 Microstructure et histologie"}]},
+{id:14,q:"Quelle est la capacité de régénération unique du foie, et pourquoi cette capacité devient-elle beaucoup plus limitée en cas de cirrhose ?",ok:"A",ch:[{l:"A",t:"5.4.8 Régénération"},{l:"B",t:"5.4.5 Production et sécrétion de la bile"},{l:"C",t:"7.5 Rappel MTC"},{l:"D",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"E",t:"3.5 Rappel MTC"}]},
+{id:15,q:"Comment le foie régule-t-il l'absorption du fer au duodénum par l'intermédiaire de l'hepcidine ?",ok:"C",ch:[{l:"A",t:"3.4.1 La sécrétion acide"},{l:"B",t:"5.4.7.4 Risques de surcharge"},{l:"C",t:"5.4.9.5 La régulation du fer par l'hepcidine"},{l:"D",t:"5.3 Microstructure et histologie"},{l:"E",t:"6.5 Rappel MTC"}]},
+{id:16,q:"Pourquoi une infection ou une inflammation prolongée peut-elle causer une anémie même quand les réserves de fer sont normales ?",ok:"C",ch:[{l:"A",t:"5.3 Microstructure et histologie"},{l:"B",t:"5.4.8 Régénération"},{l:"C",t:"5.4.9.5 La régulation du fer par l'hepcidine"},{l:"D",t:"7.4.1 La sécrétion enzymatique, un mécanisme de sécurité en"},{l:"E",t:"6.4.2 Concentration de la bile"}]},
+{id:17,q:"Que risque-t-il d'arriver en cas d'apport excessif et prolongé en fer ou en cuivre ?",ok:"E",ch:[{l:"A",t:"3.3 Microstructure et histologie"},{l:"B",t:"7.3 Microstructure et histologie"},{l:"C",t:"7.4.1 La sécrétion enzymatique, un mécanisme de sécurité en"},{l:"D",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"E",t:"5.4.7.4 Risques de surcharge"}]},
+{id:18,q:"Selon la MTC, que se passe-t-il en cas de Feu du Foie montant ou de Vide de Sang du Foie ?",ok:"E",ch:[{l:"A",t:"6.4.2 Concentration de la bile"},{l:"B",t:"6.5 Rappel MTC"},{l:"C",t:"7.4.3 La régulation glycémique, insuline et glucagon"},{l:"D",t:"5.4.8 Régénération"},{l:"E",t:"5.5 Rappel MTC"}]},
+{id:19,q:"Qui a réalisé la première cholécystectomie laparoscopique et en quelle année ?",ok:"E",ch:[{l:"A",t:"5.5 Rappel MTC"},{l:"B",t:"5.4.7.4 Risques de surcharge"},{l:"C",t:"4.3 Microstructure et histologie"},{l:"D",t:"7.3 Microstructure et histologie"},{l:"E",t:"6.1 Perspective évolutive"}]},
+{id:20,q:"Quelle proportion des sels biliaires est récupérée dans l'iléon et recyclée, et à quelle fréquence ce cycle se répète-t-il ?",ok:"C",ch:[{l:"A",t:"3.4.1 La sécrétion acide"},{l:"B",t:"7.4.1 La sécrétion enzymatique, un mécanisme de sécurité en"},{l:"C",t:"5.4.5 Production et sécrétion de la bile"},{l:"D",t:"4.4.3 Régulation hormonale du reste du système digestif"},{l:"E",t:"6.4.5 Un mot sur la lithiase biliaire"}]},
+{id:21,q:"Par quel mécanisme la vésicule biliaire concentre-t-elle la bile qu'elle reçoit du foie ?",ok:"B",ch:[{l:"A",t:"7.5 Rappel MTC"},{l:"B",t:"6.4.2 Concentration de la bile"},{l:"C",t:"7.1 Perspective évolutive"},{l:"D",t:"3.1 Perspective évolutive"},{l:"E",t:"4.3 Microstructure et histologie"}]},
+{id:22,q:"Comment se forme un calcul biliaire dans la vésicule ?",ok:"C",ch:[{l:"A",t:"6.4.2 Concentration de la bile"},{l:"B",t:"4.4.3 Régulation hormonale du reste du système digestif"},{l:"C",t:"6.4.5 Un mot sur la lithiase biliaire"},{l:"D",t:"7.3 Microstructure et histologie"},{l:"E",t:"7.4.5 Un mot sur la pancréatite"}]},
+{id:23,q:"Selon un texte fondateur de la médecine chinoise, pourquoi la Vésicule biliaire occupe-t-elle une place si centrale parmi les organes ?",ok:"E",ch:[{l:"A",t:"5.5 Rappel MTC"},{l:"B",t:"5.4.7.4 Risques de surcharge"},{l:"C",t:"7.4.1 La sécrétion enzymatique, un mécanisme de sécurité en"},{l:"D",t:"3.4.3 Le facteur intrinsèque, le maillon caché de la vitamine"},{l:"E",t:"6.5 Rappel MTC"}]},
+{id:24,q:"D'où vient le nom du pancréas ?",ok:"C",ch:[{l:"A",t:"7.3 Microstructure et histologie"},{l:"B",t:"7.4.5 Un mot sur la pancréatite"},{l:"C",t:"7.1 Perspective évolutive"},{l:"D",t:"3.4.1 La sécrétion acide"},{l:"E",t:"4.5 Rappel MTC"}]},
+{id:25,q:"Quelle découverte a transformé le traitement du diabète de type 1 en 1921-1922, et qui en a reçu le crédit officiel ?",ok:"E",ch:[{l:"A",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"B",t:"7.4.1 La sécrétion enzymatique, un mécanisme de sécurité en"},{l:"C",t:"5.4.9.5 La régulation du fer par l'hepcidine"},{l:"D",t:"6.1 Perspective évolutive"},{l:"E",t:"7.1 Perspective évolutive"}]},
+{id:26,q:"Quelle enzyme active le trypsinogène dans le duodénum, et pourquoi cette étape est-elle un mécanisme de sécurité ?",ok:"C",ch:[{l:"A",t:"5.5 Rappel MTC"},{l:"B",t:"3.4.3 Le facteur intrinsèque, le maillon caché de la vitamine"},{l:"C",t:"7.4.1 La sécrétion enzymatique, un mécanisme de sécurité en"},{l:"D",t:"4.3 Microstructure et histologie"},{l:"E",t:"5.4.7.4 Risques de surcharge"}]},
+{id:27,q:"Quel transporteur fait entrer le glucose dans la cellule bêta chez l'humain, et pourquoi cette précision est-elle importante ?",ok:"A",ch:[{l:"A",t:"7.4.3 La régulation glycémique, insuline et glucagon"},{l:"B",t:"6.5 Rappel MTC"},{l:"C",t:"6.4.5 Un mot sur la lithiase biliaire"},{l:"D",t:"5.3 Microstructure et histologie"},{l:"E",t:"4.4.3 Régulation hormonale du reste du système digestif"}]},
+{id:28,q:"Quelle cause fréquente déclenche une pancréatite en faisant refluer les sécrétions pancréatiques à l'intérieur même du pancréas ?",ok:"E",ch:[{l:"A",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"B",t:"4.4.3 Régulation hormonale du reste du système digestif"},{l:"C",t:"4.1 Perspective évolutive"},{l:"D",t:"3.4.1 La sécrétion acide"},{l:"E",t:"7.4.5 Un mot sur la pancréatite"}]},
+{id:29,q:"Comment l'architecture réelle des îlots de Langerhans chez l'humain diffère-t-elle de celle décrite dans les manuels classiques ?",ok:"E",ch:[{l:"A",t:"6.5 Rappel MTC"},{l:"B",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"C",t:"6.4.2 Concentration de la bile"},{l:"D",t:"3.1 Perspective évolutive"},{l:"E",t:"7.3 Microstructure et histologie"}]},
+{id:30,q:"Selon la MTC, quelles conséquences produit un Vide de Qi de la Rate ?",ok:"A",ch:[{l:"A",t:"7.5 Rappel MTC"},{l:"B",t:"5.4.7.4 Risques de surcharge"},{l:"C",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"D",t:"4.4.3 Régulation hormonale du reste du système digestif"},{l:"E",t:"7.4.5 Un mot sur la pancréatite"}]}
+];
+
+const LS="elysens_quiz_m2_v1";
+let S={name:"",email:"",cur:0,done:false,score:0,
+ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))};
+function save(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function load(){try{const d=localStorage.getItem(LS);if(d){S=JSON.parse(d);return true}}catch(e){}return false}
+function reset(){localStorage.removeItem(LS);S={name:"",email:"",cur:0,done:false,score:0,ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))}}
+function show(id){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+document.getElementById("prog-wrap").style.display=id==="screen-quiz"?"block":"none";
+document.getElementById("float-submit").style.display=id==="screen-quiz"?"block":"none";
+}
+document.addEventListener("DOMContentLoaded",()=>{
+document.getElementById("btn-start").addEventListener("click",startQuiz);
+if(load()&&S.name&&!S.done){
+if(confirm("Quiz en cours trouvé pour "+S.name+".\n\nReprendre à la question "+(S.cur+1)+" ?\n\n(Annuler = recommencer à zéro)")){
+show("screen-quiz");liveScore();render();
+}else{reset();}
+}
+if(S.done){showResults();}
+});
+function startQuiz(){
+const n=document.getElementById("inp-name").value.trim();
+const e=document.getElementById("inp-email").value.trim();
+const err=document.getElementById("err-msg");
+if(!n||!e||!e.includes("@")){err.style.display="block";return;}
+err.style.display="none";
+S.name=n;S.email=e;save();
+show("screen-quiz");liveScore();render();
+}
+function render(){
+const i=S.cur,q=QS[i],ans=S.ans[i],locked=ans.mcq!==null;
+const pct=Math.round(i/30*100);
+document.getElementById("prog-bar").style.width=pct+"%";
+document.getElementById("prog-text").textContent="Question "+(i+1)+" / 30";
+document.getElementById("prog-pct").textContent=pct+" %";
+let ch="";
+const validAnswers = q.oks || [q.ok];
+q.ch.forEach(c=>{
+let cls="choice";
+if(locked){
+cls+=" locked";
+if(validAnswers.includes(c.l))cls+=" is-correct";
+else if(c.l===ans.mcq && !ans.ok)cls+=" is-wrong";
+}
+ch+=`<div class="${cls}" data-letter="${c.l}"><div class="letter">${c.l}</div><div class="choice-text">${c.t}</div></div>`;
+});
+let fb="";
+if(locked){
+const validAnsList = q.oks || [q.ok];
+const sectList = validAnsList.map(l=>q.ch.find(c=>c.l===l).t).join(" — ou — ");
+const cAns=CORRECT_ANS[i];
+fb=ans.ok
+?`<div class="fb ok show">✅ Bonne réponse ! Section : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`
+:`<div class="fb ko show">❌ La bonne réponse est : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`;
+}
+const isLast=i===29;
+const nxt=isLast
+?`<button class="btn btn-or" id="btn-next" ${!locked?"disabled":""} onclick="finish()">Terminer le quiz ✓</button>`
+:`<button class="btn btn-vert" id="btn-next" ${!locked?"disabled":""} onclick="goTo(${i+1})">Suivant →</button>`;
+const themeNum = QTHEM[i];
+const themeSvg = SVGS[themeNum] || "";
+document.getElementById("q-container").innerHTML=`
+<div class="q-card">
+<div class="q-visual">${themeSvg}</div>
+<div class="q-card-inner">
+<div class="q-num">QUESTION ${i+1} / 30</div>
+<div class="q-text">${q.q}</div>
+<div class="part-label">1 — A &nbsp;·&nbsp; Réponse à développement</div>
+<div class="part-hint">Consultez votre cahier et répondez avec vos propres mots :</div>
+<textarea id="ta" placeholder="Écrivez votre réponse ici…">${ans.txt}</textarea>
+<div class="autosave">💾 Sauvegarde automatique à chaque frappe</div>
+<hr class="sep">
+<div class="part-label">1 — B &nbsp;·&nbsp; Section du cahier</div>
+<div class="part-hint">Dans quelle section avez-vous trouvé cette information ?</div>
+<div id="cw">${ch}</div>
+${fb}
+<div class="nav-row">
+<button class="btn btn-outline" onclick="goTo(${i-1})" ${i===0?"disabled":""}>← Précédent</button>
+<span style="font-size:13px;color:var(--muted)">Score : <strong>${Math.round(S.score)}</strong> / 100</span>
+${nxt}
+</div>
+</div>
+</div>`;
+document.getElementById("ta").addEventListener("input",e=>{S.ans[S.cur].txt=e.target.value;save();});
+if(!locked){
+document.getElementById("cw").addEventListener("click",e=>{
+const el=e.target.closest(".choice");
+if(!el)return;
+pick(el.dataset.letter);
+});
+}
+window.scrollTo(0,0);
+}
+function pick(letter){
+const i=S.cur,q=QS[i],ans=S.ans[i];
+if(ans.mcq!==null)return;
+const ta=document.getElementById("ta");
+if(ta)ans.txt=ta.value;
+ans.mcq=letter;
+const validAnswers = q.oks || [q.ok];
+ans.ok = validAnswers.includes(letter);
+if(ans.ok)S.score=Math.min(100,S.score+PTS);
+save();liveScore();render();
+}
+function goTo(idx){
+const ta=document.getElementById("ta");
+if(ta)S.ans[S.cur].txt=ta.value;
+save();
+if(idx<0||idx>=30)return;
+S.cur=idx;save();render();
+}
+function liveScore(){
+document.getElementById("live-score").textContent=Math.round(S.score)+" / 100";
+}
+function soumettreMaintenant(){
+if(confirm("Soumettre le quiz maintenant ? Les questions non répondues compteront comme incorrectes.")){
+const ta=document.getElementById("ta");
+if(ta)S.ans[S.cur].txt=ta.value;
+S.done=true;save();showResults();send();
+}
+}
+function finish(){
+const ta=document.getElementById("ta");
+if(ta)S.ans[S.cur].txt=ta.value;
+S.done=true;save();showResults();send();
+}
+function showResults(){
+show("screen-results");
+const pct=Math.round(S.score);
+const correct=S.ans.filter(a=>a.ok).length;
+const withTxt=S.ans.filter(a=>a.txt.trim().length>15).length;
+document.getElementById("res-pct").textContent=pct+" %";
+document.getElementById("live-score").textContent=pct+" / 100";
+const ms=[[90,"🏆 Excellent !"],[80,"🌟 Très bien"],[70,"👍 Bien"],[60,"📖 Passable"],[0,"⚠️ À revoir"]];
+document.getElementById("res-mention").textContent=ms.find(m=>pct>=m[0])[1];
+document.getElementById("res-breakdown").innerHTML=`
+<strong>Résumé</strong><br>
+📊 Score QCM (1‑B) : <strong>${pct} / 100</strong><br>
+✅ Bonnes réponses : <strong>${correct} / 30</strong><br>
+✍️ Réponses écrites (1‑A) : <strong>${withTxt} / 30</strong> complétées<br>
+👤 ${S.name}<br>📧 ${S.email}<br>
+📅 ${new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"})}`;
+}
+function restartQuiz(){
+if(confirm("Recommencer le quiz ? Toute votre progression sera effacée.")){
+reset();
+document.getElementById("inp-name").value="";
+document.getElementById("inp-email").value="";
+document.getElementById("live-score").textContent="— / 100";
+show("screen-welcome");
+}
+}
+function send(){
+const el=document.getElementById("send-status");
+if(SCRIPT_URL==="REPLACE_WITH_GOOGLE_SCRIPT_URL"){
+el.className="send-st s-err";
+el.textContent="⚙️ URL Google Apps Script non configurée.";
+return;
+}
+const timeout = setTimeout(()=>{
+el.className="send-st s-ok";
+el.textContent="✅ Résultats transmis. Vérifiez votre Google Sheet.";
+}, 12000);
+const payload = JSON.stringify({
+nom:S.name, courriel:S.email,
+date:new Date().toISOString(),
+score:Math.round(S.score),
+reponses:S.ans.map((a,i)=>({q:i+1,texte:a.txt,choix:a.mcq,correct:a.ok}))
+});
+fetch(SCRIPT_URL,{
+method:"POST",
+mode:"no-cors",
+headers:{"Content-Type":"text/plain"},
+body:payload
+})
+.then(()=>{
+clearTimeout(timeout);
+el.className="send-st s-ok";
+el.textContent="✅ Résultats transmis à l'enseignant.";
+})
+.catch(()=>{
+clearTimeout(timeout);
+el.className="send-st s-err";
+el.textContent="❌ Erreur d'envoi — contactez votre enseignant.";
+});
+}
+function showCorrige(){
+show("screen-corrige");
+const info=document.getElementById("corrige-info");
+info.textContent=S.name+" · "+S.email+" · Score : "+Math.round(S.score)+" / 100 · "+
+new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"});
+const list=document.getElementById("corrige-list");
+let html="";
+QS.forEach((q,i)=>{
+const ans=S.ans[i];
+const locked=ans.mcq!==null;
+const correct=q.ch.find(c=>c.l===q.ok);
+const chosen=ans.mcq?q.ch.find(c=>c.l===ans.mcq):null;
+let status="skip",statusTxt="Non répondue";
+if(locked){status=ans.ok?"ok":"ko";statusTxt=ans.ok?"✅ Correcte":"❌ Incorrecte";}
+html+=`
+<div class="corrige-item">
+<div class="corrige-qnum ${status}">${statusTxt} — Question ${i+1}/30</div>
+<div class="corrige-qtxt">${q.q}</div>
+<div class="corrige-block">
+<div class="corrige-label">1 — A · Réponse développement</div>
+<div class="corrige-answer">${ans.txt.trim()||'<em style="color:var(--muted)">Aucune réponse écrite</em>'}</div>
+</div>
+<div class="corrige-block">
+<div class="corrige-label">✅ Bonne réponse — Corrigé</div>
+<div class="corrige-answer" style="border-left:3px solid #2E7D32;background:#E8F5E9;color:#1B5E20">${CORRECT_ANS[i]}</div>
+</div>
+<div class="corrige-block">
+<div class="corrige-label">1 — B · Section du cahier</div>
+<div class="corrige-mcq-row">
+${chosen && !ans.ok?`<div class="mcq-chip mcq-wrong">❌ Votre choix : ${chosen.t}</div>`:''}
+${(q.oks||[q.ok]).map(l=>`<div class="mcq-chip mcq-good">✅ ${q.ch.find(c=>c.l===l).t}</div>`).join('')}
+</div>
+</div>
+</div>`;
+});
+list.innerHTML=html;
+window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
