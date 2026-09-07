@@ -388,7 +388,7 @@ const SVGS = {
 <text x="380" y="15" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="11" fill="#9EC8B0" opacity=".7" letter-spacing="2">PANCRÉAS · ÎLOTS DE LANGERHANS</text>
 </svg>`,
 };
-
+ 
 const QTHEM = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 3, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5];
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzpGI6VYxakRpoRyTA1swKb04rsOGaUcISRGZjVIXPtmChmbBQQ8TG3cK54N1BZ6pJ5sg/exec";
 const PTS = 100/30;
@@ -456,7 +456,7 @@ const QS=[
 {id:29,q:"Comment l'architecture réelle des îlots de Langerhans chez l'humain diffère-t-elle de celle décrite dans les manuels classiques ?",ok:"E",ch:[{l:"A",t:"6.5 Rappel MTC"},{l:"B",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"C",t:"6.4.2 Concentration de la bile"},{l:"D",t:"3.1 Perspective évolutive"},{l:"E",t:"7.3 Microstructure et histologie"}]},
 {id:30,q:"Selon la MTC, quelles conséquences produit un Vide de Qi de la Rate ?",ok:"A",ch:[{l:"A",t:"7.5 Rappel MTC"},{l:"B",t:"5.4.7.4 Risques de surcharge"},{l:"C",t:"3.4.5 La régulation hormonale, gastrine et ghréline"},{l:"D",t:"4.4.3 Régulation hormonale du reste du système digestif"},{l:"E",t:"7.4.5 Un mot sur la pancréatite"}]}
 ];
-
+ 
 const LS="elysens_quiz_m2_v1";
 let S={name:"",email:"",cur:0,done:false,score:0,
 ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))};
@@ -527,8 +527,8 @@ document.getElementById("q-container").innerHTML=`
 <div class="q-text">${q.q}</div>
 <div class="part-label">1 — A &nbsp;·&nbsp; Réponse à développement</div>
 <div class="part-hint">Consultez votre cahier et répondez avec vos propres mots :</div>
-<textarea id="ta" placeholder="Écrivez votre réponse ici…">${ans.txt}</textarea>
-<div class="autosave">💾 Sauvegarde automatique à chaque frappe</div>
+<textarea id="ta" placeholder="Écrivez votre réponse ici…" ${locked?"disabled":""}>${ans.txt}</textarea>
+<div class="autosave">${locked?"🔒 Réponse verrouillée après le choix de section (1‑B)":"💾 Sauvegarde automatique à chaque frappe"}</div>
 <hr class="sep">
 <div class="part-label">1 — B &nbsp;·&nbsp; Section du cahier</div>
 <div class="part-hint">Dans quelle section avez-vous trouvé cette information ?</div>
@@ -685,3 +685,4 @@ window.scrollTo(0,0);
 </script>
 </body>
 </html>
+ 
