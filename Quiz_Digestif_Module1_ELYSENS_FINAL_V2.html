@@ -23,7 +23,6 @@
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Outfit',sans-serif;background:var(--beige);
     color:var(--noir);font-size:15px;min-height:100vh}
-
   /* ── HEADER ── */
   .hdr{background:var(--vert);padding:16px 28px;display:flex;
     align-items:center;justify-content:space-between;
@@ -40,7 +39,6 @@
     border-radius:20px;font-weight:700;font-size:13px;
     font-family:'Outfit',sans-serif;min-width:85px;text-align:center;
     white-space:nowrap}
-
   /* ── PROGRESS ── */
   .prog-wrap{background:var(--blanc);padding:8px 28px;
     border-bottom:1px solid var(--border);display:none}
@@ -49,16 +47,12 @@
     height:100%;border-radius:10px;transition:width .4s}
   .prog-info{display:flex;justify-content:space-between;
     font-size:11px;color:var(--muted);margin-top:3px}
-
   main{max-width:760px;margin:0 auto;padding:28px 16px 80px}
-
   /* ── SCREENS ── */
   .screen{display:none}.screen.active{display:block}
-
   /* ── CARDS ── */
   .card{background:var(--blanc);border-radius:14px;padding:32px;
     box-shadow:0 2px 16px rgba(12,38,19,.09)}
-
   /* ── WELCOME ── */
   .welcome-wrap{max-width:540px;margin:24px auto}
   .brand-pill{display:inline-flex;align-items:center;gap:7px;
@@ -70,18 +64,15 @@
   .welcome-wrap h2{font-family:'Cormorant Garamond',serif;
     font-size:28px;font-weight:700;color:var(--vert);margin-bottom:4px}
   .welcome-wrap .sub{font-size:13.5px;color:var(--muted);margin-bottom:22px}
-
   .instr{background:var(--sauge-l);border-left:4px solid var(--sauge);
     border-radius:0 10px 10px 0;padding:14px 16px;
     margin-bottom:18px;font-size:13.5px;line-height:1.8}
   .instr strong{color:var(--vert)}
   .instr ul{margin-left:18px;margin-top:4px}
   .instr li{margin-bottom:2px}
-
   .alert{border-left:4px solid var(--orange);background:#FEF6EC;
     border-radius:0 10px 10px 0;padding:12px 16px;
     font-size:13px;color:#5A2E00;margin-bottom:22px;line-height:1.6}
-
   .field{margin-bottom:14px}
   .field label{display:block;font-weight:600;font-size:13px;
     color:var(--vert);margin-bottom:5px}
@@ -91,7 +82,6 @@
     background:var(--beige)}
   .field input:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
   .err{color:var(--rouge);font-size:13px;margin-bottom:10px;display:none}
-
   /* ── QUESTION ── */
   .q-card{background:var(--blanc);border-radius:14px;padding:0;
     box-shadow:0 2px 14px rgba(12,38,19,.08);margin-bottom:20px;overflow:hidden}
@@ -111,10 +101,8 @@
     background:var(--beige);line-height:1.65}
   textarea:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
   .autosave{font-size:11px;color:var(--muted);margin-top:3px}
-
   /* ── SEPARATOR ── */
   .sep{border:none;border-top:1.5px solid var(--border);margin:22px 0}
-
   /* ── CHOICES ── */
   .choice{display:flex;align-items:flex-start;gap:11px;
     padding:11px 14px;border:1.5px solid var(--border);
@@ -122,12 +110,10 @@
     transition:all .15s;background:var(--blanc);user-select:none}
   .choice:hover:not(.locked){border-color:var(--sauge);background:var(--sauge-l)}
   .choice.locked{cursor:default}
-
   /* Après réponse */
   .choice.is-correct{border-color:#2E7D32!important;background:#E8F5E9!important}
   .choice.is-wrong{border-color:var(--rouge)!important;background:#FDECEA!important}
   .choice.reveal{border-color:#2E7D32!important;background:#F1F8F1!important}
-
   .letter{flex-shrink:0;width:28px;height:28px;border-radius:50%;
     background:var(--beige);border:1.5px solid var(--border);
     font-weight:700;font-size:12px;display:flex;
@@ -137,14 +123,12 @@
   .choice.is-wrong .letter{background:var(--rouge);border-color:var(--rouge);color:#fff}
   .choice.reveal .letter{background:#2E7D32;border-color:#2E7D32;color:#fff}
   .choice-text{font-size:15px;line-height:1.5;padding-top:4px;color:var(--noir)}
-
   /* ── FEEDBACK ── */
   .fb{padding:11px 14px;border-radius:9px;margin-top:10px;
     font-size:13.5px;font-weight:600;display:none;line-height:1.5}
   .fb.show{display:block}
   .fb.ok{background:#E8F5E9;color:#1B5E20;border-left:4px solid #2E7D32}
   .fb.ko{background:#FDECEA;color:#7F1D1D;border-left:4px solid var(--rouge)}
-
   /* ── BUTTONS ── */
   .btn{display:inline-flex;align-items:center;justify-content:center;
     gap:7px;padding:11px 24px;border:none;border-radius:9px;
@@ -160,7 +144,6 @@
   .btn:disabled{opacity:.4;cursor:not-allowed}
   .nav-row{display:flex;gap:10px;justify-content:space-between;
     align-items:center;flex-wrap:wrap;margin-top:20px}
-
   /* ── RESULTS ── */
   .res-wrap{max-width:580px;margin:28px auto}
   .score-ring{width:148px;height:148px;border-radius:50%;
@@ -179,8 +162,6 @@
   .send-st{font-size:13px;margin-top:12px;text-align:center}
   .s-wait{color:var(--muted)}.s-ok{color:#2E7D32;font-weight:600}
   .s-err{color:var(--rouge)}
-
-
   /* ── CORRIGÉ COMPLET ── */
   .corrige-item{background:var(--blanc);border-radius:12px;padding:22px;
     margin-bottom:16px;box-shadow:0 1px 8px rgba(12,38,19,.07)}
@@ -202,7 +183,6 @@
   .mcq-correct{background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7}
   .mcq-wrong{background:#FDECEA;color:#7F1D1D;border:1px solid #FFCDD2}
   .mcq-good{background:#E8F5E9;color:#1B5E20;border:1.5px solid #2E7D32}
-
   /* ── IMPRESSION ── */
   @media print{
     .hdr,.prog-wrap,.nav-row,#btn-start,.btn{display:none!important}
@@ -212,8 +192,6 @@
     .corrige-item{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
     main{padding:10px}
   }
-
-
   /* ── VISUEL THÉMATIQUE ── */
   .q-visual{width:100%;height:110px;overflow:hidden;border-radius:10px 10px 0 0;
     margin:-26px -26px 20px -26px;width:calc(100% + 52px)}
@@ -226,7 +204,6 @@
     width:fit-content}
   .q-card{overflow:hidden;padding-top:0}
   .q-card-inner{padding:20px 26px 26px}
-
   @media(max-width:600px){
     main{padding:12px 8px 70px}
     .q-card{padding:0}
@@ -247,7 +224,6 @@
 </style>
 </head>
 <body>
-
 <header class="hdr">
   <div class="hdr-brand">
     <div class="hdr-logo">
@@ -265,7 +241,6 @@
   </div>
   <div class="score-badge" id="live-score">— / 100</div>
 </header>
-
 <div class="prog-wrap" id="prog-wrap">
   <div class="prog-bar-bg"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
   <div class="prog-info">
@@ -273,9 +248,7 @@
     <span id="prog-pct">0 %</span>
   </div>
 </div>
-
 <main>
-
 <!-- ─── WELCOME ─────────────────────────────────────────── -->
 <div class="screen active" id="screen-welcome">
   <div class="welcome-wrap">
@@ -283,7 +256,6 @@
       <div class="brand-pill">ACADÉMIE <span>ÉLYSENS</span></div>
       <h2>Quiz de fin de module</h2>
       <p class="sub">Système Digestif · Module 1 · 30 questions</p>
-
       <div class="instr">
         <strong>Consignes :</strong>
         <ul>
@@ -293,14 +265,12 @@
           <li>Vous pouvez quitter et reprendre à tout moment — votre progression est sauvegardée.</li>
         </ul>
       </div>
-
       <div class="alert">
         ⚠️ <strong>Note importante :</strong> La note est calculée à partir des questions 1‑B.
         Les réponses 1‑A sont vérifiées par l'enseignant. Une réponse absente ou
         insuffisante entraîne une pénalité pouvant aller jusqu'à <strong>50 % de la note finale</strong>.
         Ces questionnaires constituent votre meilleure préparation à l'examen de fin de système.
       </div>
-
       <div class="field">
         <label for="inp-name">Nom complet *</label>
         <input type="text" id="inp-name" placeholder="Prénom Nom">
@@ -316,12 +286,10 @@
     </div>
   </div>
 </div>
-
 <!-- ─── QUIZ ─────────────────────────────────────────────── -->
 <div class="screen" id="screen-quiz">
   <div id="q-container"></div>
 </div>
-
 <!-- ─── RESULTS ──────────────────────────────────────────── -->
 <div class="screen" id="screen-results">
   <div class="res-wrap">
@@ -354,8 +322,6 @@
     </div>
   </div>
 </div>
-
-
 <!-- ─── CORRIGÉ COMPLET ──────────────────────────────────── -->
 <div class="screen" id="screen-corrige">
   <div style="max-width:760px;margin:0 auto">
@@ -380,7 +346,6 @@
     <div id="corrige-list"></div>
   </div>
 </div>
-
 <!-- ─── BOUTON FLOTTANT SOUMETTRE ─── -->
 <div id="float-submit" style="display:none;position:fixed;bottom:20px;right:20px;z-index:999">
   <button onclick="soumettreMaintenant()" style="
@@ -394,9 +359,7 @@
     ✔ Soumettre maintenant
   </button>
 </div>
-
 </main>
-
 <script>
 const SVGS = {
   1: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
@@ -485,7 +448,7 @@ const SVGS = {
 </svg>`,
   7: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
   <rect width="760" height="110" fill="#0C2613"/>
-  
+ 
   <g transform="translate(100,35)" opacity="0.8">
     <polygon points="0,-18 9.0,-15.66 9.0,15.66 0,18 -9.0,15.66 -9.0,-15.66" fill="#FFBD46" opacity=".35"/>
     <circle cx="0" cy="0" r="7" fill="#FFBD46" opacity=".7"/>
@@ -566,7 +529,7 @@ const SVGS = {
 </svg>`,
   11: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
   <rect width="760" height="110" fill="#0C2613"/>
-  
+ 
   <g opacity=".75">
     <path d="M80,15 C200,5 280,40 300,55" stroke="#FFBD46" stroke-width="2.5" fill="none" opacity=".6"/>
     <polygon points="294,50 306,50 300,63" fill="#FFBD46" opacity=".7"/>
@@ -609,10 +572,8 @@ const SVGS = {
 </svg>`,
 };
 const QTHEM = [1, 1, 1, 2, 3, 3, 3, 4, 5, 5, 6, 6, 6, 7, 7, 8, 9, 9, 9, 10, 11, 11, 11, 11, 12, 12, 12, 13, 9, 13];
-
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRBLCAE0REhsengeNdrXbz0MouKzr1sPA-FfKHJIq08EEINIrcfKOuTbXlNvBXivUVNg/exec";
 const PTS = 100/30;
-
 const CORRECT_ANS=[
   "La relation entre ces deux structures suit le cycle de contrôle (Ke) : l'Eau contrôle le Feu. En d'autres mots, la colonne vertébrale (Eau, structure protectrice) encadre et régule physiquement le SNC (Feu, fonction) — Les surrénales permettent l'adaptabilité et lors de stress chronique une perte d'équilibre de l'Eau réduit la capacité à contrôler le Feu, une image cohérente avec le rôle stabilisateur que la MTC attribue aux Reins/Eau envers l'activité du cerveau.",
   "En MTC, le SNC relève de l'élément Feu : c'est le Cœur qui abrite le Shen, c'est-à-dire la conscience, la pensée claire, la capacité de réfléchir.",
@@ -645,7 +606,6 @@ const CORRECT_ANS=[
   "Celles de la salive forment une première barrière de protection dans la bouche.",
   "Un stress intense peut provoquer des spasmes œsophagiens (des contractions douloureuses et anormales) suffisamment forts pour imiter un infarctus (une crise cardiaque)."
 ];
-
 const QS=[
   {id:1,q:"Selon le cycle de contrôle (Ke), quelle relation existe entre l'Eau et le Feu, et comment cela se traduit-il pour le SNC et la colonne vertébrale ?",ok:"C",ch:[{l:"A",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"},{l:"B",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"C",t:"1.2.1. Eau ~ Feu"},{l:"D",t:"4.6. Lecture MTC et naturopathique"},{l:"E",t:"7.5. Lien inter-systèmes"}]},
   {id:2,q:"Pourquoi le SNC relève-t-il de l'élément Feu en MTC ?",ok:"D",ch:[{l:"A",t:"5.2. La langue comme outil d'observation en MTC"},{l:"B",t:"4.6. Lecture MTC et naturopathique"},{l:"C",t:"1.4. Vue d'ensemble des cycles énergétiques sur la digestion"},{l:"D",t:"1.2.1. Eau ~ Feu"},{l:"E",t:"3. Les Tissus Embryonnaires — Repère pour la recherche"}]},
@@ -678,22 +638,18 @@ const QS=[
   {id:29,q:"Quel rôle jouent les IgA sécrétoires présents dans la salive ?",ok:"D",ch:[{l:"A",t:"2.1. Le microbiome buccal — un écosystème à ne pas négliger"},{l:"B",t:"4.5. Le parodonte — le système de soutien de la dent"},{l:"C",t:"5.1. Les papilles gustatives — les capteurs du goût"},{l:"D",t:"6.2. Composition et rôles multiples"},{l:"E",t:"6.3. Lien inter-systèmes — la phase céphalique"}]},
   {id:30,q:"Quel type de situation peut imiter une crise cardiaque à travers l'œsophage ?",ok:"B",ch:[{l:"A",t:"7.4. Le cardia — gardien de l'œsophage"},{l:"B",t:"7.5. Lien inter-systèmes"},{l:"C",t:"6.3. Lien inter-systèmes — la phase céphalique"},{l:"D",t:"7.2. La déglutition en 4 temps — une chorégraphie remarquablement précise"},{l:"E",t:"1.3. Quatre états émotionnels peuvent perturber cet équilibre, avec des répercussions directes sur la digestion"}]}
 ];
-
 const LS="elysens_quiz_m1_v3";
 let S={name:"",email:"",cur:0,done:false,score:0,
   ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))};
-
 function save(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 function load(){try{const d=localStorage.getItem(LS);if(d){S=JSON.parse(d);return true}}catch(e){}return false}
 function reset(){localStorage.removeItem(LS);S={name:"",email:"",cur:0,done:false,score:0,ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))}}
-
 function show(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   document.getElementById("prog-wrap").style.display=id==="screen-quiz"?"block":"none";
   document.getElementById("float-submit").style.display=id==="screen-quiz"?"block":"none";
 }
-
 document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("btn-start").addEventListener("click",startQuiz);
   if(load()&&S.name&&!S.done){
@@ -703,7 +659,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
   if(S.done){showResults();}
 });
-
 function startQuiz(){
   const n=document.getElementById("inp-name").value.trim();
   const e=document.getElementById("inp-email").value.trim();
@@ -713,14 +668,12 @@ function startQuiz(){
   S.name=n;S.email=e;save();
   show("screen-quiz");liveScore();render();
 }
-
 function render(){
   const i=S.cur,q=QS[i],ans=S.ans[i],locked=ans.mcq!==null;
   const pct=Math.round(i/30*100);
   document.getElementById("prog-bar").style.width=pct+"%";
   document.getElementById("prog-text").textContent="Question "+(i+1)+" / 30";
   document.getElementById("prog-pct").textContent=pct+" %";
-
   let ch="";
   const validAnswers = q.oks || [q.ok];
   q.ch.forEach(c=>{
@@ -732,7 +685,6 @@ function render(){
     }
     ch+=`<div class="${cls}" data-letter="${c.l}"><div class="letter">${c.l}</div><div class="choice-text">${c.t}</div></div>`;
   });
-
   let fb="";
   if(locked){
     const validAnsList = q.oks || [q.ok];
@@ -742,12 +694,10 @@ function render(){
       ?`<div class="fb ok show">✅ Bonne réponse ! Section : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`
       :`<div class="fb ko show">❌ La bonne réponse est : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`;
   }
-
   const isLast=i===29;
   const nxt=isLast
     ?`<button class="btn btn-or" id="btn-next" ${!locked?"disabled":""} onclick="finish()">Terminer le quiz ✓</button>`
     :`<button class="btn btn-vert" id="btn-next" ${!locked?"disabled":""} onclick="goTo(${i+1})">Suivant →</button>`;
-
   const themeNum = QTHEM[i];
   const themeSvg = SVGS[themeNum] || "";
   document.getElementById("q-container").innerHTML=`
@@ -758,8 +708,8 @@ function render(){
       <div class="q-text">${q.q}</div>
       <div class="part-label">1 — A &nbsp;·&nbsp; Réponse à développement</div>
       <div class="part-hint">Consultez votre cahier et répondez avec vos propres mots :</div>
-      <textarea id="ta" placeholder="Écrivez votre réponse ici…">${ans.txt}</textarea>
-      <div class="autosave">💾 Sauvegarde automatique à chaque frappe</div>
+      <textarea id="ta" placeholder="Écrivez votre réponse ici…" ${locked?"disabled":""}>${ans.txt}</textarea>
+      <div class="autosave">${locked?"🔒 Réponse verrouillée après le choix de section (1‑B)":"💾 Sauvegarde automatique à chaque frappe"}</div>
       <hr class="sep">
       <div class="part-label">1 — B &nbsp;·&nbsp; Section du cahier</div>
       <div class="part-hint">Dans quelle section avez-vous trouvé cette information ?</div>
@@ -772,7 +722,6 @@ function render(){
       </div>
       </div>
     </div>`;
-
   document.getElementById("ta").addEventListener("input",e=>{S.ans[S.cur].txt=e.target.value;save();});
   if(!locked){
     document.getElementById("cw").addEventListener("click",e=>{
@@ -783,7 +732,6 @@ function render(){
   }
   window.scrollTo(0,0);
 }
-
 function pick(letter){
   const i=S.cur,q=QS[i],ans=S.ans[i];
   if(ans.mcq!==null)return;
@@ -796,7 +744,6 @@ function pick(letter){
   if(ans.ok)S.score=Math.min(100,S.score+PTS);
   save();liveScore();render();
 }
-
 function goTo(idx){
   const ta=document.getElementById("ta");
   if(ta)S.ans[S.cur].txt=ta.value;
@@ -804,11 +751,9 @@ function goTo(idx){
   if(idx<0||idx>=30)return;
   S.cur=idx;save();render();
 }
-
 function liveScore(){
   document.getElementById("live-score").textContent=Math.round(S.score)+" / 100";
 }
-
 function soumettreMaintenant(){
   if(confirm("Soumettre le quiz maintenant ? Les questions non répondues compteront comme incorrectes.")){
     const ta=document.getElementById("ta");
@@ -816,13 +761,11 @@ function soumettreMaintenant(){
     S.done=true;save();showResults();send();
   }
 }
-
 function finish(){
   const ta=document.getElementById("ta");
   if(ta)S.ans[S.cur].txt=ta.value;
   S.done=true;save();showResults();send();
 }
-
 function showResults(){
   show("screen-results");
   const pct=Math.round(S.score);
@@ -840,7 +783,6 @@ function showResults(){
     👤 ${S.name}<br>📧 ${S.email}<br>
     📅 ${new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"})}`;
 }
-
 function restartQuiz(){
   if(confirm("Recommencer le quiz ? Toute votre progression sera effacée.")){
     reset();
@@ -850,7 +792,6 @@ function restartQuiz(){
     show("screen-welcome");
   }
 }
-
 function send(){
   const el=document.getElementById("send-status");
   if(SCRIPT_URL==="REPLACE_WITH_GOOGLE_SCRIPT_URL"){
@@ -858,20 +799,17 @@ function send(){
     el.textContent="⚙️ URL Google Apps Script non configurée.";
     return;
   }
-
   // Timeout de sécurité : si pas de réponse en 12s, on considère envoyé
   const timeout = setTimeout(()=>{
     el.className="send-st s-ok";
     el.textContent="✅ Résultats transmis. Vérifiez votre Google Sheet.";
   }, 12000);
-
   const payload = JSON.stringify({
     nom:S.name, courriel:S.email,
     date:new Date().toISOString(),
     score:Math.round(S.score),
     reponses:S.ans.map((a,i)=>({q:i+1,texte:a.txt,choix:a.mcq,correct:a.ok}))
   });
-
   fetch(SCRIPT_URL,{
     method:"POST",
     mode:"no-cors",
@@ -889,13 +827,11 @@ function send(){
     el.textContent="❌ Erreur d'envoi — contactez votre enseignant.";
   });
 }
-
 function showCorrige(){
   show("screen-corrige");
   const info=document.getElementById("corrige-info");
   info.textContent=S.name+" · "+S.email+" · Score : "+Math.round(S.score)+" / 100 · "+
     new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"});
-
   const list=document.getElementById("corrige-list");
   let html="";
   QS.forEach((q,i)=>{
@@ -903,25 +839,20 @@ function showCorrige(){
     const locked=ans.mcq!==null;
     const correct=q.ch.find(c=>c.l===q.ok);
     const chosen=ans.mcq?q.ch.find(c=>c.l===ans.mcq):null;
-
     let status="skip",statusTxt="Non répondue";
     if(locked){status=ans.ok?"ok":"ko";statusTxt=ans.ok?"✅ Correcte":"❌ Incorrecte";}
-
     html+=`
       <div class="corrige-item">
         <div class="corrige-qnum ${status}">${statusTxt} — Question ${i+1}/30</div>
         <div class="corrige-qtxt">${q.q}</div>
-
         <div class="corrige-block">
           <div class="corrige-label">1 — A · Réponse développement</div>
           <div class="corrige-answer">${ans.txt.trim()||'<em style="color:var(--muted)">Aucune réponse écrite</em>'}</div>
         </div>
-
         <div class="corrige-block">
           <div class="corrige-label">✅ Bonne réponse — Corrigé</div>
           <div class="corrige-answer" style="border-left:3px solid #2E7D32;background:#E8F5E9;color:#1B5E20">${CORRECT_ANS[i]}</div>
         </div>
-
         <div class="corrige-block">
           <div class="corrige-label">1 — B · Section du cahier</div>
           <div class="corrige-mcq-row">
@@ -934,7 +865,6 @@ function showCorrige(){
   list.innerHTML=html;
   window.scrollTo(0,0);
 }
-
 </script>
 </body>
 </html>
