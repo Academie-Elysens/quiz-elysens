@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Système Digestif M3 | Académie ÉLYSENS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--vert: #0C2613;
+--sauge: #9EC8B0;
+--beige: #F2EDE4;
+--or: #FFBD46;
+--noir: #1E1E1E;
+--orange: #E0732E;
+--rouge: #8C0009;
+--blanc: #FFFFFF;
+--sauge-l: #E8F4EE;
+--border: #D4C9B8;
+--muted: #6B6B5A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--beige);
+color:var(--noir);font-size:15px;min-height:100vh}
+.hdr{background:var(--vert);padding:16px 28px;display:flex;
+align-items:center;justify-content:space-between;
+position:sticky;top:0;z-index:100;
+box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.hdr-brand{display:flex;align-items:center;gap:12px}
+.hdr-logo{width:36px;height:36px;border-radius:50%;
+background:var(--or);display:flex;align-items:center;justify-content:center;
+font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:var(--vert)}
+.hdr-text h1{font-family:'Cormorant Garamond',serif;font-size:17px;
+font-weight:600;color:var(--blanc);letter-spacing:.3px}
+.hdr-text p{font-size:11px;color:var(--sauge);margin-top:1px}
+.score-badge{background:var(--or);color:var(--vert);padding:6px 16px;
+border-radius:20px;font-weight:700;font-size:13px;
+font-family:'Outfit',sans-serif;min-width:85px;text-align:center;
+white-space:nowrap}
+.prog-wrap{background:var(--blanc);padding:8px 28px;
+border-bottom:1px solid var(--border);display:none}
+.prog-bar-bg{background:var(--border);border-radius:10px;height:6px;overflow:hidden}
+.prog-bar{background:linear-gradient(90deg,var(--vert),var(--sauge));
+height:100%;border-radius:10px;transition:width .4s}
+.prog-info{display:flex;justify-content:space-between;
+font-size:11px;color:var(--muted);margin-top:3px}
+main{max-width:760px;margin:0 auto;padding:28px 16px 80px}
+.screen{display:none}.screen.active{display:block}
+.card{background:var(--blanc);border-radius:14px;padding:32px;
+box-shadow:0 2px 16px rgba(12,38,19,.09)}
+.welcome-wrap{max-width:540px;margin:24px auto}
+.brand-pill{display:inline-flex;align-items:center;gap:7px;
+background:var(--vert);color:var(--blanc);padding:4px 14px;
+border-radius:20px;font-size:11px;font-weight:600;
+letter-spacing:.6px;margin-bottom:16px}
+.brand-pill span{background:var(--or);color:var(--vert);
+padding:1px 7px;border-radius:10px;font-size:10px}
+.welcome-wrap h2{font-family:'Cormorant Garamond',serif;
+font-size:28px;font-weight:700;color:var(--vert);margin-bottom:4px}
+.welcome-wrap .sub{font-size:13.5px;color:var(--muted);margin-bottom:22px}
+.instr{background:var(--sauge-l);border-left:4px solid var(--sauge);
+border-radius:0 10px 10px 0;padding:14px 16px;
+margin-bottom:18px;font-size:13.5px;line-height:1.8}
+.instr strong{color:var(--vert)}
+.instr ul{margin-left:18px;margin-top:4px}
+.instr li{margin-bottom:2px}
+.alert{border-left:4px solid var(--orange);background:#FEF6EC;
+border-radius:0 10px 10px 0;padding:12px 16px;
+font-size:13px;color:#5A2E00;margin-bottom:22px;line-height:1.6}
+.field{margin-bottom:14px}
+.field label{display:block;font-weight:600;font-size:13px;
+color:var(--vert);margin-bottom:5px}
+.field input{width:100%;padding:10px 13px;
+border:1.5px solid var(--border);border-radius:9px;
+font-family:'Outfit',sans-serif;font-size:14px;transition:border .2s;
+background:var(--beige)}
+.field input:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
+.err{color:var(--rouge);font-size:13px;margin-bottom:10px;display:none}
+.q-card{background:var(--blanc);border-radius:14px;padding:0;
+box-shadow:0 2px 14px rgba(12,38,19,.08);margin-bottom:20px;overflow:hidden}
+.q-num{display:inline-block;background:var(--vert);color:var(--blanc);
+font-size:11px;font-weight:700;padding:3px 12px;
+border-radius:10px;margin-bottom:12px;letter-spacing:.5px}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:18px;
+font-weight:600;color:var(--vert);line-height:1.45;margin-bottom:22px}
+.part-label{font-size:11px;font-weight:700;letter-spacing:.7px;
+color:var(--muted);text-transform:uppercase;margin-bottom:5px}
+.part-hint{font-size:14.5px;color:var(--noir);
+margin-bottom:9px;font-style:italic}
+textarea{width:100%;min-height:105px;padding:11px 13px;
+border:1.5px solid var(--border);border-radius:9px;
+font-family:'Outfit',sans-serif;font-size:15px;
+resize:vertical;transition:border .2s;
+background:var(--beige);line-height:1.65}
+textarea:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
+textarea[readonly]{background:#F4F2EC;border-color:var(--border);color:#4A4A3F;
+cursor:default;border-style:dashed}
+textarea[readonly]:focus{border-color:var(--border);background:#F4F2EC}
+.autosave{font-size:11px;color:var(--muted);margin-top:3px}
+.sep{border:none;border-top:1.5px solid var(--border);margin:22px 0}
+.choice{display:flex;align-items:flex-start;gap:11px;
+padding:11px 14px;border:1.5px solid var(--border);
+border-radius:10px;margin-bottom:8px;cursor:pointer;
+transition:all .15s;background:var(--blanc);user-select:none}
+.choice:hover:not(.locked){border-color:var(--sauge);background:var(--sauge-l)}
+.choice.locked{cursor:default}
+.choice.is-correct{border-color:#2E7D32!important;background:#E8F5E9!important}
+.choice.is-wrong{border-color:var(--rouge)!important;background:#FDECEA!important}
+.choice.reveal{border-color:#2E7D32!important;background:#F1F8F1!important}
+.letter{flex-shrink:0;width:28px;height:28px;border-radius:50%;
+background:var(--beige);border:1.5px solid var(--border);
+font-weight:700;font-size:12px;display:flex;
+align-items:center;justify-content:center;
+color:var(--noir);transition:all .15s}
+.choice.is-correct .letter{background:#2E7D32;border-color:#2E7D32;color:#fff}
+.choice.is-wrong .letter{background:var(--rouge);border-color:var(--rouge);color:#fff}
+.choice.reveal .letter{background:#2E7D32;border-color:#2E7D32;color:#fff}
+.choice-text{font-size:15px;line-height:1.5;padding-top:4px;color:var(--noir)}
+.fb{padding:11px 14px;border-radius:9px;margin-top:10px;
+font-size:13.5px;font-weight:600;display:none;line-height:1.5}
+.fb.show{display:block}
+.fb.ok{background:#E8F5E9;color:#1B5E20;border-left:4px solid #2E7D32}
+.fb.ko{background:#FDECEA;color:#7F1D1D;border-left:4px solid var(--rouge)}
+.btn{display:inline-flex;align-items:center;justify-content:center;
+gap:7px;padding:11px 24px;border:none;border-radius:9px;
+font-family:'Outfit',sans-serif;font-weight:600;font-size:14px;
+cursor:pointer;transition:all .18s;letter-spacing:.2px}
+.btn-vert{background:var(--vert);color:var(--blanc)}
+.btn-vert:hover{background:#0A1E0F}
+.btn-or{background:var(--or);color:var(--vert)}
+.btn-or:hover{background:#E0A030}
+.btn-outline{background:var(--blanc);color:var(--vert);
+border:1.5px solid var(--vert)}
+.btn-outline:hover{background:var(--sauge-l)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.nav-row{display:flex;gap:10px;justify-content:space-between;
+align-items:center;flex-wrap:wrap;margin-top:20px}
+.res-wrap{max-width:580px;margin:28px auto}
+.score-ring{width:148px;height:148px;border-radius:50%;
+border:8px solid var(--vert);margin:20px auto;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+background:var(--sauge-l)}
+.score-pct{font-family:'Cormorant Garamond',serif;
+font-size:42px;font-weight:700;color:var(--vert)}
+.score-lbl{font-size:11px;color:var(--muted);margin-top:1px}
+.mention{font-family:'Cormorant Garamond',serif;
+font-size:22px;font-weight:600;color:var(--vert);
+margin:14px 0;text-align:center}
+.breakdown{background:var(--beige);border-radius:10px;padding:16px;
+margin:16px 0;font-size:13.5px;line-height:2.1}
+.send-st{font-size:13px;margin-top:12px;text-align:center}
+.s-wait{color:var(--muted)}.s-ok{color:#2E7D32;font-weight:600}
+.s-err{color:var(--rouge)}
+.corrige-item{background:var(--blanc);border-radius:12px;padding:22px;
+margin-bottom:16px;box-shadow:0 1px 8px rgba(12,38,19,.07)}
+.corrige-qnum{display:inline-block;font-size:11px;font-weight:700;
+letter-spacing:.5px;padding:2px 10px;border-radius:10px;
+margin-bottom:10px}
+.corrige-qnum.ok{background:#E8F5E9;color:#1B5E20}
+.corrige-qnum.ko{background:#FDECEA;color:#7F1D1D}
+.corrige-qnum.skip{background:#F5F5F5;color:#666}
+.corrige-qtxt{font-family:'Cormorant Garamond',serif;font-size:16px;
+font-weight:600;color:var(--vert);margin-bottom:14px;line-height:1.4}
+.corrige-block{margin-bottom:12px}
+.corrige-label{font-size:11px;font-weight:700;letter-spacing:.5px;
+color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.corrige-answer{background:var(--beige);border-radius:7px;padding:10px 12px;
+font-size:13.5px;line-height:1.6;color:var(--noir)}
+.corrige-mcq-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.mcq-chip{padding:5px 12px;border-radius:20px;font-size:12.5px;font-weight:600}
+.mcq-correct{background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7}
+.mcq-wrong{background:#FDECEA;color:#7F1D1D;border:1px solid #FFCDD2}
+.mcq-good{background:#E8F5E9;color:#1B5E20;border:1.5px solid #2E7D32}
+@media print{
+.hdr,.prog-wrap,.nav-row,#btn-start,.btn{display:none!important}
+.screen{display:none!important}
+#screen-corrige{display:block!important}
+body{background:#fff;font-size:12px}
+.corrige-item{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+main{padding:10px}
+}
+.q-visual{width:100%;height:110px;overflow:hidden;border-radius:10px 10px 0 0;
+margin:-26px -26px 20px -26px;width:calc(100% + 52px)}
+.q-visual svg{width:100%;height:110px;display:block}
+.q-theme-label{display:flex;align-items:center;gap:8px;
+margin-bottom:16px;padding:6px 12px;
+background:var(--vert);border-radius:6px;
+font-size:11px;font-weight:700;letter-spacing:.6px;
+color:var(--or);text-transform:uppercase;
+width:fit-content}
+.q-card{overflow:hidden;padding-top:0}
+.q-card-inner{padding:20px 26px 26px}
+@media(max-width:600px){
+main{padding:12px 8px 70px}
+.q-card{padding:0}
+.q-card-inner{padding:14px 14px 18px}
+.card{padding:18px}
+.hdr{padding:12px 14px}
+.hdr-text h1{font-size:14px}
+.hdr-text p{font-size:10px}
+.q-text{font-size:16px}
+.choice{padding:10px 12px}
+.choice-text{font-size:14px}
+.btn{padding:12px 16px;font-size:13px}
+.nav-row{gap:8px}
+.q-visual{height:80px;margin:-0 -0 16px -0;width:100%;border-radius:10px 10px 0 0}
+.q-visual svg{height:80px}
+.welcome-wrap{margin:12px auto}
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-brand">
+<div class="hdr-logo">
+<svg width="42" height="42" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+<polygon points="21,2 40,21 21,40 2,21" fill="#FFBD46"/>
+<polygon points="21,4 38,21 21,38 4,21" fill="none" stroke="#0C2613" stroke-width="1" opacity=".3"/>
+<text x="13" y="24" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,13,24)">A</text>
+<text x="22" y="28" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,22,28)">É</text>
+</svg>
+</div>
+<div class="hdr-text">
+<h1>Académie ÉLYSENS</h1>
+<p>Système Digestif — Module 3 · 30 questions</p>
+</div>
+</div>
+<div class="score-badge" id="live-score">— / 100</div>
+</header>
+<div class="prog-wrap" id="prog-wrap">
+<div class="prog-bar-bg"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+<div class="prog-info">
+<span id="prog-text">Question 1 / 30</span>
+<span id="prog-pct">0 %</span>
+</div>
+</div>
+<main>
+<div class="screen active" id="screen-welcome">
+<div class="welcome-wrap">
+<div class="card">
+<div class="brand-pill">ACADÉMIE <span>ÉLYSENS</span></div>
+<h2>Quiz de fin de module</h2>
+<p class="sub">Système Digestif · Module 3 · Absorption, Élimination et Métabolisme · 30 questions</p>
+<div class="instr">
+<strong>Consignes :</strong>
+<ul>
+<li>Relisez la section correspondante dans votre cahier avant de répondre.</li>
+<li><strong>1‑A</strong> — Répondez avec vos propres mots.</li>
+<li><strong>1‑B</strong> — Sélectionnez la section où vous avez trouvé l'information.</li>
+<li>Vous pouvez quitter et reprendre à tout moment — votre progression est sauvegardée.</li>
+</ul>
+</div>
+<div class="alert">
+⚠️ <strong>Note importante :</strong> La note est calculée à partir des questions 1‑B.
+Les réponses 1‑A sont vérifiées par l'enseignant. Une réponse absente ou
+insuffisante entraîne une pénalité pouvant aller jusqu'à <strong>50 % de la note finale</strong>.
+Ces questionnaires constituent votre meilleure préparation à l'examen de fin de système.
+</div>
+<div class="field">
+<label for="inp-name">Nom complet *</label>
+<input type="text" id="inp-name" placeholder="Prénom Nom">
+</div>
+<div class="field">
+<label for="inp-email">Adresse courriel *</label>
+<input type="email" id="inp-email" placeholder="votre@courriel.com">
+</div>
+<div class="err" id="err-msg">Veuillez entrer votre nom et une adresse courriel valide.</div>
+<button class="btn btn-vert" id="btn-start" style="width:100%;padding:13px;font-size:15px">
+▶&nbsp;&nbsp;Commencer le quiz
+</button>
+</div>
+</div>
+</div>
+<div class="screen" id="screen-quiz">
+<div id="q-container"></div>
+</div>
+<div class="screen" id="screen-results">
+<div class="res-wrap">
+<div class="card" style="text-align:center">
+<div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--vert)">
+Quiz terminé !
+</div>
+<div class="score-ring">
+<div class="score-pct" id="res-pct">—</div>
+<div class="score-lbl">sur 100</div>
+</div>
+<div class="mention" id="res-mention"></div>
+<div class="breakdown" id="res-breakdown" style="text-align:left"></div>
+<div class="alert" style="text-align:left">
+⚠️ Cette note sera ajustée par l'enseignant après révision des réponses écrites (1‑A).
+Une réponse insuffisante peut entraîner une pénalité jusqu'à 50 %.
+</div>
+<div id="send-status" class="send-st s-wait">⏳ Envoi des résultats en cours…</div>
+<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+<button class="btn btn-vert" style="flex:1;min-width:180px" onclick="showCorrige()">
+📋&nbsp; Voir le corrigé complet
+</button>
+<button class="btn btn-outline" style="flex:1;min-width:180px" onclick="window.print()">
+🖨&nbsp; Imprimer / PDF
+</button>
+</div>
+<button class="btn" onclick="restartQuiz()" style="width:100%;margin-top:10px;background:#fff;color:#8C0009;border:1.5px solid #8C0009;font-family:Outfit,sans-serif;font-weight:600;font-size:14px;padding:11px;border-radius:9px;cursor:pointer">
+🔄&nbsp; Recommencer le quiz à zéro
+</button>
+</div>
+</div>
+</div>
+<div class="screen" id="screen-corrige">
+<div style="max-width:760px;margin:0 auto">
+<div class="card" style="margin-bottom:20px">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+<div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--vert)">
+Corrigé complet — Système Digestif M3
+</div>
+<div style="font-size:13px;color:var(--muted);margin-top:3px" id="corrige-info"></div>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-outline" style="font-size:13px;padding:8px 16px" onclick="show('screen-results')">
+← Retour aux résultats
+</button>
+<button class="btn btn-vert" style="font-size:13px;padding:8px 16px" onclick="window.print()">
+🖨 Imprimer
+</button>
+</div>
+</div>
+</div>
+<div id="corrige-list"></div>
+</div>
+</div>
+<div id="float-submit" style="display:none;position:fixed;bottom:20px;right:20px;z-index:999">
+<button onclick="soumettreMaintenant()" style="
+background:var(--orange);color:#fff;
+border:none;border-radius:30px;
+padding:13px 22px;
+font-family:Outfit,sans-serif;font-weight:700;font-size:14px;
+cursor:pointer;
+box-shadow:0 4px 16px rgba(224,115,46,.45);
+transition:all .2s">
+✔ Soumettre maintenant
+</button>
+</div>
+</main>
+<script>
+const SVGS = {
+1: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M120,88 L640,88" stroke="#9EC8B0" stroke-width="2" opacity=".45"/>
+<path d="M140,88 C140,66 150,44 158,44 C166,44 176,66 176,88" fill="#FFBD46" opacity=".13"/>
+<path d="M140,88 C140,66 150,44 158,44 C166,44 176,66 176,88" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<path d="M186,88 C186,62 198,36 206,36 C214,36 226,62 226,88" fill="#FFBD46" opacity=".13"/>
+<path d="M186,88 C186,62 198,36 206,36 C214,36 226,62 226,88" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<path d="M236,88 C236,64 247,41 255,41 C263,41 274,64 274,88" fill="#FFBD46" opacity=".13"/>
+<path d="M236,88 C236,64 247,41 255,41 C263,41 274,64 274,88" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<path d="M284,88 C284,60 296,33 304,33 C312,33 324,60 324,88" fill="#FFBD46" opacity=".13"/>
+<path d="M284,88 C284,60 296,33 304,33 C312,33 324,60 324,88" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<path d="M334,88 C334,64 345,40 353,40 C361,40 372,64 372,88" fill="#FFBD46" opacity=".13"/>
+<path d="M334,88 C334,64 345,40 353,40 C361,40 372,64 372,88" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<path d="M382,88 C382,61 394,35 402,35 C410,35 422,61 422,88" fill="#FFBD46" opacity=".13"/>
+<path d="M382,88 C382,61 394,35 402,35 C410,35 422,61 422,88" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<path d="M432,88 C432,65 443,43 451,43 C459,43 470,65 470,88" fill="#FFBD46" opacity=".13"/>
+<path d="M432,88 C432,65 443,43 451,43 C459,43 470,65 470,88" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<path d="M480,88 C480,62 492,37 500,37 C508,37 520,62 520,88" fill="#FFBD46" opacity=".13"/>
+<path d="M480,88 C480,62 492,37 500,37 C508,37 520,62 520,88" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<path d="M530,88 C530,65 541,42 549,42 C557,42 568,65 568,88" fill="#FFBD46" opacity=".13"/>
+<path d="M530,88 C530,65 541,42 549,42 C557,42 568,65 568,88" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<circle cx="158" cy="64" r="3" fill="#E0732E" opacity=".55"/>
+<circle cx="255" cy="64" r="3" fill="#E0732E" opacity=".55"/>
+<circle cx="353" cy="64" r="3" fill="#E0732E" opacity=".55"/>
+<circle cx="451" cy="64" r="3" fill="#E0732E" opacity=".55"/>
+<circle cx="549" cy="64" r="3" fill="#E0732E" opacity=".55"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">INTESTIN GRÊLE · VILLOSITÉS ET ABSORPTION</text>
+</svg>`,
+2: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M512,94 L512,52 C512,40 502,34 488,34 L272,34 C258,34 248,40 248,52 L248,94" fill="none" stroke="#9EC8B0" stroke-width="10" opacity=".18"/>
+<path d="M512,94 L512,52 C512,40 502,34 488,34 L272,34 C258,34 248,40 248,52 L248,94" fill="none" stroke="#9EC8B0" stroke-width="2" opacity=".55"/>
+<circle cx="512" cy="62" r="7" fill="#FFBD46" opacity=".18"/><circle cx="512" cy="82" r="7" fill="#FFBD46" opacity=".18"/>
+<circle cx="248" cy="62" r="7" fill="#FFBD46" opacity=".18"/><circle cx="248" cy="82" r="7" fill="#FFBD46" opacity=".18"/>
+<circle cx="300" cy="34" r="7" fill="#FFBD46" opacity=".18"/><circle cx="345" cy="34" r="7" fill="#FFBD46" opacity=".18"/>
+<circle cx="390" cy="34" r="7" fill="#FFBD46" opacity=".18"/><circle cx="435" cy="34" r="7" fill="#FFBD46" opacity=".18"/>
+<path d="M556,64 L612,64" stroke="#9EC8B0" stroke-width="1.5" opacity=".35" stroke-dasharray="4 4"/>
+<path d="M604,58 L612,64 L604,70" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".45"/>
+<circle cx="184" cy="54" r="4" fill="#E0732E" opacity=".55"/><circle cx="200" cy="70" r="3" fill="#E0732E" opacity=".45"/>
+<circle cx="172" cy="74" r="3" fill="#E0732E" opacity=".45"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">CÔLON · RÉCUPÉRATION DE L'EAU ET DES SELS</text>
+</svg>`,
+3: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<rect x="140" y="82" width="480" height="14" fill="#9EC8B0" opacity=".22"/>
+<rect x="140" y="82" width="480" height="14" fill="none" stroke="#9EC8B0" stroke-width="1" opacity=".4"/>
+<rect x="140" y="62" width="480" height="20" fill="#9EC8B0" opacity=".1"/>
+<path d="M140,62 L620,62" stroke="#9EC8B0" stroke-width="1" opacity=".3" stroke-dasharray="5 4"/>
+<circle cx="190" cy="50" r="5" fill="#FFBD46" opacity=".5"/><circle cx="232" cy="38" r="4" fill="#FFBD46" opacity=".4"/>
+<circle cx="268" cy="52" r="6" fill="#E0732E" opacity=".45"/><circle cx="312" cy="34" r="4" fill="#FFBD46" opacity=".45"/>
+<circle cx="352" cy="48" r="5" fill="#FFBD46" opacity=".5"/><circle cx="398" cy="36" r="4" fill="#E0732E" opacity=".4"/>
+<circle cx="438" cy="52" r="6" fill="#FFBD46" opacity=".45"/><circle cx="482" cy="38" r="4" fill="#FFBD46" opacity=".45"/>
+<circle cx="522" cy="50" r="5" fill="#E0732E" opacity=".45"/><circle cx="566" cy="40" r="4" fill="#FFBD46" opacity=".4"/>
+<ellipse cx="300" cy="72" rx="7" ry="4" fill="#FFBD46" opacity=".3"/>
+<ellipse cx="420" cy="74" rx="7" ry="4" fill="#FFBD46" opacity=".3"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">TERRAIN · MICROBIOTE ET COUCHES DE MUCUS</text>
+</svg>`,
+4: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M170,60 C200,34 230,86 262,60 C294,34 324,86 356,60 C388,34 418,86 450,60 C482,34 512,86 544,60" fill="none" stroke="#9EC8B0" stroke-width="3" opacity=".5" stroke-linecap="round"/>
+<circle cx="170" cy="60" r="6" fill="#E0732E" opacity=".6"/>
+<circle cx="596" cy="42" r="15" fill="none" stroke="#FFBD46" stroke-width="1.5" opacity=".45"/>
+<circle cx="596" cy="42" r="8" fill="#FFBD46" opacity=".18"/>
+<circle cx="596" cy="42" r="3" fill="#FFBD46" opacity=".5"/>
+<circle cx="630" cy="74" r="11" fill="none" stroke="#FFBD46" stroke-width="1.2" opacity=".35"/>
+<circle cx="630" cy="74" r="2.5" fill="#FFBD46" opacity=".4"/>
+<ellipse cx="124" cy="44" rx="13" ry="8" fill="#9EC8B0" opacity=".18"/>
+<ellipse cx="124" cy="44" rx="13" ry="8" fill="none" stroke="#9EC8B0" stroke-width="1.2" opacity=".4"/>
+<path d="M112,44 C104,40 100,48 94,44" fill="none" stroke="#9EC8B0" stroke-width="1.2" opacity=".4"/>
+<path d="M112,50 C104,54 100,46 94,52" fill="none" stroke="#9EC8B0" stroke-width="1.2" opacity=".35"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">PARASITES · FAMILLES, PORTES ET CYCLES</text>
+</svg>`,
+5: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M150,52 L610,52" stroke="#9EC8B0" stroke-width="2" opacity=".45"/>
+<path d="M150,82 L610,82" stroke="#9EC8B0" stroke-width="2" opacity=".45"/>
+<rect x="150" y="52" width="460" height="30" fill="#9EC8B0" opacity=".08"/>
+<rect x="222" y="46" width="17" height="42" rx="8" fill="#FFBD46" opacity=".3"/>
+<rect x="222" y="46" width="17" height="42" rx="8" fill="none" stroke="#FFBD46" stroke-width="1.2" opacity=".55"/>
+<rect x="330" y="46" width="17" height="42" rx="8" fill="#E0732E" opacity=".3"/>
+<rect x="330" y="46" width="17" height="42" rx="8" fill="none" stroke="#E0732E" stroke-width="1.2" opacity=".55"/>
+<circle cx="448" cy="67" r="15" fill="#FFBD46" opacity=".22"/>
+<circle cx="448" cy="67" r="15" fill="none" stroke="#FFBD46" stroke-width="1.5" opacity=".6"/>
+<text x="448" y="71" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" font-weight="700" fill="#FFBD46" opacity=".8">ATP</text>
+<rect x="536" y="46" width="17" height="42" rx="8" fill="#9EC8B0" opacity=".3"/>
+<rect x="536" y="46" width="17" height="42" rx="8" fill="none" stroke="#9EC8B0" stroke-width="1.2" opacity=".55"/>
+<circle cx="230" cy="36" r="4" fill="#FFBD46" opacity=".6"/><circle cx="230" cy="94" r="4" fill="#FFBD46" opacity=".35"/>
+<circle cx="338" cy="94" r="4" fill="#E0732E" opacity=".6"/><circle cx="338" cy="36" r="4" fill="#E0732E" opacity=".35"/>
+<circle cx="544" cy="36" r="4" fill="#9EC8B0" opacity=".6"/><circle cx="544" cy="94" r="4" fill="#9EC8B0" opacity=".35"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">NUTRIMENTS · TRANSPORT ET SUPPLÉMENTATION</text>
+</svg>`,
+};
+
+const QTHEM = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 5, 5];
+const MODULE = "Digestif M3";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxm_qbqyFv3IbrcXuFnXPKECk2Su-P12UR0sL6dDFjB_WcWWtYrSdaAk835T8KONA1z/exec";
+const PTS = 100/30;
+const CORRECT_ANS=[
+"La digestion découpe les aliments en molécules de plus en plus petites, un travail largement accompli au Module 2. L'absorption correspond au passage de ces petites molécules à travers la paroi de l'intestin, vers le sang ou vers la lymphe, le liquide clair qui circule dans un réseau de vaisseaux parallèle au réseau sanguin.",
+"L'Intestin Grêle relève du Feu, comme le Cœur dont il est le partenaire, et le Gros Intestin, nom que la MTC donne au côlon, relève du Métal, comme le Poumon. Le tableau qui suit emploie le mot Fu, réservé en MTC aux organes creux qui reçoivent, transforment et font circuler.",
+"En disséquant l'intestin grêle, il remarque, dans la paroi de l'iléon, de petits amas ovales et blanchâtres, regroupés en plaques, et il les prend pour des glandes chargées de verser un suc dans l'intestin.",
+"Leur estimation corrige l'image classique : la surface muqueuse de l'ensemble du tube digestif avoisine plutôt 32 m², soit la surface d'un petit appartement, dont la très grande majorité appartient à l'intestin grêle.",
+"Une deuxième route, plus discrète, emprunte les vaisseaux lymphatiques : elle recueille surtout les chylomicrons, de grosses particules chargées de graisses alimentaires, qui rejoignent la circulation générale en contournant le foie. Deux routes quittent ainsi l'intestin, l'une passant par un poste de contrôle et l'autre filant directement vers la ville, et le chemin qu'emprunte un nutriment influence la façon dont le corps l'utilisera.",
+"Les moyennes obtenues sont proches de 6,6 dans la première portion de l'intestin grêle, montent jusqu'à 7,5 dans l'iléon terminal, puis redescendent à 6,4 à l'entrée du cæcum, la première portion du gros intestin, où la fermentation microbienne produit des acides. Ces valeurs dessinent un profil général; elles varient selon la personne, le moment de la journée et la méthode employée, et le pH mesuré tout contre le mucus peut différer de celui du contenu au centre du tube. Devant un chiffre de pH, la bonne question devient donc toujours la même : où, quand et comment a-t-il été mesuré?",
+"À la troisième échelle, visible seulement au microscope électronique, chaque cellule absorbante porte sur sa face exposée des milliers de microvillosités, de fins prolongements de sa membrane. Leur ensemble forme la bordure en brosse, ainsi nommée parce qu'elle ressemble aux poils serrés d'une brosse, et c'est dans cette bordure que se trouvent les enzymes qui terminent la digestion et les transporteurs qui font entrer les nutriments.",
+"Au fond des cryptes se trouvent les cellules de Paneth, typiques de l'intestin grêle, qui libèrent des peptides antimicrobiens, de petites protéines capables de percer la membrane de certains microbes, ainsi que du lysozyme, une enzyme qui attaque la paroi des bactéries.",
+"La tolérance immunitaire est la capacité de répondre avec mesure aux aliments et aux microbes habituels, tout en gardant intacte la capacité de combattre un agent dangereux.",
+"Lorsque la lactase manque, une partie du lactose reste dans la lumière. Ce sucre retient de l'eau par effet osmotique, c'est-à-dire qu'il attire l'eau vers lui, puis il est fermenté par les bactéries du côlon, ce qui produit des gaz, des ballonnements et parfois une diarrhée.",
+"Un acide aminé essentiel est un acide aminé que l'alimentation doit obligatoirement fournir, parce que le corps est incapable d'en fabriquer la structure de base en quantité suffisante pour couvrir ses besoins. Chez l'adulte, ils sont au nombre de neuf : l'histidine, l'isoleucine, la leucine, la lysine, la méthionine, la phénylalanine, la thréonine, le tryptophane et la valine.",
+"Trop gros pour entrer dans les capillaires sanguins, les chylomicrons passent dans le chylifère de la villosité, puis dans les vaisseaux lymphatiques de l'intestin et enfin dans le canal thoracique, le grand collecteur lymphatique qui se jette dans une veine à la base du cou, du côté gauche.",
+"Sa fonction propre est de « séparer le pur de l'impur » : le pur, ce qui peut nourrir le corps, monte vers la Rate, qui le transporte et le distribue à l'ensemble de l'organisme. Lorsque ce tri se fait mal, la Rate reçoit le trouble en même temps que le clair, et elle transporte alors une nourriture chargée d'Humidité.",
+"Si l'iléon ne fait plus son travail, la fuite des sels biliaires dans le côlon provoque une diarrhée sécrétoire épuisante pour tout l'organisme. Le foie, tenu de reconstituer la bile sans relâche, s'épuise, et le manque de sels biliaires qui s'ensuit gêne l'absorption des vitamines liposolubles A, D, E et K, ce qui fragilise les os par la vitamine D et la coagulation sanguine par la vitamine K.",
+"Élie Metchnikoff, biologiste de l'Institut Pasteur et lauréat du prix Nobel de physiologie ou médecine en 1908 pour ses travaux sur l'immunité, défend l'idée d'une autointoxication : les bactéries du gros intestin fabriqueraient des poisons qui accéléreraient le vieillissement.",
+"en 2008, l'équipe de Gunnar Hansson, à l'Université de Göteborg, en Suède, démontre que le mucus du côlon forme deux couches distinctes : une couche externe, lâche, habitée par les bactéries, et une couche interne, dense et attachée à la paroi, que les bactéries franchissent très difficilement.",
+"Les ténias coliques sont trois bandes de muscle longitudinal qui courent sur toute sa longueur; plus courtes que la paroi, elles la froncent comme le cordon d'un sac, ce qui forme une série de renflements appelés haustrations.",
+"Des échangeurs logés dans sa paroi travaillent par troc. Le premier fait entrer un sodium, Na⁺, pendant qu'il fait sortir un hydrogène, H⁺ : on le nomme NHE3, de l'anglais sodium-hydrogen exchanger, soit échangeur sodium-hydrogène. Le second fait entrer un chlorure, Cl⁻, pendant qu'il fait sortir un bicarbonate, HCO₃⁻ : on le nomme DRA, de l'anglais down-regulated in adenoma, soit diminué dans l'adénome, un nom hérité des recherches sur les tumeurs du côlon. Comme ces deux échangeurs font entrer une charge positive et une charge négative en quantités égales, le bilan électrique de la paroi reste inchangé, et les physiologistes parlent alors d'une absorption électroneutre.",
+"Ces acides traversent la paroi par trois mécanismes complémentaires. Une partie franchit la membrane sous sa forme protonée, c'est-à-dire lorsque l'acide a gardé son hydrogène, et elle diffuse alors directement à travers la paroi de la cellule. Une autre partie entre en échange d'un bicarbonate, HCO₃⁻, que la cellule renvoie dans la lumière. Le reste emprunte deux transporteurs spécialisés dans les petits acides comme le butyrate : le MCT1, de l'anglais monocarboxylate transporter 1, soit transporteur des monocarboxylates numéro 1, qui les fait entrer avec un hydrogène, et le SMCT1, de l'anglais sodium-coupled monocarboxylate transporter 1, soit le même transporteur couplé au sodium.",
+"Chez certaines personnes, le muscle puborectal ou le sphincter externe se contracte au lieu de se relâcher au moment de pousser, ce qui rend l'évacuation difficile même lorsque les selles sont molles. Cette dyssynergie relève d'un mécanisme bien différent d'un simple manque de fibres, et les essais cliniques chez l'humain montrent de bons résultats avec une évaluation anorectale suivie d'une rééducation spécialisée par biofeedback, une méthode qui permet de voir et de corriger en temps réel l'activité de ses muscles.",
+"Le Poumon, qui fait descendre le Qi, soutient ce mouvement vers le bas, ce qui explique qu'en MTC une respiration ample et un Qi du Poumon vigoureux aident l'évacuation.",
+"La résistance à la colonisation désigne la capacité de la communauté microbienne et de l'hôte à empêcher un organisme indésirable de s'installer. Elle repose sur plusieurs mécanismes qui agissent ensemble : les microbes résidents occupent déjà les places disponibles le long du mucus, ils consomment les nutriments avant l'intrus, ils produisent des substances qui freinent sa croissance, ils entretiennent un pH qui lui convient mal, et ils stimulent les défenses de la paroi.",
+"Un probiotique est un micro-organisme vivant qui, administré en quantité suffisante, procure un bénéfice de santé démontré dans un usage précis.",
+"Les protozoaires se multiplient dans le corps, alors une exposition unique et discrète peut mener à une population importante en quelques jours. La plupart des vers suivent une autre logique : leurs œufs ou leurs larves quittent le corps et mûrissent à l'extérieur avant de pouvoir infecter quelqu'un, si bien que la charge parasitaire dépend du nombre de formes infectantes avalées ou reçues et qu'elle augmente par des expositions répétées.",
+"Les signes d'une infection parasitaire ressemblent à ceux de beaucoup d'autres situations digestives. Des ballonnements, des selles irrégulières, de la fatigue, des douleurs abdominales et des démangeaisons se rencontrent dans une longue liste de situations digestives, alors ces signes ouvrent une piste au lieu de désigner un coupable. Deux tableaux appellent davantage l'attention : la démangeaison anale nocturne chez l'enfant, qui oriente vers l'oxyure, et une diarrhée prolongée avec selles grasses au retour d'un voyage ou d'une randonnée, qui oriente vers Giardia.",
+"Le mot anti-nutriment décrit donc une interaction, bien plus que la valeur globale d'un aliment : les légumineuses restent d'excellentes sources de protéines, de fibres et de minéraux malgré leurs phytates.",
+"Le complexe voyage ensuite jusqu'au bout de l'intestin grêle, où un récepteur de l'iléon terminal, formé de deux protéines associées, la cubiline et l'amnionless, le reconnaît et le fait entrer. La B12 rejoint enfin le sang, portée par la transcobalamine, sa protéine de transport sanguine.",
+"Un excès de zinc pousse l'entérocyte à fabriquer une protéine, la métallothionéine, qui capture le cuivre et le retient dans la cellule, où il sera éliminé avec elle lors du renouvellement de l'épithélium : c'est pourquoi un excès de zinc peut provoquer un manque de cuivre.",
+"L'huile essentielle de menthe poivrée contient du menthol, qui détend le muscle lisse de l'intestin en bloquant l'entrée du calcium dans ses cellules, le même calcium qui déclenche la contraction (Section 3.3.5). Cet effet antispasmodique, c'est-à-dire la diminution des contractions douloureuses, explique l'intérêt porté à cette plante dans le syndrome de l'intestin irritable. Les résultats dépendent fortement de la formulation : les capsules gastro-résistantes, conçues pour traverser l'estomac sans se dissoudre, libèrent l'huile directement dans l'intestin, là où les spasmes se produisent, et les essais les plus favorables ont été menés avec ce type de capsules.",
+"Ainsi, pour un symptôme du Feu, la Terre subit et l'Eau est à la cause; pour un symptôme du Métal, l'Eau subit et le Feu est à la cause; pour un symptôme de la Terre, le Métal subit et le Bois est à la cause."
+];
+const QS=[
+{id:1,q:"Quelle différence le cahier établit-il entre la digestion et l'absorption?",ok:"D",ch:[{l:"A",t:"5.7.1 Le prébiotique : nourrir les habitants déjà présents"},{l:"B",t:"5.1 Une longue histoire commune"},{l:"C",t:"6.6.5 La réponse immunitaire, utile et coûteuse"},{l:"D",t:"1.1 Du repas aux cellules, le trajet déjà parcouru"},{l:"E",t:"3.3.2 Les cellules de l'épithélium"}]},
+{id:2,q:"Dans le rappel MTC, à quel élément et à quel organe partenaire l'Intestin Grêle et le Gros Intestin se rattachent-ils, et que désigne le mot Fu?",ok:"A",ch:[{l:"A",t:"2 Rappel MTC condensé, Système digestif, Module 3"},{l:"B",t:"6.5.1 L'intestin grêle"},{l:"C",t:"4.1 Perspective évolutive"},{l:"D",t:"3.4.7 Vitamines et minéraux, une carte avant les fiches détaillées"},{l:"E",t:"6.2 Les trois grandes familles"}]},
+{id:3,q:"Qu'a observé Johann Conrad Peyer dans la paroi de l'iléon, et comment a-t-il interprété sa découverte?",ok:"D",ch:[{l:"A",t:"3.4.3 Les principes du transport"},{l:"B",t:"3.2.4 Le pH, un environnement local et changeant"},{l:"C",t:"6.5.4 Le sang, les muscles et les tissus"},{l:"D",t:"3.1 Perspective évolutive"},{l:"E",t:"6.3.2 Tenir en place"}]},
+{id:4,q:"Comment Helander et Fändriks ont-ils corrigé l'image classique du « terrain de tennis »?",ok:"C",ch:[{l:"A",t:"3.3.6 Origines embryologiques et vocabulaire ÉLYSENS"},{l:"B",t:"3.4.1 La commande nerveuse, un réseau local connecté au corps"},{l:"C",t:"3.1 Perspective évolutive"},{l:"D",t:"8.1 Reconnaissance, disponibilité et dosage"},{l:"E",t:"4.5 Rappel MTC, Le Côlon"}]},
+{id:5,q:"Des deux routes qui quittent l'intestin grêle, laquelle contourne le foie, que transporte-t-elle, et pourquoi ce détail compte-t-il?",ok:"E",ch:[{l:"A",t:"3.3.4 Plaques de Peyer, IgA et tolérance"},{l:"B",t:"3.3.5 Muscles, nerfs et cellules coordinatrices"},{l:"C",t:"11.1 Une indication, un objectif et une réévaluation"},{l:"D",t:"6.7 Les signes, et la prudence de lecture"},{l:"E",t:"3.2.2 Le mésentère, les vaisseaux et la graisse viscérale"}]},
+{id:6,q:"Quelles valeurs moyennes de pH une capsule avalée a-t-elle mesurées le long de l'intestin grêle, et quelle question faut-il toujours poser devant un chiffre de pH?",ok:"A",ch:[{l:"A",t:"3.2.4 Le pH, un environnement local et changeant"},{l:"B",t:"3.6 Lien inter-systèmes"},{l:"C",t:"3.2.3 Quatre tuniques, quatre niveaux de travail"},{l:"D",t:"7.5 Ce qui appelle une orientation médicale"},{l:"E",t:"5.8 Les levures et l'intestin"}]},
+{id:7,q:"Comment la bordure en brosse est-elle formée, d'où vient son nom, et que contient-elle?",ok:"D",ch:[{l:"A",t:"3.2.2 Le mésentère, les vaisseaux et la graisse viscérale"},{l:"B",t:"3.4.4 Les glucides, de l'assiette au sang porte"},{l:"C",t:"8.3 Vitamine C, Acide ascorbique"},{l:"D",t:"3.3.1 Plis, villosités, microvillosités et cryptes"},{l:"E",t:"5.7 Prébiotiques, probiotiques, synbiotiques et postbiotiques"}]},
+{id:8,q:"Les cellules de Paneth libèrent deux sortes de substances : comment chacune agit-elle sur les microbes?",ok:"A",ch:[{l:"A",t:"3.3.2 Les cellules de l'épithélium"},{l:"B",t:"3.2.2 Le mésentère, les vaisseaux et la graisse viscérale"},{l:"C",t:"3.4.2 Les cellules entéroendocrines, de la détection à la réponse"},{l:"D",t:"5.7.1 Le prébiotique : nourrir les habitants déjà présents"},{l:"E",t:"7.2.2 Les nutriments réparateurs concrets"}]},
+{id:9,q:"Qu'est-ce que la tolérance immunitaire intestinale?",ok:"C",ch:[{l:"A",t:"3.3.2 Les cellules de l'épithélium"},{l:"B",t:"3.3.3 Le chorion, le tissu de soutien et la microcirculation"},{l:"C",t:"3.3.4 Plaques de Peyer, IgA et tolérance"},{l:"D",t:"9.9 Sélénium"},{l:"E",t:"5.9 Ce que montrent les essais humains"}]},
+{id:10,q:"Par quels deux mécanismes successifs un manque de lactase produit-il des gaz et parfois une diarrhée?",ok:"B",ch:[{l:"A",t:"3.3.5 Muscles, nerfs et cellules coordinatrices"},{l:"B",t:"3.4.4 Les glucides, de l'assiette au sang porte"},{l:"C",t:"3.4.1 La commande nerveuse, un réseau local connecté au corps"},{l:"D",t:"6.3.4 Se reproduire"},{l:"E",t:"5.7.1 Le prébiotique : nourrir les habitants déjà présents"}]},
+{id:11,q:"Qu'est-ce qu'un acide aminé essentiel, et combien l'adulte en compte-t-il?",ok:"C",ch:[{l:"A",t:"3.1 Perspective évolutive"},{l:"B",t:"3.3.6 Origines embryologiques et vocabulaire ÉLYSENS"},{l:"C",t:"3.4.5 Les protéines et les acides aminés essentiels"},{l:"D",t:"4.2.2 Jonction iléocæcale, continence et pH du côlon"},{l:"E",t:"6.6.3 La lésion mécanique de la paroi"}]},
+{id:12,q:"Pourquoi les chylomicrons ne peuvent-ils pas entrer dans les capillaires sanguins, et par quel trajet précis rejoignent-ils la circulation?",ok:"B",ch:[{l:"A",t:"3.2.1 Les trois segments et leurs positions"},{l:"B",t:"3.4.6 Les lipides, végétal, animal et trajet lymphatique"},{l:"C",t:"3.4.3 Les principes du transport"},{l:"D",t:"4.2.1 Segments, formes et positionnement"},{l:"E",t:"8.2.4 B5, Acide pantothénique"}]},
+{id:13,q:"Selon la MTC, en quoi consiste la fonction propre de l'Intestin Grêle, et que reçoit la Rate lorsque ce tri se fait mal?",ok:"D",ch:[{l:"A",t:"3.3.3 Le chorion, le tissu de soutien et la microcirculation"},{l:"B",t:"3.4.3 Les principes du transport"},{l:"C",t:"6.6.5 La réponse immunitaire, utile et coûteuse"},{l:"D",t:"3.5 Rappel MTC, L'Intestin grêle"},{l:"E",t:"6.3.1 Se nourrir"}]},
+{id:14,q:"Lorsque l'iléon ne récupère plus les sels biliaires, quelles conséquences se produisent pour le côlon, pour le foie et pour les vitamines liposolubles?",ok:"B",ch:[{l:"A",t:"3.2.1 Les trois segments et leurs positions"},{l:"B",t:"3.6 Lien inter-systèmes"},{l:"C",t:"3.3.3 Le chorion, le tissu de soutien et la microcirculation"},{l:"D",t:"10.4 Menthe poivrée, l'importance de la formulation"},{l:"E",t:"5.8.1 Les levures qui habitent"}]},
+{id:15,q:"Quelle théorie Élie Metchnikoff défendait-il au sujet du gros intestin?",ok:"C",ch:[{l:"A",t:"4.4.5 Former les selles et organiser leur sortie"},{l:"B",t:"4.3.1 Une muqueuse sans villosités"},{l:"C",t:"4.1 Perspective évolutive"},{l:"D",t:"9.3 Calcium"},{l:"E",t:"8.4 Vitamine A, Rétinoïdes et caroténoïdes"}]},
+{id:16,q:"Quelle équipe a démontré en 2008 que le mucus du côlon forme deux couches, et comment les décrit-elle?",ok:"D",ch:[{l:"A",t:"4.7 Tableau récapitulatif, Le Côlon"},{l:"B",t:"4.2.1 Segments, formes et positionnement"},{l:"C",t:"9.8 Cuivre"},{l:"D",t:"4.1 Perspective évolutive"},{l:"E",t:"5.8.1 Les levures qui habitent"}]},
+{id:17,q:"Comment les ténias coliques forment-ils les haustrations?",ok:"C",ch:[{l:"A",t:"4.3.2 Le mucus, les cellules immunitaires et le tissu de soutien"},{l:"B",t:"4.3.3 Les tissus moteurs et sensitifs"},{l:"C",t:"4.2.1 Segments, formes et positionnement"},{l:"D",t:"7.2.3 Les étapes du soutien nutritionnel, une fois la situation sécuritaire"},{l:"E",t:"3.3.6 Origines embryologiques et vocabulaire ÉLYSENS"}]},
+{id:18,q:"Quels deux échangeurs le côlon emploie-t-il pour récupérer le sel, et pourquoi les physiologistes parlent-ils d'une absorption électroneutre?",ok:"E",ch:[{l:"A",t:"4.4.5 Former les selles et organiser leur sortie"},{l:"B",t:"4.3.2 Le mucus, les cellules immunitaires et le tissu de soutien"},{l:"C",t:"8.1 Reconnaissance, disponibilité et dosage"},{l:"D",t:"6.10.1 Ce que la médecine utilise, et ce qui est accessible au Québec"},{l:"E",t:"4.4.1 Eau, sodium, chlorure et potassium"}]},
+{id:19,q:"Par quels trois mécanismes complémentaires les acides gras à chaîne courte traversent-ils la paroi du côlon?",ok:"C",ch:[{l:"A",t:"4.3.2 Le mucus, les cellules immunitaires et le tissu de soutien"},{l:"B",t:"4.2.2 Jonction iléocæcale, continence et pH du côlon"},{l:"C",t:"4.4.2 Les acides gras à chaîne courte"},{l:"D",t:"3.3.5 Muscles, nerfs et cellules coordinatrices"},{l:"E",t:"5.11 Lire un test et reconnaître ses limites"}]},
+{id:20,q:"Quel mécanisme précis produit une dyssynergie lors de l'évacuation, et quelle approche les essais cliniques retiennent-ils?",ok:"A",ch:[{l:"A",t:"4.4.5 Former les selles et organiser leur sortie"},{l:"B",t:"4.7 Tableau récapitulatif, Le Côlon"},{l:"C",t:"4.6 Lien inter-systèmes"},{l:"D",t:"6.3.2 Tenir en place"},{l:"E",t:"7.5 Ce qui appelle une orientation médicale"}]},
+{id:21,q:"En MTC, comment le Poumon soutient-il la fonction d'évacuation du Gros Intestin?",ok:"B",ch:[{l:"A",t:"4.6 Lien inter-systèmes"},{l:"B",t:"4.5 Rappel MTC, Le Côlon"},{l:"C",t:"4.3.1 Une muqueuse sans villosités"},{l:"D",t:"6.5.5 Les poumons, la peau et les autres régions"},{l:"E",t:"5.5 Ce que les microbes transforment"}]},
+{id:22,q:"Qu'est-ce que la résistance à la colonisation, et sur quels mécanismes repose-t-elle?",ok:"E",ch:[{l:"A",t:"5.7.2 Le probiotique : un renfort de passage"},{l:"B",t:"5.5 Ce que les microbes transforment"},{l:"C",t:"8.2.5 B6, Pyridoxine et autres vitamères"},{l:"D",t:"12.3 Côlon, rectum et appendice"},{l:"E",t:"5.5.3 La résistance à la colonisation"}]},
+{id:23,q:"Quels quatre éléments la définition scientifique d'un probiotique réunit-elle?",ok:"B",ch:[{l:"A",t:"5.2 Le terrain, un mot qui décrit des conditions observables"},{l:"B",t:"5.7.2 Le probiotique : un renfort de passage"},{l:"C",t:"5.6 Bonnes et mauvaises bactéries : le contexte décide"},{l:"D",t:"4.4.6 Barrière, réparation et résilience"},{l:"E",t:"3.2.4 Le pH, un environnement local et changeant"}]},
+{id:24,q:"Quelle distinction sépare les protozoaires des vers quant à la multiplication dans le corps, et quelle conséquence pratique en découle?",ok:"A",ch:[{l:"A",t:"6.2 Les trois grandes familles"},{l:"B",t:"6.3.3 Se protéger"},{l:"C",t:"6.10.1 Ce que la médecine utilise, et ce qui est accessible au Québec"},{l:"D",t:"7.5 Ce qui appelle une orientation médicale"},{l:"E",t:"9.8 Cuivre"}]},
+{id:25,q:"Pourquoi les signes d'une infection parasitaire ouvrent-ils une piste au lieu de désigner un coupable, et quels deux tableaux appellent davantage l'attention?",ok:"E",ch:[{l:"A",t:"6.12 Le rôle du naturopathe, étape par étape"},{l:"B",t:"6.5.3 Le foie et les voies biliaires"},{l:"C",t:"3.4.2 Les cellules entéroendocrines, de la détection à la réponse"},{l:"D",t:"5.7.2 Le probiotique : un renfort de passage"},{l:"E",t:"6.7 Les signes, et la prudence de lecture"}]},
+{id:26,q:"Pourquoi le mot anti-nutriment décrit-il une interaction plutôt que la valeur d'un aliment?",ok:"A",ch:[{l:"A",t:"7.3 Anti-nutriments, comprendre la dose, la matrice et la préparation"},{l:"B",t:"7.2.1 La sentinelle du microbiote"},{l:"C",t:"7.2.3 Les étapes du soutien nutritionnel, une fois la situation sécuritaire"},{l:"D",t:"4.1 Perspective évolutive"},{l:"E",t:"3.3.4 Plaques de Peyer, IgA et tolérance"}]},
+{id:27,q:"Le cahier compare le parcours de la vitamine B12 à un relais à quatre coureurs : quelles sont ses deux dernières étapes, et de quelles protéines le récepteur de l'iléon terminal est-il formé?",ok:"E",ch:[{l:"A",t:"8.2.1 B1, Thiamine"},{l:"B",t:"8.8 Tableau de synthèse des vitamines"},{l:"C",t:"6.3.4 Se reproduire"},{l:"D",t:"6.10.2 L'ivermectine, hors de son cadre"},{l:"E",t:"8.2.8 B12, Cobalamines"}]},
+{id:28,q:"Pourquoi un excès de zinc peut-il provoquer un manque de cuivre?",ok:"B",ch:[{l:"A",t:"9.13 Sodium et chlorure"},{l:"B",t:"9.8 Cuivre"},{l:"C",t:"9.7 Phosphore"},{l:"D",t:"8.2.7 B9, Folates"},{l:"E",t:"6.9.2 Interrompre la chaîne, les gestes qui comptent"}]},
+{id:29,q:"Par quel mécanisme le menthol détend-il le muscle lisse de l'intestin, et pourquoi la formulation change-t-elle autant les résultats?",ok:"E",ch:[{l:"A",t:"10.2 Psyllium, retenir l'eau pour transformer la consistance"},{l:"B",t:"10.5 Gingembre, un lien avec les étapes en amont"},{l:"C",t:"5.6 Bonnes et mauvaises bactéries : le contexte décide"},{l:"D",t:"3.4.4 Les glucides, de l'assiette au sang porte"},{l:"E",t:"10.4 Menthe poivrée, l'importance de la formulation"}]},
+{id:30,q:"Selon la grille ÉLYSENS du Dossier Pratique, quels éléments subissent et portent la cause d'un symptôme du Feu, du Métal et de la Terre?",ok:"D",ch:[{l:"A",t:"12.3 Côlon, rectum et appendice"},{l:"B",t:"12.2 Intestin grêle"},{l:"C",t:"11.3 Les vérifications qui changent réellement le choix"},{l:"D",t:"12.1 Repères de lecture et sécurité"},{l:"E",t:"7.2.1 La sentinelle du microbiote"}]}
+];
+
+const LS="elysens_quiz_m3_v1";
+let S={name:"",email:"",cur:0,done:false,score:0,
+ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))};
+function save(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function load(){try{const d=localStorage.getItem(LS);if(d){S=JSON.parse(d);return true}}catch(e){}return false}
+function reset(){localStorage.removeItem(LS);S={name:"",email:"",cur:0,done:false,score:0,ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))}}
+function show(id){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+document.getElementById("prog-wrap").style.display=id==="screen-quiz"?"block":"none";
+document.getElementById("float-submit").style.display=id==="screen-quiz"?"block":"none";
+}
+document.addEventListener("DOMContentLoaded",()=>{
+document.getElementById("btn-start").addEventListener("click",startQuiz);
+if(load()&&S.name&&!S.done){
+if(confirm("Quiz en cours trouvé pour "+S.name+".\n\nReprendre à la question "+(S.cur+1)+" ?\n\n(Annuler = recommencer à zéro)")){
+show("screen-quiz");liveScore();render();
+}else{reset();}
+}
+if(S.done){showResults();}
+});
+function startQuiz(){
+const n=document.getElementById("inp-name").value.trim();
+const e=document.getElementById("inp-email").value.trim();
+const err=document.getElementById("err-msg");
+if(!n||!e||!e.includes("@")){err.style.display="block";return;}
+err.style.display="none";
+S.name=n;S.email=e;save();
+show("screen-quiz");liveScore();render();
+}
+function render(){
+const i=S.cur,q=QS[i],ans=S.ans[i],locked=ans.mcq!==null;
+const pct=Math.round(i/30*100);
+document.getElementById("prog-bar").style.width=pct+"%";
+document.getElementById("prog-text").textContent="Question "+(i+1)+" / 30";
+document.getElementById("prog-pct").textContent=pct+" %";
+let ch="";
+const validAnswers = q.oks || [q.ok];
+q.ch.forEach(c=>{
+let cls="choice";
+if(locked){
+cls+=" locked";
+if(validAnswers.includes(c.l))cls+=" is-correct";
+else if(c.l===ans.mcq && !ans.ok)cls+=" is-wrong";
+}
+ch+=`<div class="${cls}" data-letter="${c.l}"><div class="letter">${c.l}</div><div class="choice-text">${c.t}</div></div>`;
+});
+let fb="";
+if(locked){
+const validAnsList = q.oks || [q.ok];
+const sectList = validAnsList.map(l=>q.ch.find(c=>c.l===l).t).join(" — ou — ");
+const cAns=CORRECT_ANS[i];
+fb=ans.ok
+?`<div class="fb ok show">✅ Bonne réponse ! Section : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`
+:`<div class="fb ko show">❌ La bonne réponse est : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`;
+}
+const isLast=i===29;
+const nxt=isLast
+?`<button class="btn btn-or" id="btn-next" ${!locked?"disabled":""} onclick="finish()">Terminer le quiz ✓</button>`
+:`<button class="btn btn-vert" id="btn-next" ${!locked?"disabled":""} onclick="goTo(${i+1})">Suivant →</button>`;
+const themeNum = QTHEM[i];
+const themeSvg = SVGS[themeNum] || "";
+document.getElementById("q-container").innerHTML=`
+<div class="q-card">
+<div class="q-visual">${themeSvg}</div>
+<div class="q-card-inner">
+<div class="q-num">QUESTION ${i+1} / 30</div>
+<div class="q-text">${q.q}</div>
+<div class="part-label">1 — A &nbsp;·&nbsp; Réponse à développement</div>
+<div class="part-hint">Consultez votre cahier et répondez avec vos propres mots :</div>
+<textarea id="ta" placeholder="Écrivez votre réponse ici…" ${locked?"readonly":""}>${ans.txt}</textarea>
+<div class="autosave">${locked?"🔒 Réponse verrouillée après le choix de section (1‑B)":"💾 Sauvegarde automatique à chaque frappe"}</div>
+<hr class="sep">
+<div class="part-label">1 — B &nbsp;·&nbsp; Section du cahier</div>
+<div class="part-hint">Dans quelle section avez-vous trouvé cette information ?</div>
+<div id="cw">${ch}</div>
+${fb}
+<div class="nav-row">
+<button class="btn btn-outline" onclick="goTo(${i-1})" ${i===0?"disabled":""}>← Précédent</button>
+<span style="font-size:13px;color:var(--muted)">Score : <strong>${Math.round(S.score)}</strong> / 100</span>
+${nxt}
+</div>
+</div>
+</div>`;
+document.getElementById("ta").addEventListener("input",e=>{S.ans[S.cur].txt=e.target.value;save();});
+if(!locked){
+document.getElementById("cw").addEventListener("click",e=>{
+const el=e.target.closest(".choice");
+if(!el)return;
+pick(el.dataset.letter);
+});
+}
+window.scrollTo(0,0);
+}
+function pick(letter){
+const i=S.cur,q=QS[i],ans=S.ans[i];
+if(ans.mcq!==null)return;
+const ta=document.getElementById("ta");
+if(ta)ans.txt=ta.value;
+ans.mcq=letter;
+const validAnswers = q.oks || [q.ok];
+ans.ok = validAnswers.includes(letter);
+if(ans.ok)S.score=Math.min(100,S.score+PTS);
+save();liveScore();render();
+}
+function goTo(idx){
+const ta=document.getElementById("ta");
+if(ta)S.ans[S.cur].txt=ta.value;
+save();
+if(idx<0||idx>=30)return;
+S.cur=idx;save();render();
+}
+function liveScore(){
+document.getElementById("live-score").textContent=Math.round(S.score)+" / 100";
+}
+function soumettreMaintenant(){
+if(confirm("Soumettre le quiz maintenant ? Les questions non répondues compteront comme incorrectes.")){
+const ta=document.getElementById("ta");
+if(ta)S.ans[S.cur].txt=ta.value;
+S.done=true;save();showResults();send();
+}
+}
+function finish(){
+const ta=document.getElementById("ta");
+if(ta)S.ans[S.cur].txt=ta.value;
+S.done=true;save();showResults();send();
+}
+function showResults(){
+show("screen-results");
+const pct=Math.round(S.score);
+const correct=S.ans.filter(a=>a.ok).length;
+const withTxt=S.ans.filter(a=>a.txt.trim().length>15).length;
+document.getElementById("res-pct").textContent=pct+" %";
+document.getElementById("live-score").textContent=pct+" / 100";
+const ms=[[90,"🏆 Excellent !"],[80,"🌟 Très bien"],[70,"👍 Bien"],[60,"📖 Passable"],[0,"⚠️ À revoir"]];
+document.getElementById("res-mention").textContent=ms.find(m=>pct>=m[0])[1];
+document.getElementById("res-breakdown").innerHTML=`
+<strong>Résumé</strong><br>
+📊 Score QCM (1‑B) : <strong>${pct} / 100</strong><br>
+✅ Bonnes réponses : <strong>${correct} / 30</strong><br>
+✍️ Réponses écrites (1‑A) : <strong>${withTxt} / 30</strong> complétées<br>
+👤 ${S.name}<br>📧 ${S.email}<br>
+📅 ${new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"})}`;
+}
+function restartQuiz(){
+if(confirm("Recommencer le quiz ? Toute votre progression sera effacée.")){
+reset();
+document.getElementById("inp-name").value="";
+document.getElementById("inp-email").value="";
+document.getElementById("live-score").textContent="— / 100";
+show("screen-welcome");
+}
+}
+function send(){
+const el=document.getElementById("send-status");
+if(SCRIPT_URL==="REPLACE_WITH_GOOGLE_SCRIPT_URL"){
+el.className="send-st s-err";
+el.textContent="⚙️ URL Google Apps Script non configurée.";
+return;
+}
+const timeout = setTimeout(()=>{
+el.className="send-st s-ok";
+el.textContent="✅ Résultats envoyés. La réception se confirme dans le classeur de l'enseignant.";
+}, 12000);
+const payload = JSON.stringify({
+module:MODULE,
+nom:S.name, courriel:S.email,
+date:new Date().toISOString(),
+score:Math.round(S.score),
+reponses:S.ans.map((a,i)=>({q:i+1,texte:a.txt,choix:a.mcq,correct:a.ok}))
+});
+fetch(SCRIPT_URL,{
+method:"POST",
+mode:"no-cors",
+headers:{"Content-Type":"text/plain"},
+body:payload
+})
+.then(()=>{
+clearTimeout(timeout);
+el.className="send-st s-ok";
+el.textContent="✅ Résultats envoyés à l'enseignant.";
+})
+.catch(()=>{
+clearTimeout(timeout);
+el.className="send-st s-err";
+el.textContent="❌ Erreur d'envoi — contactez votre enseignant.";
+});
+}
+function showCorrige(){
+show("screen-corrige");
+const info=document.getElementById("corrige-info");
+info.textContent=S.name+" · "+S.email+" · Score : "+Math.round(S.score)+" / 100 · "+
+new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"});
+const list=document.getElementById("corrige-list");
+let html="";
+QS.forEach((q,i)=>{
+const ans=S.ans[i];
+const locked=ans.mcq!==null;
+const correct=q.ch.find(c=>c.l===q.ok);
+const chosen=ans.mcq?q.ch.find(c=>c.l===ans.mcq):null;
+let status="skip",statusTxt="Non répondue";
+if(locked){status=ans.ok?"ok":"ko";statusTxt=ans.ok?"✅ Correcte":"❌ Incorrecte";}
+html+=`
+<div class="corrige-item">
+<div class="corrige-qnum ${status}">${statusTxt} — Question ${i+1}/30</div>
+<div class="corrige-qtxt">${q.q}</div>
+<div class="corrige-block">
+<div class="corrige-label">1 — A · Réponse développement</div>
+<div class="corrige-answer">${ans.txt.trim()||'<em style="color:var(--muted)">Aucune réponse écrite</em>'}</div>
+</div>
+<div class="corrige-block">
+<div class="corrige-label">✅ Bonne réponse — Corrigé</div>
+<div class="corrige-answer" style="border-left:3px solid #2E7D32;background:#E8F5E9;color:#1B5E20">${CORRECT_ANS[i]}</div>
+</div>
+<div class="corrige-block">
+<div class="corrige-label">1 — B · Section du cahier</div>
+<div class="corrige-mcq-row">
+${chosen && !ans.ok?`<div class="mcq-chip mcq-wrong">❌ Votre choix : ${chosen.t}</div>`:''}
+${(q.oks||[q.ok]).map(l=>`<div class="mcq-chip mcq-good">✅ ${q.ch.find(c=>c.l===l).t}</div>`).join('')}
+</div>
+</div>
+</div>`;
+});
+list.innerHTML=html;
+window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
