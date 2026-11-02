@@ -3,89 +3,294 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz — Académie ÉLYSENS</title>
+<title>Quiz & Révision | Académie ÉLYSENS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--vert:#0C2613;--sauge:#9EC8B0;--beige:#F2EDE4;--or:#FFBD46;
---noir:#1E1E1E;--blanc:#FFFFFF;--border:#D4C9B8;--muted:#6B6B5A;--sauge-l:#E8F4EE}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Outfit',sans-serif;background:var(--beige);color:var(--noir);
-font-size:15px;min-height:100vh}
-.hdr{background:var(--vert);padding:16px 28px;display:flex;align-items:center;gap:12px;
-box-shadow:0 2px 10px rgba(0,0,0,.25)}
-.hdr-logo{width:36px;height:36px;flex-shrink:0}
-.hdr h1{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;
-color:var(--blanc);letter-spacing:.3px}
-.hdr p{font-size:11px;color:var(--sauge);margin-top:1px}
-main{max-width:640px;margin:0 auto;padding:32px 16px 80px}
-.card{background:var(--blanc);border-radius:14px;padding:28px;
-box-shadow:0 2px 16px rgba(12,38,19,.09)}
-h2{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;
-color:var(--vert);margin-bottom:4px}
-.sub{font-size:13.5px;color:var(--muted);margin-bottom:22px}
-.instr{background:var(--sauge-l);border-left:4px solid var(--sauge);
-border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:22px;
-font-size:13.5px;line-height:1.8}
-.quiz-link{display:flex;align-items:center;justify-content:space-between;gap:12px;
-padding:16px 18px;border:1.5px solid var(--border);border-radius:11px;
-margin-bottom:10px;text-decoration:none;color:var(--noir);
-transition:all .15s;background:var(--blanc)}
-.quiz-link:hover{border-color:var(--sauge);background:var(--sauge-l)}
-.quiz-link .t{font-family:'Cormorant Garamond',serif;font-size:17px;
-font-weight:600;color:var(--vert)}
-.quiz-link .d{font-size:12.5px;color:var(--muted);margin-top:2px}
-.quiz-link .go{color:var(--or);font-weight:700;font-size:20px;flex-shrink:0}
-footer{text-align:center;font-size:12px;color:var(--muted);margin-top:28px}
-@media(max-width:600px){main{padding:16px 10px 60px}.card{padding:18px}}
+  :root {
+    --vert:   #0C2613;
+    --sauge:  #9EC8B0;
+    --beige:  #F2EDE4;
+    --or:     #FFBD46;
+    --noir:   #1E1E1E;
+    --orange: #E0732E;
+    --blanc:  #FFFFFF;
+    --border: #D4C9B8;
+    --muted:  #6B6B5A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--beige);
+    color: var(--noir);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--vert);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo {
+    flex-shrink: 0;
+  }
+  .logo svg { display: block; }
+  .header-text h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--blanc);
+  }
+  .header-text p {
+    font-size: 12px;
+    color: var(--sauge);
+    margin-top: 2px;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
+
+  .intro {
+    background: var(--blanc);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    border-left: 4px solid var(--sauge);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .intro strong { color: var(--vert); }
+
+  /* SYSTÈME */
+  .systeme {
+    margin-bottom: 28px;
+  }
+  .systeme-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--vert);
+    padding: 10px 0 8px;
+    border-bottom: 2px solid var(--sauge);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .systeme-num {
+    background: var(--vert);
+    color: var(--or);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: .5px;
+  }
+
+  /* MODULE CARD */
+  .module-card {
+    background: var(--blanc);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 1px 6px rgba(12,38,19,.07);
+    flex-wrap: wrap;
+  }
+  .module-info { flex: 1; min-width: 200px; }
+  .module-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .module-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--vert);
+  }
+  .module-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* BOUTON QUIZ */
+  .btn-quiz {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--or);
+    color: var(--vert);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    transition: background .18s;
+    white-space: nowrap;
+  }
+  .btn-quiz:hover { background: #E0A030; }
+
+  /* BIENTÔT */
+  .btn-soon {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--border);
+    color: var(--muted);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: default;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  @media(max-width: 500px) {
+    .module-card { flex-direction: column; align-items: flex-start; }
+    .btn-quiz, .btn-soon { width: 100%; justify-content: center; }
+  }
 </style>
 </head>
 <body>
-<header class="hdr">
-<svg class="hdr-logo" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
-<polygon points="21,2 40,21 21,40 2,21" fill="#FFBD46"/>
-<polygon points="21,4 38,21 21,38 4,21" fill="none" stroke="#0C2613" stroke-width="1" opacity=".3"/>
-<text x="13" y="24" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,13,24)">A</text>
-<text x="22" y="28" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,22,28)">É</text>
-</svg>
-<div>
-<h1>Académie ÉLYSENS</h1>
-<p>Quiz de fin de module</p>
-</div>
+
+<header>
+  <div class="logo">
+    <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="22,2 42,22 22,42 2,22" fill="#FFBD46"/>
+      <text x="13" y="26" font-family="Cormorant Garamond,serif" font-size="14" font-weight="700" fill="#0C2613" transform="rotate(-12,13,26)">A</text>
+      <text x="23" y="30" font-family="Cormorant Garamond,serif" font-size="14" font-weight="700" fill="#0C2613" transform="rotate(-12,23,30)">É</text>
+    </svg>
+  </div>
+  <div class="header-text">
+    <h1>Quiz & Révision</h1>
+    <p>Académie ÉLYSENS — Naturopathie & Massothérapie</p>
+  </div>
 </header>
+
 <main>
-<div class="card">
-<h2>Choisissez votre quiz</h2>
-<p class="sub">Cursus Anatomie Naturopathie · Système Digestif</p>
-<div class="instr">
-Relisez la section correspondante dans votre cahier avant de répondre.
-Votre progression est sauvegardée : vous pouvez quitter et reprendre à tout moment,
-sur le même appareil et le même navigateur.
-</div>
-<a class="quiz-link" href="digestif-m2.html">
-<div>
-<div class="t">Système Digestif — Module 2</div>
-<div class="d">Digestion et Organes Centraux · 30 questions</div>
-</div>
-<div class="go">→</div>
-</a>
-<a class="quiz-link" href="digestif-m3.html">
-<div>
-<div class="t">Système Digestif — Module 3</div>
-<div class="d">Absorption, Élimination et Métabolisme · 30 questions</div>
-</div>
-<div class="go">→</div>
-</a>
-<a class="quiz-link" href="digestif-m4.html">
-<div>
-<div class="t">Système Digestif — Module 4</div>
-<div class="d">Anatomie Fonctionnelle, de l’Aliment à la Cellule · 30 questions</div>
-</div>
-<div class="go">→</div>
-</a>
-</div>
-<footer>© Académie ÉLYSENS · Espace ÉLYSENS, Shefford, Québec</footer>
+
+  <div class="intro">
+    <strong>Consigne :</strong> Sélectionne le quiz correspondant à ton module de cours.
+    Consulte ton cahier avant de répondre à chaque question.
+    Ta progression est sauvegardée automatiquement.
+  </div>
+
+  <!-- SYSTÈME DIGESTIF -->
+  <div class="systeme">
+    <div class="systeme-title">
+      <span class="systeme-num">01</span>
+      Système Digestif
+    </div>
+
+    <div class="module-card">
+      <div class="module-info">
+        <div class="module-num">Module 1</div>
+        <div class="module-name">Les Voies Digestives Supérieures</div>
+        <div class="module-desc">30 questions · Dents, langue, salive, pharynx, œsophage</div>
+      </div>
+      <a class="btn-quiz" href="Quiz_Digestif_Module1_ELYSENS_FINAL_V2.html">
+        ▶ Commencer
+      </a>
+    </div>
+
+     <div class="module-card">
+      <div class="module-info">
+        <div class="module-num">Module 2</div>
+        <div class="module-name">Digestion et Organes Centraux</div>
+        <div class="module-desc">30 questions · Estomac, duodénum, foie, vésicule biliaire, pancréas</div>
+      </div>
+      <a class="btn-quiz" href="Quiz_Digestif_Module2_ELYSENS_FINAL.html">
+        ▶ Commencer
+      </a>
+    </div>
+
+       <div class="module-card">
+      <div class="module-info">
+        <div class="module-num">Module 3</div>
+        <div class="module-name">Absorption, Élimination et Métabolisme</div>
+        <div class="module-desc">30 questions · Intestin grêle, côlon, microbiote, absorption</div>
+      </div>
+      <a class="btn-quiz" href="Quiz_Digestif_Module3_ELYSENS_FINAL.html">
+        ▶ Commencer
+      </a>
+    </div>
+
+    <div class="module-card">
+      <div class="module-info">
+        <div class="module-num">Module 4</div>
+        <div class="module-name">Anatomie Fonctionnelle — De l'Aliment à la Cellule</div>
+        <div class="module-desc">30 questions · Métabolisme, aliments transformés, jeûne, familles d'aliments</div>
+      </div>
+      <a class="btn-quiz" href="Quiz_Digestif_Module4_ELYSENS_FINAL.html">
+        ▶ Commencer
+      </a>
+    </div>
+
+  </div>
+
+  <!-- SYSTÈME NERVEUX -->
+  <div class="systeme">
+    <div class="systeme-title">
+      <span class="systeme-num">02</span>
+      Système Nerveux
+    </div>
+    <div class="module-card">
+      <div class="module-info">
+        <div class="module-num">Module 1</div>
+        <div class="module-name">Le Système Nerveux Central</div>
+        <div class="module-desc">Bientôt disponible</div>
+      </div>
+      <span class="btn-soon">⏳ À venir</span>
+    </div>
+  </div>
+
+  <!-- SYSTÈME CIRCULATOIRE -->
+  <div class="systeme">
+    <div class="systeme-title">
+      <span class="systeme-num">03</span>
+      Système Circulatoire
+    </div>
+    <div class="module-card">
+      <div class="module-info">
+        <div class="module-num">Module 1</div>
+        <div class="module-name">Le Cœur & les Vaisseaux</div>
+        <div class="module-desc">Bientôt disponible</div>
+      </div>
+      <span class="btn-soon">⏳ À venir</span>
+    </div>
+  </div>
+
 </main>
+
+<footer>
+  © 2026 Académie ÉLYSENS — Centre Cosmique LB Inc. — Espace Élysens, Shefford QC
+</footer>
+
 </body>
 </html>
- 
