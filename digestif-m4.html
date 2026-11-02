@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Système Digestif Module 4 — Académie ÉLYSENS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--vert: #0C2613;
+--sauge: #9EC8B0;
+--beige: #F2EDE4;
+--or: #FFBD46;
+--noir: #1E1E1E;
+--orange: #E0732E;
+--rouge: #8C0009;
+--blanc: #FFFFFF;
+--sauge-l: #E8F4EE;
+--border: #D4C9B8;
+--muted: #6B6B5A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--beige);
+color:var(--noir);font-size:15px;min-height:100vh}
+.hdr{background:var(--vert);padding:16px 28px;display:flex;
+align-items:center;justify-content:space-between;
+position:sticky;top:0;z-index:100;
+box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.hdr-brand{display:flex;align-items:center;gap:12px}
+.hdr-logo{width:36px;height:36px;border-radius:50%;
+background:var(--or);display:flex;align-items:center;justify-content:center;
+font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:var(--vert)}
+.hdr-text h1{font-family:'Cormorant Garamond',serif;font-size:17px;
+font-weight:600;color:var(--blanc);letter-spacing:.3px}
+.hdr-text p{font-size:11px;color:var(--sauge);margin-top:1px}
+.score-badge{background:var(--or);color:var(--vert);padding:6px 16px;
+border-radius:20px;font-weight:700;font-size:13px;
+font-family:'Outfit',sans-serif;min-width:85px;text-align:center;
+white-space:nowrap}
+.prog-wrap{background:var(--blanc);padding:8px 28px;
+border-bottom:1px solid var(--border);display:none}
+.prog-bar-bg{background:var(--border);border-radius:10px;height:6px;overflow:hidden}
+.prog-bar{background:linear-gradient(90deg,var(--vert),var(--sauge));
+height:100%;border-radius:10px;transition:width .4s}
+.prog-info{display:flex;justify-content:space-between;
+font-size:11px;color:var(--muted);margin-top:3px}
+main{max-width:760px;margin:0 auto;padding:28px 16px 80px}
+.screen{display:none}.screen.active{display:block}
+.card{background:var(--blanc);border-radius:14px;padding:32px;
+box-shadow:0 2px 16px rgba(12,38,19,.09)}
+.welcome-wrap{max-width:540px;margin:24px auto}
+.brand-pill{display:inline-flex;align-items:center;gap:7px;
+background:var(--vert);color:var(--blanc);padding:4px 14px;
+border-radius:20px;font-size:11px;font-weight:600;
+letter-spacing:.6px;margin-bottom:16px}
+.brand-pill span{background:var(--or);color:var(--vert);
+padding:1px 7px;border-radius:10px;font-size:10px}
+.welcome-wrap h2{font-family:'Cormorant Garamond',serif;
+font-size:28px;font-weight:700;color:var(--vert);margin-bottom:4px}
+.welcome-wrap .sub{font-size:13.5px;color:var(--muted);margin-bottom:22px}
+.instr{background:var(--sauge-l);border-left:4px solid var(--sauge);
+border-radius:0 10px 10px 0;padding:14px 16px;
+margin-bottom:18px;font-size:13.5px;line-height:1.8}
+.instr strong{color:var(--vert)}
+.instr ul{margin-left:18px;margin-top:4px}
+.instr li{margin-bottom:2px}
+.alert{border-left:4px solid var(--orange);background:#FEF6EC;
+border-radius:0 10px 10px 0;padding:12px 16px;
+font-size:13px;color:#5A2E00;margin-bottom:22px;line-height:1.6}
+.field{margin-bottom:14px}
+.field label{display:block;font-weight:600;font-size:13px;
+color:var(--vert);margin-bottom:5px}
+.field input{width:100%;padding:10px 13px;
+border:1.5px solid var(--border);border-radius:9px;
+font-family:'Outfit',sans-serif;font-size:14px;transition:border .2s;
+background:var(--beige)}
+.field input:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
+.err{color:var(--rouge);font-size:13px;margin-bottom:10px;display:none}
+.q-card{background:var(--blanc);border-radius:14px;padding:0;
+box-shadow:0 2px 14px rgba(12,38,19,.08);margin-bottom:20px;overflow:hidden}
+.q-num{display:inline-block;background:var(--vert);color:var(--blanc);
+font-size:11px;font-weight:700;padding:3px 12px;
+border-radius:10px;margin-bottom:12px;letter-spacing:.5px}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:18px;
+font-weight:600;color:var(--vert);line-height:1.45;margin-bottom:22px}
+.part-label{font-size:11px;font-weight:700;letter-spacing:.7px;
+color:var(--muted);text-transform:uppercase;margin-bottom:5px}
+.part-hint{font-size:14.5px;color:var(--noir);
+margin-bottom:9px;font-style:italic}
+textarea{width:100%;min-height:105px;padding:11px 13px;
+border:1.5px solid var(--border);border-radius:9px;
+font-family:'Outfit',sans-serif;font-size:15px;
+resize:vertical;transition:border .2s;
+background:var(--beige);line-height:1.65}
+textarea:focus{outline:none;border-color:var(--vert);background:var(--blanc)}
+textarea[readonly]{background:#F4F2EC;border-color:var(--border);color:#4A4A3F;
+cursor:default;border-style:dashed}
+textarea[readonly]:focus{border-color:var(--border);background:#F4F2EC}
+.autosave{font-size:11px;color:var(--muted);margin-top:3px}
+.sep{border:none;border-top:1.5px solid var(--border);margin:22px 0}
+.choice{display:flex;align-items:flex-start;gap:11px;
+padding:11px 14px;border:1.5px solid var(--border);
+border-radius:10px;margin-bottom:8px;cursor:pointer;
+transition:all .15s;background:var(--blanc);user-select:none}
+.choice:hover:not(.locked){border-color:var(--sauge);background:var(--sauge-l)}
+.choice.locked{cursor:default}
+.choice.is-correct{border-color:#2E7D32!important;background:#E8F5E9!important}
+.choice.is-wrong{border-color:var(--rouge)!important;background:#FDECEA!important}
+.choice.reveal{border-color:#2E7D32!important;background:#F1F8F1!important}
+.letter{flex-shrink:0;width:28px;height:28px;border-radius:50%;
+background:var(--beige);border:1.5px solid var(--border);
+font-weight:700;font-size:12px;display:flex;
+align-items:center;justify-content:center;
+color:var(--noir);transition:all .15s}
+.choice.is-correct .letter{background:#2E7D32;border-color:#2E7D32;color:#fff}
+.choice.is-wrong .letter{background:var(--rouge);border-color:var(--rouge);color:#fff}
+.choice.reveal .letter{background:#2E7D32;border-color:#2E7D32;color:#fff}
+.choice-text{font-size:15px;line-height:1.5;padding-top:4px;color:var(--noir)}
+.fb{padding:11px 14px;border-radius:9px;margin-top:10px;
+font-size:13.5px;font-weight:600;display:none;line-height:1.5}
+.fb.show{display:block}
+.fb.ok{background:#E8F5E9;color:#1B5E20;border-left:4px solid #2E7D32}
+.fb.ko{background:#FDECEA;color:#7F1D1D;border-left:4px solid var(--rouge)}
+.btn{display:inline-flex;align-items:center;justify-content:center;
+gap:7px;padding:11px 24px;border:none;border-radius:9px;
+font-family:'Outfit',sans-serif;font-weight:600;font-size:14px;
+cursor:pointer;transition:all .18s;letter-spacing:.2px}
+.btn-vert{background:var(--vert);color:var(--blanc)}
+.btn-vert:hover{background:#0A1E0F}
+.btn-or{background:var(--or);color:var(--vert)}
+.btn-or:hover{background:#E0A030}
+.btn-outline{background:var(--blanc);color:var(--vert);
+border:1.5px solid var(--vert)}
+.btn-outline:hover{background:var(--sauge-l)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.nav-row{display:flex;gap:10px;justify-content:space-between;
+align-items:center;flex-wrap:wrap;margin-top:20px}
+.res-wrap{max-width:580px;margin:28px auto}
+.score-ring{width:148px;height:148px;border-radius:50%;
+border:8px solid var(--vert);margin:20px auto;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+background:var(--sauge-l)}
+.score-pct{font-family:'Cormorant Garamond',serif;
+font-size:42px;font-weight:700;color:var(--vert)}
+.score-lbl{font-size:11px;color:var(--muted);margin-top:1px}
+.mention{font-family:'Cormorant Garamond',serif;
+font-size:22px;font-weight:600;color:var(--vert);
+margin:14px 0;text-align:center}
+.breakdown{background:var(--beige);border-radius:10px;padding:16px;
+margin:16px 0;font-size:13.5px;line-height:2.1}
+.send-st{font-size:13px;margin-top:12px;text-align:center}
+.s-wait{color:var(--muted)}.s-ok{color:#2E7D32;font-weight:600}
+.s-err{color:var(--rouge)}
+.corrige-item{background:var(--blanc);border-radius:12px;padding:22px;
+margin-bottom:16px;box-shadow:0 1px 8px rgba(12,38,19,.07)}
+.corrige-qnum{display:inline-block;font-size:11px;font-weight:700;
+letter-spacing:.5px;padding:2px 10px;border-radius:10px;
+margin-bottom:10px}
+.corrige-qnum.ok{background:#E8F5E9;color:#1B5E20}
+.corrige-qnum.ko{background:#FDECEA;color:#7F1D1D}
+.corrige-qnum.skip{background:#F5F5F5;color:#666}
+.corrige-qtxt{font-family:'Cormorant Garamond',serif;font-size:16px;
+font-weight:600;color:var(--vert);margin-bottom:14px;line-height:1.4}
+.corrige-block{margin-bottom:12px}
+.corrige-label{font-size:11px;font-weight:700;letter-spacing:.5px;
+color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.corrige-answer{background:var(--beige);border-radius:7px;padding:10px 12px;
+font-size:13.5px;line-height:1.6;color:var(--noir)}
+.corrige-mcq-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.mcq-chip{padding:5px 12px;border-radius:20px;font-size:12.5px;font-weight:600}
+.mcq-correct{background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7}
+.mcq-wrong{background:#FDECEA;color:#7F1D1D;border:1px solid #FFCDD2}
+.mcq-good{background:#E8F5E9;color:#1B5E20;border:1.5px solid #2E7D32}
+@media print{
+.hdr,.prog-wrap,.nav-row,#btn-start,.btn{display:none!important}
+.screen{display:none!important}
+#screen-corrige{display:block!important}
+body{background:#fff;font-size:12px}
+.corrige-item{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+main{padding:10px}
+}
+.q-visual{width:100%;height:110px;overflow:hidden;border-radius:10px 10px 0 0;
+margin:-26px -26px 20px -26px;width:calc(100% + 52px)}
+.q-visual svg{width:100%;height:110px;display:block}
+.q-theme-label{display:flex;align-items:center;gap:8px;
+margin-bottom:16px;padding:6px 12px;
+background:var(--vert);border-radius:6px;
+font-size:11px;font-weight:700;letter-spacing:.6px;
+color:var(--or);text-transform:uppercase;
+width:fit-content}
+.q-card{overflow:hidden;padding-top:0}
+.q-card-inner{padding:20px 26px 26px}
+@media(max-width:600px){
+main{padding:12px 8px 70px}
+.q-card{padding:0}
+.q-card-inner{padding:14px 14px 18px}
+.card{padding:18px}
+.hdr{padding:12px 14px}
+.hdr-text h1{font-size:14px}
+.hdr-text p{font-size:10px}
+.q-text{font-size:16px}
+.choice{padding:10px 12px}
+.choice-text{font-size:14px}
+.btn{padding:12px 16px;font-size:13px}
+.nav-row{gap:8px}
+.q-visual{height:80px;margin:-0 -0 16px -0;width:100%;border-radius:10px 10px 0 0}
+.q-visual svg{height:80px}
+.welcome-wrap{margin:12px auto}
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-brand">
+<div class="hdr-logo">
+<svg width="42" height="42" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+<polygon points="21,2 40,21 21,40 2,21" fill="#FFBD46"/>
+<polygon points="21,4 38,21 21,38 4,21" fill="none" stroke="#0C2613" stroke-width="1" opacity=".3"/>
+<text x="13" y="24" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,13,24)">A</text>
+<text x="22" y="28" font-family="Cormorant Garamond,serif" font-size="13" font-weight="700" fill="#0C2613" transform="rotate(-12,22,28)">É</text>
+</svg>
+</div>
+<div class="hdr-text">
+<h1>Académie ÉLYSENS</h1>
+<p>Système Digestif — Module 4 · 30 questions</p>
+</div>
+</div>
+<div class="score-badge" id="live-score">— / 100</div>
+</header>
+<div class="prog-wrap" id="prog-wrap">
+<div class="prog-bar-bg"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+<div class="prog-info">
+<span id="prog-text">Question 1 / 30</span>
+<span id="prog-pct">0 %</span>
+</div>
+</div>
+<main>
+<div class="screen active" id="screen-welcome">
+<div class="welcome-wrap">
+<div class="card">
+<div class="brand-pill">ACADÉMIE <span>ÉLYSENS</span></div>
+<h2>Quiz de fin de module</h2>
+<p class="sub">Système Digestif · Module 4 · Anatomie Fonctionnelle, de l’Aliment à la Cellule · 30 questions</p>
+<div class="instr">
+<strong>Consignes :</strong>
+<ul>
+<li>Relisez la section correspondante dans votre cahier avant de répondre.</li>
+<li><strong>1‑A</strong> — Répondez avec vos propres mots.</li>
+<li><strong>1‑B</strong> — Sélectionnez la section où vous avez trouvé l'information.</li>
+<li>Vous pouvez quitter et reprendre à tout moment — votre progression est sauvegardée.</li>
+</ul>
+</div>
+<div class="alert">
+⚠️ <strong>Note importante :</strong> La note est calculée à partir des questions 1‑B.
+Les réponses 1‑A sont vérifiées par l'enseignant. Une réponse absente ou
+insuffisante entraîne une pénalité pouvant aller jusqu'à <strong>50 % de la note finale</strong>.
+Ces questionnaires constituent votre meilleure préparation à l'examen de fin de système.
+</div>
+<div class="field">
+<label for="inp-name">Nom complet *</label>
+<input type="text" id="inp-name" placeholder="Prénom Nom">
+</div>
+<div class="field">
+<label for="inp-email">Adresse courriel *</label>
+<input type="email" id="inp-email" placeholder="votre@courriel.com">
+</div>
+<div class="err" id="err-msg">Veuillez entrer votre nom et une adresse courriel valide.</div>
+<button class="btn btn-vert" id="btn-start" style="width:100%;padding:13px;font-size:15px">
+▶&nbsp;&nbsp;Commencer le quiz
+</button>
+</div>
+</div>
+</div>
+<div class="screen" id="screen-quiz">
+<div id="q-container"></div>
+</div>
+<div class="screen" id="screen-results">
+<div class="res-wrap">
+<div class="card" style="text-align:center">
+<div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--vert)">
+Quiz terminé !
+</div>
+<div class="score-ring">
+<div class="score-pct" id="res-pct">—</div>
+<div class="score-lbl">sur 100</div>
+</div>
+<div class="mention" id="res-mention"></div>
+<div class="breakdown" id="res-breakdown" style="text-align:left"></div>
+<div class="alert" style="text-align:left">
+⚠️ Cette note sera ajustée par l'enseignant après révision des réponses écrites (1‑A).
+Une réponse insuffisante peut entraîner une pénalité jusqu'à 50 %.
+</div>
+<div id="send-status" class="send-st s-wait">⏳ Envoi des résultats en cours…</div>
+<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+<button class="btn btn-vert" style="flex:1;min-width:180px" onclick="showCorrige()">
+📋&nbsp; Voir le corrigé complet
+</button>
+<button class="btn btn-outline" style="flex:1;min-width:180px" onclick="window.print()">
+🖨&nbsp; Imprimer / PDF
+</button>
+</div>
+<button class="btn" onclick="restartQuiz()" style="width:100%;margin-top:10px;background:#fff;color:#8C0009;border:1.5px solid #8C0009;font-family:Outfit,sans-serif;font-weight:600;font-size:14px;padding:11px;border-radius:9px;cursor:pointer">
+🔄&nbsp; Recommencer le quiz à zéro
+</button>
+</div>
+</div>
+</div>
+<div class="screen" id="screen-corrige">
+<div style="max-width:760px;margin:0 auto">
+<div class="card" style="margin-bottom:20px">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+<div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--vert)">
+Corrigé complet — Système Digestif M4
+</div>
+<div style="font-size:13px;color:var(--muted);margin-top:3px" id="corrige-info"></div>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-outline" style="font-size:13px;padding:8px 16px" onclick="show('screen-results')">
+← Retour aux résultats
+</button>
+<button class="btn btn-vert" style="font-size:13px;padding:8px 16px" onclick="window.print()">
+🖨 Imprimer
+</button>
+</div>
+</div>
+</div>
+<div id="corrige-list"></div>
+</div>
+</div>
+<div id="float-submit" style="display:none;position:fixed;bottom:20px;right:20px;z-index:999">
+<button onclick="soumettreMaintenant()" style="
+background:var(--orange);color:#fff;
+border:none;border-radius:30px;
+padding:13px 22px;
+font-family:Outfit,sans-serif;font-weight:700;font-size:14px;
+cursor:pointer;
+box-shadow:0 4px 16px rgba(224,115,46,.45);
+transition:all .2s">
+✔ Soumettre maintenant
+</button>
+</div>
+</main>
+<script>
+const SVGS = {
+1: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<circle cx="380" cy="60" r="30" fill="none" stroke="#9EC8B0" stroke-width="2" opacity=".55"/>
+<circle cx="380" cy="60" r="30" fill="#FFBD46" opacity=".08"/>
+<circle cx="380" cy="60" r="11" fill="#FFBD46" opacity=".2"/>
+<circle cx="380" cy="60" r="11" fill="none" stroke="#FFBD46" stroke-width="1.2" opacity=".5"/>
+<path d="M210,60 L244,60" stroke="#9EC8B0" stroke-width="1.6" opacity=".4" stroke-dasharray="4 4"/>
+<circle cx="210" cy="60" r="4" fill="#E0732E" opacity=".5"/>
+<path d="M260,60 L294,60" stroke="#9EC8B0" stroke-width="1.6" opacity=".4" stroke-dasharray="4 4"/>
+<circle cx="260" cy="60" r="4" fill="#E0732E" opacity=".5"/>
+<path d="M310,60 L344,60" stroke="#9EC8B0" stroke-width="1.6" opacity=".4" stroke-dasharray="4 4"/>
+<circle cx="310" cy="60" r="4" fill="#E0732E" opacity=".5"/>
+<path d="M420,60 L560,60" stroke="#9EC8B0" stroke-width="1.6" opacity=".4"/>
+<path d="M552,54 L560,60 L552,66" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".5"/>
+<circle cx="596" cy="60" r="8" fill="#FFBD46" opacity=".18"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">MÉTABOLISME · DU SANG À LA CELLULE</text>
+</svg>`,
+2: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<ellipse cx="208" cy="58" rx="40" ry="28" fill="#9EC8B0" opacity=".16"/>
+<ellipse cx="208" cy="58" rx="40" ry="28" fill="none" stroke="#9EC8B0" stroke-width="1.8" opacity=".55"/>
+<circle cx="192" cy="50" r="5" fill="#FFBD46" opacity=".3"/>
+<circle cx="214" cy="48" r="5" fill="#FFBD46" opacity=".3"/>
+<circle cx="204" cy="66" r="5" fill="#FFBD46" opacity=".3"/>
+<circle cx="226" cy="64" r="5" fill="#FFBD46" opacity=".3"/>
+<path d="M268,58 L322,58" stroke="#9EC8B0" stroke-width="1.6" opacity=".4" stroke-dasharray="5 4"/>
+<path d="M314,52 L322,58 L314,64" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".5"/>
+<rect x="352" y="40" width="30" height="36" rx="4" fill="#FFBD46" opacity=".16"/>
+<rect x="352" y="40" width="30" height="36" rx="4" fill="none" stroke="#9EC8B0" stroke-width="1.2" opacity=".45"/>
+<rect x="404" y="48" width="30" height="30" rx="4" fill="#FFBD46" opacity=".16"/>
+<rect x="404" y="48" width="30" height="30" rx="4" fill="none" stroke="#9EC8B0" stroke-width="1.2" opacity=".45"/>
+<rect x="456" y="40" width="30" height="36" rx="4" fill="#FFBD46" opacity=".16"/>
+<rect x="456" y="40" width="30" height="36" rx="4" fill="none" stroke="#9EC8B0" stroke-width="1.2" opacity=".45"/>
+<rect x="508" y="48" width="30" height="30" rx="4" fill="#FFBD46" opacity=".16"/>
+<rect x="508" y="48" width="30" height="30" rx="4" fill="none" stroke="#9EC8B0" stroke-width="1.2" opacity=".45"/>
+<rect x="560" y="40" width="30" height="36" rx="4" fill="#FFBD46" opacity=".16"/>
+<rect x="560" y="40" width="30" height="36" rx="4" fill="none" stroke="#9EC8B0" stroke-width="1.2" opacity=".45"/>
+<circle cx="612" cy="46" r="4" fill="#E0732E" opacity=".5"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">L’ALIMENT · MATRICE ET TRANSFORMATION</text>
+</svg>`,
+3: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M130,74 L630,74" stroke="#9EC8B0" stroke-width="2" opacity=".45"/>
+<rect x="190" y="44" width="16" height="30" rx="4" fill="#FFBD46" opacity=".28"/>
+<rect x="190" y="44" width="16" height="30" rx="4" fill="none" stroke="#FFBD46" stroke-width="1.2" opacity=".55"/>
+<rect x="330" y="50" width="16" height="24" rx="4" fill="#FFBD46" opacity=".28"/>
+<rect x="330" y="50" width="16" height="24" rx="4" fill="none" stroke="#FFBD46" stroke-width="1.2" opacity=".55"/>
+<rect x="520" y="40" width="16" height="34" rx="4" fill="#FFBD46" opacity=".28"/>
+<rect x="520" y="40" width="16" height="34" rx="4" fill="none" stroke="#FFBD46" stroke-width="1.2" opacity=".55"/>
+<path d="M230,56 C260,40 296,40 326,56" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".4" stroke-dasharray="4 4"/>
+<path d="M360,56 C410,34 466,34 516,56" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".4" stroke-dasharray="4 4"/>
+<circle cx="438" cy="40" r="5" fill="#E0732E" opacity=".5"/>
+<circle cx="130" cy="74" r="4" fill="#9EC8B0" opacity=".6"/>
+<circle cx="630" cy="74" r="4" fill="#9EC8B0" opacity=".6"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">RYTHMES · REPAS, INTERVALLES ET JEÛNE</text>
+</svg>`,
+4: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<rect x="170" y="34" width="118" height="54" rx="5" fill="#9EC8B0" opacity=".1"/>
+<rect x="170" y="34" width="118" height="54" rx="5" fill="none" stroke="#9EC8B0" stroke-width="1.3" opacity=".45"/>
+<path d="M182,66 L276,66" stroke="#FFBD46" stroke-width="1.2" opacity=".35"/>
+<path d="M182,78 L246,78" stroke="#FFBD46" stroke-width="1.2" opacity=".25"/>
+<circle cx="190" cy="48" r="4" fill="#E0732E" opacity=".45"/>
+<rect x="280" y="34" width="118" height="54" rx="5" fill="#9EC8B0" opacity=".1"/>
+<rect x="280" y="34" width="118" height="54" rx="5" fill="none" stroke="#9EC8B0" stroke-width="1.3" opacity=".45"/>
+<path d="M292,66 L386,66" stroke="#FFBD46" stroke-width="1.2" opacity=".35"/>
+<path d="M292,78 L356,78" stroke="#FFBD46" stroke-width="1.2" opacity=".25"/>
+<circle cx="300" cy="48" r="4" fill="#E0732E" opacity=".45"/>
+<rect x="390" y="34" width="118" height="54" rx="5" fill="#9EC8B0" opacity=".1"/>
+<rect x="390" y="34" width="118" height="54" rx="5" fill="none" stroke="#9EC8B0" stroke-width="1.3" opacity=".45"/>
+<path d="M402,66 L496,66" stroke="#FFBD46" stroke-width="1.2" opacity=".35"/>
+<path d="M402,78 L466,78" stroke="#FFBD46" stroke-width="1.2" opacity=".25"/>
+<circle cx="410" cy="48" r="4" fill="#E0732E" opacity=".45"/>
+<rect x="500" y="34" width="118" height="54" rx="5" fill="#9EC8B0" opacity=".1"/>
+<rect x="500" y="34" width="118" height="54" rx="5" fill="none" stroke="#9EC8B0" stroke-width="1.3" opacity=".45"/>
+<path d="M512,66 L606,66" stroke="#FFBD46" stroke-width="1.2" opacity=".35"/>
+<path d="M512,78 L576,78" stroke="#FFBD46" stroke-width="1.2" opacity=".25"/>
+<circle cx="520" cy="48" r="4" fill="#E0732E" opacity=".45"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">OBSERVER · GRILLE, RELEVÉ ET ESTIMATION</text>
+</svg>`,
+5: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M150,80 L610,80" stroke="#9EC8B0" stroke-width="2" opacity=".4"/>
+<path d="M196,80 C196,56 210,34 224,34 C238,34 252,56 252,80" fill="#FFBD46" opacity=".14"/>
+<path d="M196,80 C196,56 210,34 224,34 C238,34 252,56 252,80" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<ellipse cx="380" cy="56" rx="26" ry="18" fill="#FFBD46" opacity=".14"/>
+<ellipse cx="380" cy="56" rx="26" ry="18" fill="none" stroke="#9EC8B0" stroke-width="1.6" opacity=".55"/>
+<circle cx="372" cy="52" r="4" fill="#E0732E" opacity=".45"/>
+<circle cx="390" cy="60" r="3" fill="#E0732E" opacity=".4"/>
+<circle cx="486" cy="50" r="6" fill="#FFBD46" opacity=".2"/>
+<circle cx="486" cy="50" r="6" fill="none" stroke="#9EC8B0" stroke-width="1.1" opacity=".45"/>
+<circle cx="508" cy="64" r="6" fill="#FFBD46" opacity=".2"/>
+<circle cx="508" cy="64" r="6" fill="none" stroke="#9EC8B0" stroke-width="1.1" opacity=".45"/>
+<circle cx="530" cy="50" r="6" fill="#FFBD46" opacity=".2"/>
+<circle cx="530" cy="50" r="6" fill="none" stroke="#9EC8B0" stroke-width="1.1" opacity=".45"/>
+<circle cx="552" cy="64" r="6" fill="#FFBD46" opacity=".2"/>
+<circle cx="552" cy="64" r="6" fill="none" stroke="#9EC8B0" stroke-width="1.1" opacity=".45"/>
+<circle cx="574" cy="50" r="6" fill="#FFBD46" opacity=".2"/>
+<circle cx="574" cy="50" r="6" fill="none" stroke="#9EC8B0" stroke-width="1.1" opacity=".45"/>
+<circle cx="596" cy="64" r="6" fill="#FFBD46" opacity=".2"/>
+<circle cx="596" cy="64" r="6" fill="none" stroke="#9EC8B0" stroke-width="1.1" opacity=".45"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">PROTÉINES, MATIÈRES GRASSES ET AMIDON</text>
+</svg>`,
+6: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 110" preserveAspectRatio="xMidYMid slice">
+<rect width="760" height="110" fill="#0C2613"/>
+<path d="M300,34 L300,74 C300,86 318,94 340,94 L420,94 C442,94 460,86 460,74 L460,34" fill="#9EC8B0" opacity=".1"/>
+<path d="M300,34 L300,74 C300,86 318,94 340,94 L420,94 C442,94 460,86 460,74 L460,34" fill="none" stroke="#9EC8B0" stroke-width="1.8" opacity=".55"/>
+<path d="M292,34 L468,34" stroke="#FFBD46" stroke-width="2" opacity=".4"/>
+<circle cx="330" cy="70" r="5" fill="#FFBD46" opacity=".3"/>
+<circle cx="352" cy="56" r="4" fill="#FFBD46" opacity=".3"/>
+<circle cx="378" cy="74" r="6" fill="#FFBD46" opacity=".3"/>
+<circle cx="404" cy="58" r="4" fill="#FFBD46" opacity=".3"/>
+<circle cx="430" cy="72" r="5" fill="#FFBD46" opacity=".3"/>
+<circle cx="390" cy="44" r="3" fill="#FFBD46" opacity=".3"/>
+<circle cx="364" cy="64" r="3" fill="#E0732E" opacity=".5"/>
+<circle cx="416" cy="68" r="3" fill="#E0732E" opacity=".45"/>
+<path d="M200,64 L262,64" stroke="#9EC8B0" stroke-width="1.5" opacity=".35" stroke-dasharray="4 4"/>
+<path d="M498,64 L560,64" stroke="#9EC8B0" stroke-width="1.5" opacity=".35" stroke-dasharray="4 4"/>
+<path d="M552,58 L560,64 L552,70" fill="none" stroke="#9EC8B0" stroke-width="1.5" opacity=".45"/>
+<text x="380" y="103" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="#FFBD46" opacity=".62" letter-spacing="2">LAIT, SUCRES ET FERMENTATION</text>
+</svg>`,
+};
+const QTHEM = [1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6];
+const MODULE = "Digestif M4";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3FoslSBppSwpwPQh6JCrd3qoS6hzOUuzdb8D1bAXrzOmTsOsCWSML6YcDhsjuLfij0g/exec";
+const PTS = 100/30;
+const CORRECT_ANS=[
+"Le métabolisme est l’ensemble des réactions chimiques du vivant, certaines dégradant des molécules pour en tirer de l’énergie ou des matériaux, d’autres construisant de nouvelles molécules.",
+"Dans les entérocytes, les cellules absorbantes de l’intestin, les produits de digestion des graisses à longue chaîne sont réassemblés et emballés dans des chylomicrons, de grosses particules riches en triglycérides.",
+"La matrice fait arriver ensemble, dans une même bouchée, l’amidon et les fibres qui ralentiront son absorption, le minéral et la vitamine qui facilitera son passage, l’eau qui occupe du volume et les molécules végétales qui donnent au fruit sa couleur et son amertume. Un nutriment isolé et le même nutriment pris dans sa matrice rencontrent donc un appareil digestif dans deux états différents.",
+"Chez l’humain, un essai contrôlé randomisé publié en 2015 dans l’American Journal of Clinical Nutrition, conduit auprès de personnes porteuses d’une iléostomie, a montré sur des préparations de blé que la taille des particules modifiait la digestion de l’amidon et la réponse qui suit le repas.",
+"La fermentation utilise l’activité de microorganismes pour transformer certains constituants de l’aliment, ce qui en modifie la composition, la conservation et parfois la digestibilité.",
+"La maldigestion correspond à une transformation insuffisante des constituants alimentaires, de sorte que les molécules restent trop grandes pour être absorbées.",
+"La malabsorption correspond à une absorption insuffisante, qu’elle découle d’une maldigestion en amont ou d’une atteinte de la surface absorbante elle-même.",
+"Les enzymes digestives sont des protéines qui accélèrent la découpe de molécules alimentaires précises, chacune reconnaissant une catégorie de liaisons chimiques.",
+"Dans l’alimentation à fenêtre horaire restreinte, les prises alimentaires sont regroupées dans une partie de la journée, et l’expression couramment employée de seize heures sur huit décrit seize heures sans apport énergétique et une fenêtre de huit heures pour manger.",
+"Le jeûne alterné fait succéder des journées d’alimentation habituelle et des journées sans apport ou très réduites.",
+"Une échelle personnelle de faim peut aller de zéro, soit aucune faim ressentie, à dix, soit la faim ressentie la plus forte.",
+"Les faits gagnent à être relevés près du moment où ils surviennent, et une case laissée vide signifie simplement que l’information a été oubliée.",
+"Une transformation qui sert la conservation, la sécurité ou la digestibilité répond à un besoin de la personne qui mangera.",
+"Une transformation qui sert la stabilité en entrepôt, la standardisation du goût ou la réduction du coût de revient répond à un besoin de l’entreprise. Les deux finalités coexistent souvent dans le même produit, et les démêler est précisément l’exercice.",
+"Le besoin nutritionnel correspond à la quantité de ressources nécessaire au fonctionnement de l’organisme dans une situation donnée.",
+"L’état nutritionnel décrit la situation réelle de la personne, soit ses ressources, ses réserves et les conséquences éventuelles d’un déséquilibre.",
+"Vingt acides aminés composent les protéines humaines, et neuf d’entre eux sont dits essentiels, puisque l’alimentation doit les fournir : l’organisme les fabrique en quantité insuffisante pour couvrir ses besoins.",
+"Dans une graine de légumineuse, les protéines sont stockées dans des corps protéiques situés à l’intérieur de cellules entourées de parois, aux côtés de l’amidon.",
+"Deux acides gras seulement sont essentiels, soit l’acide linoléique, de la famille des oméga-6, et l’acide alpha-linolénique, de la famille des oméga-3.",
+"Les triglycérides associent un glycérol et trois acides gras, et ils constituent la forme de réserve et de transport de l’énergie.",
+"L’amidon est un glucide formé de longues chaînes de glucose, stocké par la plante sous forme de grains compacts dans ses graines, ses tubercules et ses racines.",
+"Les céréales entières apportent le grain avec ses trois parties, soit le son qui forme l’enveloppe fibreuse, le germe qui contient l’embryon avec ses lipides et sa vitamine E, et l’amande amylacée qui constitue la réserve.",
+"Les caséines représentent environ quatre cinquièmes des protéines du lait de vache et forment des assemblages qui coagulent en milieu acide, ce qui explique le caillé dans l’estomac ainsi que la fabrication des fromages.",
+"Le lait à teneur réduite en lactose a reçu une enzyme qui découpe le lactose avant la consommation.",
+"La conclusion des auteurs est explicite : le lait cru a laissé la malabsorption du lactose et les symptômes au même niveau que le lait pasteurisé.",
+"Les sucres libres regroupent les sucres ajoutés par un fabricant, un cuisinier ou un consommateur, ainsi que les sucres naturellement présents dans le miel, les sirops, les jus de fruits et les concentrés de jus.",
+"La perception de l’intensité sucrée se recalibre en quelques semaines lorsque l’apport en sucres diminue, de sorte qu’une même quantité de sucre devient plus perceptible et qu’un produit auparavant acceptable devient excessif.",
+"La fermentation est la transformation d’un aliment par l’activité de micro-organismes, bactéries, levures ou moisissures, qui consomment une partie de ses composants et en produisent de nouveaux.",
+"Un aliment fermenté agit moins en apportant des bactéries qu’en modifiant les conditions dans lesquelles les bactéries déjà présentes travaillent.",
+"La donnée la plus importante pour une personne demeure cependant ce qu’elle perçoit elle-même, parce qu’elle réagit selon son propre état intérieur plutôt que selon une moyenne."
+];
+const QS=[
+{id:1,q:"Comment ce module définit-il le métabolisme?",ok:"D",ch:[{l:"A",t:"12.1 Définition et utilité différenciée des formes"},{l:"B",t:"13.9 Reconnaître chez soi"},{l:"C",t:"6.4 Troisième question : qu’est-ce que cela change de la bouche à la cellule"},{l:"D",t:"Introduction : ce que manger apporte réellement au vivant"},{l:"E",t:"14.5 Ce que la formation Alimentation Équilibrée ajoute à ce cahier"}]},
+{id:2,q:"Sous quelle forme les graisses à longue chaîne quittent-elles les cellules absorbantes de l’intestin?",ok:"E",ch:[{l:"A",t:"1.2 Franchir une membrane"},{l:"B",t:"1.5 Conserver le glucose et mobiliser les réserves"},{l:"C",t:"2.1 L’aliment entier, la forme sous laquelle la nature le présente"},{l:"D",t:"13.6 Ce que les aliments fermentés font au microbiote, et ce que l’essai a mesuré"},{l:"E",t:"1.1 Deux routes quittent l’intestin"}]},
+{id:3,q:"Pourquoi un nutriment isolé et le même nutriment pris dans son aliment entier rencontrent-ils un appareil digestif différent?",ok:"C",ch:[{l:"A",t:"2.2 Les transformations qui ont servi la physiologie"},{l:"B",t:"2.9 Quand l’obstacle physiologique devient un produit"},{l:"C",t:"2.1 L’aliment entier, la forme sous laquelle la nature le présente"},{l:"D",t:"4.5 Pourquoi un jeûne prolongé mobilise aussi les protéines"},{l:"E",t:"12.7 Les boissons, du verre à la cellule"}]},
+{id:4,q:"Qu’a montré, chez l’humain, l’essai contrôlé de 2015 conduit sur des préparations de blé?",ok:"E",ch:[{l:"A",t:"2.9 Quand l’obstacle physiologique devient un produit"},{l:"B",t:"2.4 La classification NOVA et ce qu’elle mesure"},{l:"C",t:"7.2 Rappel, relevé et fréquence"},{l:"D",t:"5.2 Pendant le repas"},{l:"E",t:"2.2 Les transformations qui ont servi la physiologie"}]},
+{id:5,q:"Quels trois aspects d’un aliment la fermentation modifie-t-elle?",ok:"D",ch:[{l:"A",t:"2.8 Ce qui accompagne l’aliment"},{l:"B",t:"2.3 Le basculement : du raffinage à la formulation"},{l:"C",t:"10.4 Ce que cela change de la bouche à la cellule"},{l:"D",t:"2.2 Les transformations qui ont servi la physiologie"},{l:"E",t:"5.10 Utiliser les fiches reproductibles"}]},
+{id:6,q:"Qu’est-ce que la maldigestion?",ok:"B",ch:[{l:"A",t:"3.3 Le lactose, un cas qui éclaire tous les autres"},{l:"B",t:"3.1 Situer l’endroit exact d’un écart"},{l:"C",t:"3.11 Cinq familles de causes, une grille de recherche"},{l:"D",t:"13.3 Ce que la transformation industrielle en a fait"},{l:"E",t:"8.6 Les protéines en poudre"}]},
+{id:7,q:"Qu’est-ce que la malabsorption, et quelles deux origines peut-elle avoir?",ok:"D",ch:[{l:"A",t:"3.12 Ce que cette section permet de faire"},{l:"B",t:"3.9 Le diabète de type 2, une conséquence mesurée"},{l:"C",t:"5.2 Pendant le repas"},{l:"D",t:"3.1 Situer l’endroit exact d’un écart"},{l:"E",t:"4.5 Pourquoi un jeûne prolongé mobilise aussi les protéines"}]},
+{id:8,q:"Que sont les enzymes digestives, et sur quoi agit chacune d’entre elles?",ok:"E",ch:[{l:"A",t:"3.3 Le lactose, un cas qui éclaire tous les autres"},{l:"B",t:"3.12 Ce que cette section permet de faire"},{l:"C",t:"12.3 Ce que la transformation en a fait"},{l:"D",t:"1.4 Du glucose à l’énergie utilisable"},{l:"E",t:"3.2 Quand la découpe reste incomplète"}]},
+{id:9,q:"Que décrit l’expression de seize heures sur huit?",ok:"C",ch:[{l:"A",t:"4.10 Repérer les situations à risque"},{l:"B",t:"4.8 Le jeûne hydrique et la cure, deux pratiques à distinguer"},{l:"C",t:"4.1 Distinguer les pratiques avant d’en parler"},{l:"D",t:"6.1 Pourquoi une grille plutôt qu’une liste"},{l:"E",t:"3.7 Intolérance, allergie, et ce que les tests mesurent réellement"}]},
+{id:10,q:"En quoi consiste le jeûne alterné?",ok:"B",ch:[{l:"A",t:"4.10 Repérer les situations à risque"},{l:"B",t:"4.1 Distinguer les pratiques avant d’en parler"},{l:"C",t:"4.12 Ce que les rythmes apprennent sur l’observation"},{l:"D",t:"11.6 Le lait cru est-il plus digeste? ce que l’essai a mesuré"},{l:"E",t:"10.8 Reconnaître chez soi"}]},
+{id:11,q:"Comment se construit une échelle personnelle de faim?",ok:"E",ch:[{l:"A",t:"5.3 Après le repas"},{l:"B",t:"5.9 Relire ses observations avec la grille des cinq éléments"},{l:"C",t:"2.4 La classification NOVA et ce qu’elle mesure"},{l:"D",t:"10.6 Ce qui accompagne le grain : résidus et mode de culture"},{l:"E",t:"5.1 Avant le repas"}]},
+{id:12,q:"À quel moment les faits doivent-ils être relevés dans un journal d’observation, et que signifie une case laissée vide?",ok:"C",ch:[{l:"A",t:"5.6 Mettre les observations en relation"},{l:"B",t:"5.4 Entre les repas et la nuit"},{l:"C",t:"5 Observer son expérience digestive"},{l:"D",t:"7.3 D’un aliment nommé à une portion exploitable"},{l:"E",t:"10.4 Ce que cela change de la bouche à la cellule"}]},
+{id:13,q:"La grille distingue les transformations selon leur finalité, qui répond soit au besoin de la personne qui mangera, soit au besoin de l’entreprise. Dans lequel des deux se rangent la conservation, la sécurité et la digestibilité?",ok:"A",ch:[{l:"A",t:"6.3 Deuxième question : qu’en a fait la transformation"},{l:"B",t:"6.1 Pourquoi une grille plutôt qu’une liste"},{l:"C",t:"6.9 La fiche de lecture d’un aliment"},{l:"D",t:"7.4 Choisir une donnée de composition"},{l:"E",t:"12.9 Ce que cette famille fait à l’organisme entier"}]},
+{id:14,q:"La même distinction de finalité sépare deux besoins, celui de la personne qui mangera et celui de l’entreprise. Dans lequel se rangent la stabilité en entrepôt, la standardisation du goût et la réduction du coût de revient, et pourquoi ce tri demande-t-il un examen plutôt qu’un coup d’œil?",ok:"B",ch:[{l:"A",t:"6.9 La fiche de lecture d’un aliment"},{l:"B",t:"6.3 Deuxième question : qu’en a fait la transformation"},{l:"C",t:"6.7 Reconnaître un intérêt commercial dans une source"},{l:"D",t:"5.6 Mettre les observations en relation"},{l:"E",t:"8.6 Les protéines en poudre"}]},
+{id:15,q:"Qu’est-ce qu’un besoin nutritionnel?",ok:"A",ch:[{l:"A",t:"7 Estimer et analyser"},{l:"B",t:"7.7 Examiner la régularité et la diversité des sources"},{l:"C",t:"7.12 Utiliser les quatre fiches"},{l:"D",t:"6.5 Quatrième question : que peut-on en observer"},{l:"E",t:"13.2 Ce que la nature fournissait, et ce que la nécessité a enseigné"}]},
+{id:16,q:"Que décrit l’état nutritionnel d’une personne?",ok:"C",ch:[{l:"A",t:"7.12 Utiliser les quatre fiches"},{l:"B",t:"7.4 Choisir une donnée de composition"},{l:"C",t:"7 Estimer et analyser"},{l:"D",t:"12.4 Ce que cela change de la bouche à la cellule"},{l:"E",t:"13.3 Ce que la transformation industrielle en a fait"}]},
+{id:17,q:"Combien d’acides aminés composent les protéines humaines, et pourquoi neuf d’entre eux sont-ils dits essentiels?",ok:"A",ch:[{l:"A",t:"8.1 Définition et utilité différenciée des trois formes"},{l:"B",t:"8.6 Les protéines en poudre"},{l:"C",t:"8.2 Ce que la nature fournissait, et sous quelle forme"},{l:"D",t:"9.5 Reconnu, identifié, contourné"},{l:"E",t:"1.4 Du glucose à l’énergie utilisable"}]},
+{id:18,q:"Où les protéines se trouvent-elles stockées dans une graine de légumineuse?",ok:"E",ch:[{l:"A",t:"8.3 Ce que la transformation en a fait"},{l:"B",t:"8.1 Définition et utilité différenciée des trois formes"},{l:"C",t:"10.5 Reconnu, identifié, contourné"},{l:"D",t:"1.1 Deux routes quittent l’intestin"},{l:"E",t:"8.2 Ce que la nature fournissait, et sous quelle forme"}]},
+{id:19,q:"Quels acides gras sont essentiels, et à quelles familles appartiennent-ils?",ok:"D",ch:[{l:"A",t:"9.5 Reconnu, identifié, contourné"},{l:"B",t:"9.2 Ce que la nature fournissait, et sous quelle forme"},{l:"C",t:"1.1 Deux routes quittent l’intestin"},{l:"D",t:"9.1 Définition et utilité différenciée des trois formes"},{l:"E",t:"13.8 Ce que cette famille fait à l’organisme entier"}]},
+{id:20,q:"Comment un triglycéride est-il constitué, et quel rôle remplit-il?",ok:"C",ch:[{l:"A",t:"9.7 Reconnaître chez soi"},{l:"B",t:"9.4 Ce que cela change de la bouche à la cellule"},{l:"C",t:"9.1 Définition et utilité différenciée des trois formes"},{l:"D",t:"4.7 Ce que les études humaines démontrent, et à quelles conditions"},{l:"E",t:"4.1 Distinguer les pratiques avant d’en parler"}]},
+{id:21,q:"Qu’est-ce que l’amidon, sous quelle forme et dans quelles parties la plante le stocke-t-elle?",ok:"A",ch:[{l:"A",t:"10.1 Définition et utilité différenciée des formes"},{l:"B",t:"10.8 Reconnaître chez soi"},{l:"C",t:"10.3 Ce que la transformation en a fait"},{l:"D",t:"1.6 Les acides aminés, le renouvellement et l’azote"},{l:"E",t:"11.2 Ce que la nature fournissait, et pour quelle période de la vie"}]},
+{id:22,q:"Quelles sont les trois parties d’un grain entier?",ok:"D",ch:[{l:"A",t:"10.3 Ce que la transformation en a fait"},{l:"B",t:"10.2 Ce que la nature fournissait, et sous quelle forme"},{l:"C",t:"2.3 Le basculement : du raffinage à la formulation"},{l:"D",t:"10.1 Définition et utilité différenciée des formes"},{l:"E",t:"2.2 Les transformations qui ont servi la physiologie"}]},
+{id:23,q:"Quelle proportion des protéines du lait de vache les caséines représentent-elles, et quelle propriété explique le caillé gastrique?",ok:"B",ch:[{l:"A",t:"11.2 Ce que la nature fournissait, et pour quelle période de la vie"},{l:"B",t:"11.1 Définition et utilité différenciée des formes"},{l:"C",t:"11.4 Ce que cela change de la bouche à la cellule"},{l:"D",t:"4.4 Les corps cétoniques et leurs utilisateurs"},{l:"E",t:"1.2 Franchir une membrane"}]},
+{id:24,q:"Qu’a reçu un lait à teneur réduite en lactose?",ok:"D",ch:[{l:"A",t:"11.6 Le lait cru est-il plus digeste? ce que l’essai a mesuré"},{l:"B",t:"11.5 Reconnu, identifié, contourné : le lactose et l’enzyme ajoutée"},{l:"C",t:"7.1 Définir la question avant de choisir l’outil"},{l:"D",t:"11.1 Définition et utilité différenciée des formes"},{l:"E",t:"6.10 Ce que la grille rend possible"}]},
+{id:25,q:"Qu’a conclu l’essai croisé comparant le lait cru et le lait pasteurisé chez des adultes présentant une malabsorption du lactose?",ok:"A",ch:[{l:"A",t:"11.6 Le lait cru est-il plus digeste? ce que l’essai a mesuré"},{l:"B",t:"11.7 Pourquoi cette famille est autant encouragée"},{l:"C",t:"11.5 Reconnu, identifié, contourné : le lactose et l’enzyme ajoutée"},{l:"D",t:"4.6 L’autophagie, de l’entretien courant au travail stimulé"},{l:"E",t:"2.8 Ce qui accompagne l’aliment"}]},
+{id:26,q:"Que regroupe la notion de sucres libres?",ok:"B",ch:[{l:"A",t:"12.4 Ce que cela change de la bouche à la cellule"},{l:"B",t:"12.1 Définition et utilité différenciée des formes"},{l:"C",t:"12.6 Les édulcorants, ce qui est documenté"},{l:"D",t:"9.7 Reconnaître chez soi"},{l:"E",t:"5.8 Choisir un changement et suivre son effet"}]},
+{id:27,q:"Qu’établit l’essai contrôlé portant sur la réduction des sucres simples et la perception du goût?",ok:"E",ch:[{l:"A",t:"12.1 Définition et utilité différenciée des formes"},{l:"B",t:"12.5 Reconnu, identifié, contourné"},{l:"C",t:"8.3 Ce que la transformation en a fait"},{l:"D",t:"13.5 Reconnu, identifié, contourné"},{l:"E",t:"12.8 Le goût se recalibre, et cela a été mesuré"}]},
+{id:28,q:"Comment se définit la fermentation, et quels micro-organismes peuvent l’accomplir?",ok:"A",ch:[{l:"A",t:"13.1 Définition et utilité différenciée des formes"},{l:"B",t:"13.5 Reconnu, identifié, contourné"},{l:"C",t:"13.2 Ce que la nature fournissait, et ce que la nécessité a enseigné"},{l:"D",t:"1.3 Le glucose et ses portes d’entrée"},{l:"E",t:"1.9 Ce que deviennent les produits du métabolisme"}]},
+{id:29,q:"Par quel mécanisme principal un aliment fermenté agit-il sur le microbiote?",ok:"B",ch:[{l:"A",t:"13.4 Ce que cela change de la bouche à la cellule"},{l:"B",t:"13.6 Ce que les aliments fermentés font au microbiote, et ce que l’essai a mesuré"},{l:"C",t:"13.3 Ce que la transformation industrielle en a fait"},{l:"D",t:"4.2 Du repas aux réserves"},{l:"E",t:"5.4 Entre les repas et la nuit"}]},
+{id:30,q:"Entre une moyenne établie sur un groupe et ce qu’une personne perçoit, quelle donnée a préséance pour décider avec elle?",ok:"C",ch:[{l:"A",t:"14.2 Pourquoi un même repas produit des effets différents chez deux personnes"},{l:"B",t:"14.3 Le terrain glandulaire, une lecture de la personne"},{l:"C",t:"14.1 Ce que ce module rend désormais possible"},{l:"D",t:"10.3 Ce que la transformation en a fait"},{l:"E",t:"1.9 Ce que deviennent les produits du métabolisme"}]}
+];
+
+const LS="elysens_quiz_m4_v1";
+let S={name:"",email:"",cur:0,done:false,score:0,
+ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))};
+function save(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function load(){try{const d=localStorage.getItem(LS);if(d){S=JSON.parse(d);return true}}catch(e){}return false}
+function reset(){localStorage.removeItem(LS);S={name:"",email:"",cur:0,done:false,score:0,ans:Array(30).fill(0).map(()=>({txt:"",mcq:null,ok:false}))}}
+function show(id){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+document.getElementById("prog-wrap").style.display=id==="screen-quiz"?"block":"none";
+document.getElementById("float-submit").style.display=id==="screen-quiz"?"block":"none";
+}
+document.addEventListener("DOMContentLoaded",()=>{
+document.getElementById("btn-start").addEventListener("click",startQuiz);
+if(load()&&S.name&&!S.done){
+if(confirm("Quiz en cours trouvé pour "+S.name+".\n\nReprendre à la question "+(S.cur+1)+" ?\n\n(Annuler = recommencer à zéro)")){
+show("screen-quiz");liveScore();render();
+}else{reset();}
+}
+if(S.done){showResults();}
+});
+function startQuiz(){
+const n=document.getElementById("inp-name").value.trim();
+const e=document.getElementById("inp-email").value.trim();
+const err=document.getElementById("err-msg");
+if(!n||!e||!e.includes("@")){err.style.display="block";return;}
+err.style.display="none";
+S.name=n;S.email=e;save();
+show("screen-quiz");liveScore();render();
+}
+function render(){
+const i=S.cur,q=QS[i],ans=S.ans[i],locked=ans.mcq!==null;
+const pct=Math.round(i/30*100);
+document.getElementById("prog-bar").style.width=pct+"%";
+document.getElementById("prog-text").textContent="Question "+(i+1)+" / 30";
+document.getElementById("prog-pct").textContent=pct+" %";
+let ch="";
+const validAnswers = q.oks || [q.ok];
+q.ch.forEach(c=>{
+let cls="choice";
+if(locked){
+cls+=" locked";
+if(validAnswers.includes(c.l))cls+=" is-correct";
+else if(c.l===ans.mcq && !ans.ok)cls+=" is-wrong";
+}
+ch+=`<div class="${cls}" data-letter="${c.l}"><div class="letter">${c.l}</div><div class="choice-text">${c.t}</div></div>`;
+});
+let fb="";
+if(locked){
+const validAnsList = q.oks || [q.ok];
+const sectList = validAnsList.map(l=>q.ch.find(c=>c.l===l).t).join(" — ou — ");
+const cAns=CORRECT_ANS[i];
+fb=ans.ok
+?`<div class="fb ok show">✅ Bonne réponse ! Section : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`
+:`<div class="fb ko show">❌ La bonne réponse est : <strong>${sectList}</strong><br><span style="font-weight:400;font-size:13px;display:block;margin-top:6px;opacity:.9">📖 Réponse attendue : ${cAns}</span></div>`;
+}
+const isLast=i===29;
+const nxt=isLast
+?`<button class="btn btn-or" id="btn-next" ${!locked?"disabled":""} onclick="finish()">Terminer le quiz ✓</button>`
+:`<button class="btn btn-vert" id="btn-next" ${!locked?"disabled":""} onclick="goTo(${i+1})">Suivant →</button>`;
+const themeNum = QTHEM[i];
+const themeSvg = SVGS[themeNum] || "";
+document.getElementById("q-container").innerHTML=`
+<div class="q-card">
+<div class="q-visual">${themeSvg}</div>
+<div class="q-card-inner">
+<div class="q-num">QUESTION ${i+1} / 30</div>
+<div class="q-text">${q.q}</div>
+<div class="part-label">1 — A &nbsp;·&nbsp; Réponse à développement</div>
+<div class="part-hint">Consultez votre cahier et répondez avec vos propres mots :</div>
+<textarea id="ta" placeholder="Écrivez votre réponse ici…" ${locked?"readonly":""}>${ans.txt}</textarea>
+<div class="autosave">${locked?"🔒 Réponse verrouillée après le choix de section (1‑B)":"💾 Sauvegarde automatique à chaque frappe"}</div>
+<hr class="sep">
+<div class="part-label">1 — B &nbsp;·&nbsp; Section du cahier</div>
+<div class="part-hint">Dans quelle section avez-vous trouvé cette information ?</div>
+<div id="cw">${ch}</div>
+${fb}
+<div class="nav-row">
+<button class="btn btn-outline" onclick="goTo(${i-1})" ${i===0?"disabled":""}>← Précédent</button>
+<span style="font-size:13px;color:var(--muted)">Score : <strong>${Math.round(S.score)}</strong> / 100</span>
+${nxt}
+</div>
+</div>
+</div>`;
+document.getElementById("ta").addEventListener("input",e=>{S.ans[S.cur].txt=e.target.value;save();});
+if(!locked){
+document.getElementById("cw").addEventListener("click",e=>{
+const el=e.target.closest(".choice");
+if(!el)return;
+pick(el.dataset.letter);
+});
+}
+window.scrollTo(0,0);
+}
+function pick(letter){
+const i=S.cur,q=QS[i],ans=S.ans[i];
+if(ans.mcq!==null)return;
+const ta=document.getElementById("ta");
+if(ta)ans.txt=ta.value;
+ans.mcq=letter;
+const validAnswers = q.oks || [q.ok];
+ans.ok = validAnswers.includes(letter);
+if(ans.ok)S.score=Math.min(100,S.score+PTS);
+save();liveScore();render();
+}
+function goTo(idx){
+const ta=document.getElementById("ta");
+if(ta)S.ans[S.cur].txt=ta.value;
+save();
+if(idx<0||idx>=30)return;
+S.cur=idx;save();render();
+}
+function liveScore(){
+document.getElementById("live-score").textContent=Math.round(S.score)+" / 100";
+}
+function soumettreMaintenant(){
+if(confirm("Soumettre le quiz maintenant ? Les questions non répondues compteront comme incorrectes.")){
+const ta=document.getElementById("ta");
+if(ta)S.ans[S.cur].txt=ta.value;
+S.done=true;save();showResults();send();
+}
+}
+function finish(){
+const ta=document.getElementById("ta");
+if(ta)S.ans[S.cur].txt=ta.value;
+S.done=true;save();showResults();send();
+}
+function showResults(){
+show("screen-results");
+const pct=Math.round(S.score);
+const correct=S.ans.filter(a=>a.ok).length;
+const withTxt=S.ans.filter(a=>a.txt.trim().length>15).length;
+document.getElementById("res-pct").textContent=pct+" %";
+document.getElementById("live-score").textContent=pct+" / 100";
+const ms=[[90,"🏆 Excellent !"],[80,"🌟 Très bien"],[70,"👍 Bien"],[60,"📖 Passable"],[0,"⚠️ À revoir"]];
+document.getElementById("res-mention").textContent=ms.find(m=>pct>=m[0])[1];
+document.getElementById("res-breakdown").innerHTML=`
+<strong>Résumé</strong><br>
+📊 Score QCM (1‑B) : <strong>${pct} / 100</strong><br>
+✅ Bonnes réponses : <strong>${correct} / 30</strong><br>
+✍️ Réponses écrites (1‑A) : <strong>${withTxt} / 30</strong> complétées<br>
+👤 ${S.name}<br>📧 ${S.email}<br>
+📅 ${new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"})}`;
+}
+function restartQuiz(){
+if(confirm("Recommencer le quiz ? Toute votre progression sera effacée.")){
+reset();
+document.getElementById("inp-name").value="";
+document.getElementById("inp-email").value="";
+document.getElementById("live-score").textContent="— / 100";
+show("screen-welcome");
+}
+}
+function send(){
+const el=document.getElementById("send-status");
+if(SCRIPT_URL==="REPLACE_WITH_GOOGLE_SCRIPT_URL"){
+el.className="send-st s-err";
+el.textContent="⚙️ URL Google Apps Script non configurée.";
+return;
+}
+const timeout = setTimeout(()=>{
+el.className="send-st s-ok";
+el.textContent="✅ Résultats envoyés. La réception se confirme dans le classeur de l'enseignant.";
+}, 12000);
+const payload = JSON.stringify({
+module:MODULE,
+nom:S.name, courriel:S.email,
+date:new Date().toISOString(),
+score:Math.round(S.score),
+reponses:S.ans.map((a,i)=>({q:i+1,texte:a.txt,choix:a.mcq,correct:a.ok}))
+});
+fetch(SCRIPT_URL,{
+method:"POST",
+mode:"no-cors",
+headers:{"Content-Type":"text/plain"},
+body:payload
+})
+.then(()=>{
+clearTimeout(timeout);
+el.className="send-st s-ok";
+el.textContent="✅ Résultats envoyés à l'enseignant.";
+})
+.catch(()=>{
+clearTimeout(timeout);
+el.className="send-st s-err";
+el.textContent="❌ Erreur d'envoi — contactez votre enseignant.";
+});
+}
+function showCorrige(){
+show("screen-corrige");
+const info=document.getElementById("corrige-info");
+info.textContent=S.name+" · "+S.email+" · Score : "+Math.round(S.score)+" / 100 · "+
+new Date().toLocaleDateString("fr-CA",{day:"2-digit",month:"long",year:"numeric"});
+const list=document.getElementById("corrige-list");
+let html="";
+QS.forEach((q,i)=>{
+const ans=S.ans[i];
+const locked=ans.mcq!==null;
+const correct=q.ch.find(c=>c.l===q.ok);
+const chosen=ans.mcq?q.ch.find(c=>c.l===ans.mcq):null;
+let status="skip",statusTxt="Non répondue";
+if(locked){status=ans.ok?"ok":"ko";statusTxt=ans.ok?"✅ Correcte":"❌ Incorrecte";}
+html+=`
+<div class="corrige-item">
+<div class="corrige-qnum ${status}">${statusTxt} — Question ${i+1}/30</div>
+<div class="corrige-qtxt">${q.q}</div>
+<div class="corrige-block">
+<div class="corrige-label">1 — A · Réponse développement</div>
+<div class="corrige-answer">${ans.txt.trim()||'<em style="color:var(--muted)">Aucune réponse écrite</em>'}</div>
+</div>
+<div class="corrige-block">
+<div class="corrige-label">✅ Bonne réponse — Corrigé</div>
+<div class="corrige-answer" style="border-left:3px solid #2E7D32;background:#E8F5E9;color:#1B5E20">${CORRECT_ANS[i]}</div>
+</div>
+<div class="corrige-block">
+<div class="corrige-label">1 — B · Section du cahier</div>
+<div class="corrige-mcq-row">
+${chosen && !ans.ok?`<div class="mcq-chip mcq-wrong">❌ Votre choix : ${chosen.t}</div>`:''}
+${(q.oks||[q.ok]).map(l=>`<div class="mcq-chip mcq-good">✅ ${q.ch.find(c=>c.l===l).t}</div>`).join('')}
+</div>
+</div>
+</div>`;
+});
+list.innerHTML=html;
+window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
